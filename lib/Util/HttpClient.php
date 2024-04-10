@@ -49,8 +49,10 @@ class HttpClient
         } catch (\GuzzleHttp\Exception\RequestException $ex) {
             throw $ex;
         }
+        $data = json_decode($response->getBody());
+        print_r($data);
         return new SdkReponse(
-            json_decode($response->getBody()),
+            $data,
             $response->getStatusCode()
         );
     }

@@ -8,6 +8,7 @@ class PaymentLinksRequest extends FiservObject
     public TransactionAmount $transactionAmount;
     public CheckoutSettings $checkoutSettings;
     public PaymentMethodDetails $paymentMethodDetails;
+    public string $merchantTransactionId;
     public string $storeId;
 }
 
@@ -27,7 +28,7 @@ class PaymentLink extends FiservObject
 
 class TransactionAmount extends FiservObject
 {
-    public int $total;
+    public string $total;
     public string $currency;
 }
 
@@ -39,13 +40,14 @@ class CheckoutSettings extends FiservObject
 class PaymentMethodDetails extends FiservObject
 {
     public Cards $cards;
+    public SepaDirectDebit $sepaDirectDebit;
 }
 
 class Cards extends FiservObject
 {
-    public string $authenticationPreferences;
-    public string $createToken;
-    public string $tokenBasedTransaction;
+    public AuthenticationPreferences $authenticationPreferences;
+    public CreateToken $createToken;
+    public TokenBasedTransaction $tokenBasedTransaction;
 }
 
 class AuthenticationPreferences extends FiservObject
@@ -64,4 +66,9 @@ class CreateToken extends FiservObject
 class SepaDirectDebit extends FiservObject
 {
     public string $transactionSequenceType;
+}
+
+class TokenBasedTransaction extends FiservObject
+{
+    public string $transactionSequence;
 }

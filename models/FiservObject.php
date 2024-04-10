@@ -2,20 +2,23 @@
 
 namespace Fiserv\models;
 
+use TransactionAmount;
+
 abstract class FiservObject
 {
     public function __construct($json = false)
     {
         if ($json)
-            $this->set(json_decode($json, true));
+            $this->set($json);
     }
 
     public function set($data)
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $value = self::createFromName($key);
-                $value->set(json_encode($value));
+                $nestedObj = self::createFromName($key);
+                $nestedObj->set($value);
+                $value = $nestedObj;
             }
             $this->{$key} = $value;
         }
@@ -25,13 +28,28 @@ abstract class FiservObject
     {
         switch ($name) {
             case 'transactionAmount':
-                return new \TransactionAmount();
+                return new TransactionAmount();
 
             case 'checkoutSettings':
                 return new \CheckoutSettings();
 
             case 'paymentMethodDetails':
                 return new \PaymentMethodDetails();
+
+            case 'cards':
+                return new \Cards();
+
+            case 'authenticationPreferences':
+                return new \AuthenticationPreferences();
+
+            case 'createToken':
+                return new \CreateToken();
+
+            case 'tokenBasedTransaction':
+                return new \TokenBasedTransaction();
+
+            case 'sepaDirectDebit':
+                return new \SepaDirectDebit();
 
             case 'checkout':
                 return new \CheckoutModel();
