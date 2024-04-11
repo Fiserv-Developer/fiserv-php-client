@@ -28,10 +28,10 @@ class PaymentLink extends FiservObject
 
 class CheckoutCreatedResponse extends FiservObject
 {
-    public CheckoutModel $checkout;
+    public checkout $checkout;
 }
 
-class CheckoutModel extends FiservObject
+class checkout extends FiservObject
 {
     public string $storeId;
     public string $checkoutId;

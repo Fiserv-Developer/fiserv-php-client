@@ -15,7 +15,6 @@ class CheckoutTest extends TestCase
             "storeId" => "72305408",
             "checkoutId" => "IUBsFE",
             "redirectionUrl" => "https://checkout-lane.com/?checkoutId=IUBsFE",
-            "bubble" => "glob"
         ]
     ];
 

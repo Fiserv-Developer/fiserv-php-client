@@ -2,6 +2,7 @@
 
 namespace Fiserv\models;
 
+use checkout;
 use CheckoutCreatedResponse;
 use CheckoutModel;
 use DataEncodingException;
@@ -24,7 +25,7 @@ abstract class FiservObject
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $nestedObj = self::createFromName($key);
+                $nestedObj = new $key;
                 $nestedObj->set($value);
                 $value = $nestedObj;
             }
@@ -34,41 +35,6 @@ abstract class FiservObject
             }
 
             $this->{$key} = $value;
-        }
-    }
-
-    public static function createFromName(string $name): FiservObject
-    {
-        switch ($name) {
-            case 'transactionAmount':
-                return new TransactionAmount();
-
-            case 'checkoutSettings':
-                return new \CheckoutSettings();
-
-            case 'paymentMethodDetails':
-                return new \PaymentMethodDetails();
-
-            case 'cards':
-                return new \Cards();
-
-            case 'authenticationPreferences':
-                return new \AuthenticationPreferences();
-
-            case 'createToken':
-                return new \CreateToken();
-
-            case 'tokenBasedTransaction':
-                return new \TokenBasedTransaction();
-
-            case 'sepaDirectDebit':
-                return new \SepaDirectDebit();
-
-            case 'checkout':
-                return new CheckoutModel();
-
-            default:
-                throw new NoObjectMappingFoundException("No valid mapping found for field: " . $name);
         }
     }
 }
