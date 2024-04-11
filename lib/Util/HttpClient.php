@@ -33,7 +33,7 @@ class HttpClient
         return $headers;
     }
 
-    public static function buildRequest(Client $client, string $type, string $endpoint, FiservObject $requestBody): SdkReponse
+    public static function buildRequest(Client $client, string $type, string $endpoint, FiservObject $requestBody = null): SdkReponse
     {
         try {
             $requestBodyJson = "NOT SET";
@@ -51,7 +51,7 @@ class HttpClient
         }
         $data = json_decode($response->getBody());
         return new SdkReponse(
-            $data,
+            json_decode(json_encode($data), true),
             $response->getStatusCode()
         );
     }

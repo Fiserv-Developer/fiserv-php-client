@@ -2,14 +2,13 @@
 
 namespace Fiserv;
 
+use CheckoutCreatedResponse;
 use Fiserv\HttpClient;
 use GuzzleHttp\Client;
 use PaymentLinksRequest;
 use PaymentsLinksCreatedResponse;
-use PostCheckoutsRequest;
-use PostCheckoutsResponse;
 
-class Checkout
+class CheckoutSolution
 {
     const endpointRoot = '/exp/v1/checkouts';
 
@@ -21,7 +20,8 @@ class Checkout
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest($client, 'POST', $endpoint, $req);
-        $res->data = new PaymentsLinksCreatedResponse($res->data);
+
+        $res->data = new CheckoutCreatedResponse($res->data);
         return $res;
     }
 

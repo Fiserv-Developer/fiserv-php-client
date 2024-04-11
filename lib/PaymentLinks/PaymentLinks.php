@@ -22,6 +22,6 @@ class PaymentLinks
     public static function getPaymentLinkDetails($client, $checkoutId)
     {
         $endpoint = '/exp/v1/checkouts/' . $checkoutId;
-        return HttpClient::buildRequest($client, 'GET', $endpoint, null);
+        return HttpClient::buildRequest($client, 'GET', $endpoint);
     }
 }
