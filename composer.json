@@ -19,7 +19,8 @@
         },
         "classmap": [
             "lib/",
-            "models/"
+            "models/",
+            "tests/"
         ]
     }
 }
