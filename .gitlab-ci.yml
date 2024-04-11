@@ -20,8 +20,19 @@ before_script:
   # Install all project dependencies
   - php composer.phar install
 
+stages:
+  - test
+  - deploy
 
 test:
+  stage: test
   image: php:8.2
   script:
     - vendor/bin/phpunit tests/
+
+deploy:
+  stage: deploy
+  script:
+    - apk add curl
+    - 'curl --header "Job-Token: $CI_JOB_TOKEN" --data tag=<tag> "${CI_API_V4_URL}/projects/$CI_PROJECT_ID/packages/composer"'
+  environment: production
