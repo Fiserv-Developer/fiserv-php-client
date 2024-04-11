@@ -21,7 +21,7 @@ class Checkout
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest($client, 'POST', $endpoint, $req);
-        $res->data = new PaymentsLinksCreatedResponse(json_encode($res->data));
+        $res->data = new PaymentsLinksCreatedResponse($res->data);
         return $res;
     }
 

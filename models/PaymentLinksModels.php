@@ -14,7 +14,7 @@ class PaymentLinksRequest extends FiservObject
 
 class PaymentsLinksCreatedResponse extends FiservObject
 {
-    public string $paymentLink;
+    public PaymentLink $paymentLink;
 }
 
 class PaymentLink extends FiservObject
@@ -26,9 +26,21 @@ class PaymentLink extends FiservObject
     public string $expiryDateTime;
 }
 
+class CheckoutCreatedResponse extends FiservObject
+{
+    public CheckoutModel $checkout;
+}
+
+class CheckoutModel extends FiservObject
+{
+    public string $storeId;
+    public string $checkoutId;
+    public string $redirectionUrl;
+}
+
 class TransactionAmount extends FiservObject
 {
-    public string $total;
+    public int $total;
     public string $currency;
 }
 

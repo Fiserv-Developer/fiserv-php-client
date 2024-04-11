@@ -2,6 +2,10 @@
 
 namespace Fiserv\models;
 
+use CheckoutCreatedResponse;
+use CheckoutModel;
+use DataEncodingException;
+use DynamicPropertyException;
 use TransactionAmount;
 
 abstract class FiservObject
@@ -14,12 +18,21 @@ abstract class FiservObject
 
     public function set($data)
     {
+        if (is_string($data)) {
+            throw new DataEncodingException($data);
+        }
+
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $nestedObj = self::createFromName($key);
                 $nestedObj->set($value);
                 $value = $nestedObj;
             }
+
+            if (!property_exists($this, $key)) {
+                throw new DynamicPropertyException($key, $this::class);
+            }
+
             $this->{$key} = $value;
         }
     }
@@ -52,7 +65,7 @@ abstract class FiservObject
                 return new \SepaDirectDebit();
 
             case 'checkout':
-                return new \CheckoutModel();
+                return new CheckoutModel();
 
             default:
                 throw new NoObjectMappingFoundException("No valid mapping found for field: " . $name);

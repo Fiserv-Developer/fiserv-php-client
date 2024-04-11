@@ -33,14 +33,14 @@ class HttpClient
         return $headers;
     }
 
-    public static function buildRequest(Client $client, string $type, string $endpoint, FiservObject $requestBody = null): SdkReponse
+    public static function buildRequest(Client $client, string $type, string $endpoint, FiservObject $requestBody): SdkReponse
     {
         try {
-            $requestBodyJson = "";
+            $requestBodyJson = "NOT SET";
 
             if (is_null($requestBody)) {
-                $requestBodyJson = json_encode($requestBody);
             }
+            $requestBodyJson = json_encode($requestBody);
 
             $response = $client->request($type, self::$url . $endpoint, [
                 'body' => $requestBodyJson,
@@ -50,7 +50,6 @@ class HttpClient
             throw $ex;
         }
         $data = json_decode($response->getBody());
-        print_r($data);
         return new SdkReponse(
             $data,
             $response->getStatusCode()
