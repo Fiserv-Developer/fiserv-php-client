@@ -5,6 +5,7 @@ namespace Fiserv;
 use Fiserv\models\FiservObject;
 use Fiserv\Util\Util;
 use GuzzleHttp\Client;
+use RequestBodyException;
 
 class HttpClient
 {
@@ -33,19 +34,23 @@ class HttpClient
         return $headers;
     }
 
-    public static function buildRequest(Client $client, string $type, string $endpoint, FiservObject $requestBody = null): SdkReponse
+    public static function buildRequest(Client $client, RequestType $type, string $endpoint, FiservObject $requestBody = null): SdkReponse
     {
+        if ($type === RequestType::GET xor is_null($requestBody)) {
+            throw new RequestBodyException($type);
+        }
+
+        $requestBodyJson = "NOT SET";
+
+        $requestBodyJson = json_encode($requestBody);
+        $payload = ['headers' => self::buildHeadersWithMessage($requestBodyJson)];
+
+        if ($type === RequestType::POST) {
+            $payload['body'] = $requestBodyJson;
+        }
+
         try {
-            $requestBodyJson = "NOT SET";
-
-            if (is_null($requestBody)) {
-            }
-            $requestBodyJson = json_encode($requestBody);
-
-            $response = $client->request($type, self::$url . $endpoint, [
-                'body' => $requestBodyJson,
-                'headers' => self::buildHeadersWithMessage($requestBodyJson),
-            ]);
+            $response = $client->request($type->name, self::$url . $endpoint, $payload);
         } catch (\GuzzleHttp\Exception\RequestException $ex) {
             throw $ex;
         }
@@ -55,6 +60,13 @@ class HttpClient
             $response->getStatusCode()
         );
     }
+}
+
+enum RequestType
+{
+    case GET;
+    case POST;
+    case PATCH;
 }
 
 class SdkReponse
