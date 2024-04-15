@@ -36,21 +36,19 @@ class CheckoutTest extends TestCase
 
     public function testPostCheckoutsSuccess(): void
     {
-        // $req = new PaymentLinkData(Fixtures::paymentLinksRequestContent);
-        // $res = CheckoutSolution::postCheckouts($this->client, $req);
-        // print_r($res);
-        // $this->assertInstanceOf(CheckoutCreatedResponse::class, $res->data, "Response schema is malformed");
-        // $this->assertObjectHasProperty("checkout", $res->data, "Response misses field (paymentlink)");
-        $this->assertTrue(true);
+        $req = new PaymentLinkData(Fixtures::paymentLinksRequestContent);
+        $res = CheckoutSolution::postCheckouts($this->client, $req);
+        $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");
+        $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
+        // $this->assertTrue(true);
     }
 
 
     public function testGetCheckoutIdSuccess(): void
     {
-        $this->assertTrue(true);
-        CheckoutSolution::getCheckoutId($this->client, $this->mockCheckoutId);
-        // $response = Checkout::getCheckoutId($this->client, $mockCheckoutId);
-        // $this->assertEquals($response->statusCode, 201);
-        // $this->assertInstanceOf(GetCheckoutIdResponse::class, $response->data);
+        // $this->assertTrue(true);
+        $res = CheckoutSolution::getCheckoutId($this->client, $this->mockCheckoutId);
+        $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
+        $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
 }

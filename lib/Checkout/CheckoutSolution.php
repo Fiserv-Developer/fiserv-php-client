@@ -4,9 +4,9 @@ namespace Fiserv;
 
 use CheckoutCreatedResponse;
 use Fiserv\HttpClient;
+use GetCheckoutIdResponse;
 use GuzzleHttp\Client;
 use PaymentLinkData;
-use PaymentsLinksCreatedResponse;
 
 class CheckoutSolution
 {
@@ -16,13 +16,13 @@ class CheckoutSolution
      * $client - HTTP client
      * $request - Request body for checkout link creation
      */
-    public static function postCheckouts(Client $client, PaymentLinkData $req): SdkReponse
+    public static function postCheckouts(Client $client, PaymentLinkData $req): CheckoutCreatedResponse
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest($client, RequestType::POST, $endpoint, $req);
+        $data = new CheckoutCreatedResponse($res->data);
 
-        $res->data = new CheckoutCreatedResponse($res->data);
-        return $res;
+        return $data;
     }
 
 
@@ -30,11 +30,13 @@ class CheckoutSolution
      * $client - HTTP client
      * $checkoutId - String checkout ID to be queried  
      */
-    public static function getCheckoutId(Client $client, string $checkoutId): SdkReponse
+    public static function getCheckoutId(Client $client, string $checkoutId): GetCheckoutIdResponse
     {
         $endpoint = self::endpointRoot . "/" . $checkoutId;
         $res = HttpClient::buildRequest($client, RequestType::GET, $endpoint);
-        print_r($res->data);
-        return $res;
+        $data = new GetCheckoutIdResponse($res->data);
+        $res->data = $data;
+
+        return $data;
     }
 }
