@@ -10,6 +10,7 @@ class GetCheckoutIdResponse extends FiservObject
     public approvedAmount $approvedAmount;
     public string $transactionStatus;
     public requestSent $requestSent;
+    public paymentLink $paymentLink;
 }
 
 class approvedAmount extends FiservObject

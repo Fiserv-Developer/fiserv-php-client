@@ -3,7 +3,9 @@
 namespace Fiserv\PaymentLinks;
 
 use Fiserv\HttpClient;
+use Fiserv\RequestType;
 use Fiserv\SdkReponse;
+use GetCheckoutIdResponse;
 use PaymentLinkData;
 use PaymentsLinksCreatedResponse;
 
@@ -11,17 +13,22 @@ class PaymentLinks
 {
     const endpointRoot = '/exp/v1/payment-links';
 
-    public static function createPaymentLink($client, PaymentLinkData $req): SdkReponse
+    public static function createPaymentLink($client, PaymentLinkData $req): PaymentsLinksCreatedResponse
     {
         $endpoint = self::endpointRoot;
-        $res = HttpClient::buildRequest($client, 'POST', $endpoint, $req);
-        $res->data = new PaymentsLinksCreatedResponse(json_encode($res->data));
-        return $res;
+        $res = HttpClient::buildRequest($client, RequestType::POST, $endpoint, $req);
+        $data = new PaymentsLinksCreatedResponse($res->data);
+
+        return $data;
     }
 
-    public static function getPaymentLinkDetails($client, $checkoutId)
+    public static function getPaymentLinkDetails($client, $paymentLinkId): GetCheckoutIdResponse
     {
-        $endpoint = '/exp/v1/checkouts/' . $checkoutId;
-        return HttpClient::buildRequest($client, 'GET', $endpoint);
+        $endpoint = self::endpointRoot . "/" . $paymentLinkId;
+        $res = HttpClient::buildRequest($client, RequestType::GET, $endpoint);
+        $data = new GetCheckoutIdResponse($res->data);
+        $res->data = $data;
+
+        return $data;
     }
 }

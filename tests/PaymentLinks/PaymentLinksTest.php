@@ -1,11 +1,16 @@
 <?php
 
+use Fiserv\Fixtures;
+use Fiserv\PaymentLinks\PaymentLinks;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
 class PaymentLinksTest extends TestCase
 {
     private $client = null;
+
+    private string $paymentLinkId = 'IUBsFE';
+
 
     private $mockResponseCreated = [
         "checkout" => [
@@ -22,13 +27,15 @@ class PaymentLinksTest extends TestCase
 
     public function testCreatePaymentLinkSuccess(): void
     {
-        // $req = new PaymentLinksRequest(Fixtures::paymentLinksRequestContent);
+        $req = new PaymentLinkData(Fixtures::paymentLinksRequestContent);
+        $res = PaymentLinks::createPaymentLink($this->client, $req);
         $this->assertTrue(true);
     }
 
     public function testGetPaymentLinkDetails(): void
     {
-        // $req = new PaymentLinksRequest(Fixtures::paymentLinksRequestContent);
-        $this->assertTrue(true);
+        $res = PaymentLinks::getPaymentLinkDetails($this->client, $this->paymentLinkId);
+        $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
+        $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
 }
