@@ -2,19 +2,25 @@
 
 namespace Fiserv\models;
 
-use checkout;
-use CheckoutCreatedResponse;
-use CheckoutModel;
 use DataEncodingException;
 use DynamicPropertyException;
-use TransactionAmount;
+use RequiredFieldMissingException;
 
 abstract class FiservObject
 {
+    protected array $requiredFields = [];
+
     public function __construct($json = false)
     {
-        if ($json)
+        if ($json) {
             $this->set($json);
+        }
+
+        foreach ($this->requiredFields as $field) {
+            if (!isset($this->{$field})) {
+                throw new RequiredFieldMissingException($field);
+            }
+        }
     }
 
     public function set($data)

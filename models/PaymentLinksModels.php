@@ -10,6 +10,17 @@ class PaymentLinkData extends FiservObject
     public PaymentMethodDetails $paymentMethodDetails;
     public string $merchantTransactionId;
     public string $storeId;
+
+    public function __construct($json = false)
+    {
+        $this->requiredFields = [
+            'storeId',
+            'transactionType',
+            'transactionAmount'
+        ];
+
+        FiservObject::__construct($json);
+    }
 }
 
 class PaymentsLinksCreatedResponse extends FiservObject
