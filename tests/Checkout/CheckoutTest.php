@@ -27,22 +27,22 @@ class CheckoutTest extends TestCase
 
     public function testMissingFieldException(): void
     {
-        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", PaymentLinkData::class));
+        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", PaymentLinkRequestContent::class));
 
         $missingFieldContent = Fixtures::paymentLinksRequestContent;
         unset($missingFieldContent["storeId"]);
 
-        new PaymentLinkData($missingFieldContent);
+        new PaymentLinkRequestContent($missingFieldContent);
     }
 
-    public function testNestedMissingFielException(): void
+    public function testNestedMissingFieldException(): void
     {
         $this->expectExceptionObject(new RequiredFieldMissingException("toBeUsedFor", createToken::class));
 
         $missingFieldContent = Fixtures::paymentLinksRequestContent;
         unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
 
-        new PaymentLinkData($missingFieldContent);
+        new PaymentLinkRequestContent($missingFieldContent);
     }
 
     public function testPostCheckoutsSuccess(): void
@@ -51,7 +51,7 @@ class CheckoutTest extends TestCase
         if ($this->DONT_TEST)
             return;
 
-        $req = new PaymentLinkData(Fixtures::paymentLinksRequestContent);
+        $req = new PaymentLinkRequestContent(Fixtures::paymentLinksRequestContent);
         $res = CheckoutSolution::postCheckouts($this->client, $req);
         $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
@@ -65,7 +65,7 @@ class CheckoutTest extends TestCase
             return;
 
         $res = CheckoutSolution::getCheckoutId($this->client, $this->mockCheckoutId);
-        $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
+        $this->assertInstanceOf(GetCheckoutIdResponseContent::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
 }

@@ -27,7 +27,7 @@ class PaymentLinksTest extends TestCase
 
     public function testCreatePaymentLinkSuccess(): void
     {
-        $req = new PaymentLinkData(Fixtures::paymentLinksRequestContent);
+        $req = new PaymentLinkRequestContent(Fixtures::paymentLinksRequestContent);
         $res = PaymentLinks::createPaymentLink($this->client, $req);
         $this->assertTrue(true);
     }

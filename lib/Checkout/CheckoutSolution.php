@@ -6,7 +6,7 @@ use CheckoutCreatedResponse;
 use Fiserv\HttpClient;
 use GetCheckoutIdResponse;
 use GuzzleHttp\Client;
-use PaymentLinkData;
+use PaymentLinkRequestContent;
 
 class CheckoutSolution
 {
@@ -16,7 +16,7 @@ class CheckoutSolution
      * $client - HTTP client
      * $request - Request body for checkout link creation
      */
-    public static function postCheckouts(Client $client, PaymentLinkData $req): CheckoutCreatedResponse
+    public static function postCheckouts(Client $client, PaymentLinkRequestContent $req): CheckoutCreatedResponse
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest($client, RequestType::POST, $endpoint, $req);

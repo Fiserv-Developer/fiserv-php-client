@@ -6,14 +6,14 @@ use Fiserv\HttpClient;
 use Fiserv\RequestType;
 use Fiserv\SdkReponse;
 use GetCheckoutIdResponse;
-use PaymentLinkData;
+use PaymentLinkRequestContent;
 use PaymentsLinksCreatedResponse;
 
 class PaymentLinks
 {
     const endpointRoot = '/exp/v1/payment-links';
 
-    public static function createPaymentLink($client, PaymentLinkData $req): PaymentsLinksCreatedResponse
+    public static function createPaymentLink($client, PaymentLinkRequestContent $req): PaymentsLinksCreatedResponse
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest($client, RequestType::POST, $endpoint, $req);

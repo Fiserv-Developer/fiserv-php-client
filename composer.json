@@ -14,12 +14,10 @@
         "phpstan/phpstan": "^1.10"
     },
     "autoload": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        },
         "classmap": [
             "lib/",
             "models/",
+            "models/CheckoutAndLinksDTOs/RequestContent/PaymentLinkRequestContent/",
             "tests/"
         ]
     }

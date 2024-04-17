@@ -1,12 +1,55 @@
 <?php
 namespace Fiserv;
 
-use PaymentLinkData;
+use PaymentLinkRequestContent;
 use PHPUnit\Framework\TestCase;
 
 
 class Fixtures extends TestCase
 {
+    public const paymentlinkResponseContent = [
+        "storeId" => "72305408",
+        "checkoutId" => "IUBsFE",
+        "orderId" => "72110c52-5f65-4206-8981-fa6406439aee",
+        "transactionType" => "SALE",
+        "approvedAmount" => [
+            "total" => 25,
+            "currency" => "EUR",
+            "components" => [
+                "subtotal" => 20,
+                "vatAmount" => 2,
+                "shipping" => 3
+            ],
+        ],
+        "transactionStatus" => "INITIATED",
+        "requestSent" => [
+            "orderDetails" => [],
+            "checkoutSettings" => [
+                "redirectBackUrls" => [
+                    "successUrl" => "https://www.success.com/",
+                    "failureUrl" => "https://www.failureexample.com"
+                ],
+            ],
+            "paymentMethodDetails" => [
+                "cards" => [
+                    "authenticationPreferences" => [
+                        "challengeIndicator" => "01"
+                    ],
+                    "tokenBasedTransaction" => [
+                        "value" => "ApoorvaTest9thNov",
+                        "transactionSequence" => "SUBSEQUENT"
+                    ],
+                ],
+                "sepaDirectDebit" => [
+                    "transactionSequenceType" => "SINGLE"
+                ],
+                "payPal" => [
+                    "riskData" => [],
+                ],
+            ],
+        ],
+    ];
+
     public const paymentLinksRequestContent = [
         'transactionOrigin' => 'ECOM',
         'transactionType' => 'SALE',
@@ -33,7 +76,7 @@ class Fixtures extends TestCase
 
     public function testDeserializedDeeplyNestedField(): void
     {
-        $data = new PaymentLinkData(self::paymentLinksRequestContent);
+        $data = new PaymentLinkRequestContent(self::paymentLinksRequestContent);
         $this->assertEquals($data->paymentMethodDetails->cards->tokenBasedTransaction->transactionSequence, 'FIRST', 'Correct');
     }
 }
