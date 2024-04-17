@@ -9,11 +9,18 @@ use RequiredFieldMissingException;
 abstract class FiservObject
 {
     protected array $requiredFields = [];
+    protected bool $isReponseContent = false;
 
-    public function __construct($json = false)
+    public function __construct($json = false, $isReponseContent = false)
     {
+        $this->isReponseContent = $isReponseContent;
+
         if ($json) {
             $this->set($json);
+        }
+
+        if ($this->isReponseContent) {
+            return;
         }
 
         foreach ($this->requiredFields as $field) {
@@ -31,7 +38,7 @@ abstract class FiservObject
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $nestedObj = new $key($value);
+                $nestedObj = new $key($value, $this->isReponseContent);
                 $value = $nestedObj;
             }
 

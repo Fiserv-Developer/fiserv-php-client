@@ -7,12 +7,12 @@ class cards extends FiservObject
     public tokenBasedTransaction $tokenBasedTransaction;
     public createToken $createToken;
 
-    public function __construct($json = false)
+    public function __construct($json = false, $isReponseContent = false)
     {
         $this->requiredFields = [
             'createToken',
         ];
 
-        FiservObject::__construct($json);
+        FiservObject::__construct($json, $isReponseContent);
     }
 }
