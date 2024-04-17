@@ -57,6 +57,15 @@ class paymentMethodDetails extends FiservObject
     public sepaDirectDebit $sepaDirectDebit;
     public payPal $payPal;
     public tokenBasedTransaction $tokenBasedTransaction;
+
+    public function __construct($json = false)
+    {
+        $this->requiredFields = [
+            'cards',
+        ];
+
+        FiservObject::__construct($json);
+    }
 }
 
 class tokenBasedTransaction extends FiservObject
@@ -83,8 +92,16 @@ class cards extends FiservObject
 {
     public authenticationPreferences $authenticationPreferences;
     public TokenBasedTransaction $tokenBasedTransaction;
-
     public createToken $createToken;
+
+    public function __construct($json = false)
+    {
+        $this->requiredFields = [
+            'createToken',
+        ];
+
+        FiservObject::__construct($json);
+    }
 }
 
 

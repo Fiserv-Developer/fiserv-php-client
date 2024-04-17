@@ -16,7 +16,8 @@ class PaymentLinkData extends FiservObject
         $this->requiredFields = [
             'storeId',
             'transactionType',
-            'transactionAmount'
+            'transactionAmount',
+            'paymentMethodDetails'
         ];
 
         FiservObject::__construct($json);
@@ -61,4 +62,13 @@ class createToken extends FiservObject
     public bool $declineDuplicateToken;
     public bool $reusable;
     public string $toBeUsedFor;
+
+    public function __construct($json = false)
+    {
+        $this->requiredFields = [
+            'toBeUsedFor',
+        ];
+
+        FiservObject::__construct($json);
+    }
 }

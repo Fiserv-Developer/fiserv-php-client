@@ -18,12 +18,12 @@ abstract class FiservObject
 
         foreach ($this->requiredFields as $field) {
             if (!isset($this->{$field})) {
-                throw new RequiredFieldMissingException($field);
+                throw new RequiredFieldMissingException($field, $this::class);
             }
         }
     }
 
-    public function set($data)
+    private function set($data)
     {
         if (is_string($data)) {
             throw new DataEncodingException($data);
@@ -31,8 +31,7 @@ abstract class FiservObject
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $nestedObj = new $key;
-                $nestedObj->set($value);
+                $nestedObj = new $key($value);
                 $value = $nestedObj;
             }
 
@@ -43,9 +42,4 @@ abstract class FiservObject
             $this->{$key} = $value;
         }
     }
-}
-
-class NoObjectMappingFoundException extends \Exception
-{
-    public $message = "No valid mapping found for some field";
 }

@@ -25,14 +25,24 @@ class CheckoutTest extends TestCase
         $this->client = new Client();
     }
 
-    public function testPostMalformedBody(): void
+    public function testMissingFieldException(): void
     {
-        $this->expectExceptionObject(new RequiredFieldMissingException("transactionAmount"));
+        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", PaymentLinkData::class));
 
-        $paymentRequestContent = Fixtures::paymentLinksRequestContent;
-        unset($paymentRequestContent["transactionAmount"]);
+        $missingFieldContent = Fixtures::paymentLinksRequestContent;
+        unset($missingFieldContent["storeId"]);
 
-        new PaymentLinkData($paymentRequestContent);
+        new PaymentLinkData($missingFieldContent);
+    }
+
+    public function testNestedMissingFielException(): void
+    {
+        $this->expectExceptionObject(new RequiredFieldMissingException("toBeUsedFor", createToken::class));
+
+        $missingFieldContent = Fixtures::paymentLinksRequestContent;
+        unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
+
+        new PaymentLinkData($missingFieldContent);
     }
 
     public function testPostCheckoutsSuccess(): void
