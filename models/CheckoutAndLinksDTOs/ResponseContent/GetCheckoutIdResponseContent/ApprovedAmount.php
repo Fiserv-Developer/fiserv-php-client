@@ -1,7 +1,7 @@
 <?php
 use Fiserv\models\FiservObject;
 
-class ApprovedAmount extends FiservObject
+class approvedAmount extends FiservObject
 {
     public string $total;
     public string $currency;

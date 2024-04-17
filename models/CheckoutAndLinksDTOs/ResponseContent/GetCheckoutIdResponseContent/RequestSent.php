@@ -1,7 +1,7 @@
 <?php
 use Fiserv\models\FiservObject;
 
-class RequestSent extends FiservObject
+class requestSent extends FiservObject
 {
     public orderDetails $orderDetails;
     public checkoutSettings $checkoutSettings;

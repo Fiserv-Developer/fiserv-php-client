@@ -6,6 +6,7 @@ use Fiserv\HttpClient;
 use Fiserv\RequestType;
 use Fiserv\SdkReponse;
 use GetCheckoutIdResponse;
+use GetPaymentLinkDetailsResponseContent;
 use PaymentLinkRequestContent;
 use PaymentsLinksCreatedResponse;
 
@@ -22,11 +23,11 @@ class PaymentLinks
         return $data;
     }
 
-    public static function getPaymentLinkDetails($client, $paymentLinkId): GetCheckoutIdResponse
+    public static function getPaymentLinkDetails($client, $paymentLinkId): GetPaymentLinkDetailsResponseContent
     {
         $endpoint = self::endpointRoot . "/" . $paymentLinkId;
         $res = HttpClient::buildRequest($client, RequestType::GET, $endpoint);
-        $data = new GetCheckoutIdResponse($res->data);
+        $data = new GetPaymentLinkDetailsResponseContent($res->data);
         $res->data = $data;
 
         return $data;
