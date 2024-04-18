@@ -65,7 +65,7 @@ class CheckoutTest extends TestCase
             return;
 
         $res = CheckoutSolution::getCheckoutId($this->client, $this->mockCheckoutId);
-        $this->assertInstanceOf(GetCheckoutIdResponseContent::class, $res);
+        $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
 }

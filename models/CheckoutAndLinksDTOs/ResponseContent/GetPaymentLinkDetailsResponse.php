@@ -1,7 +1,7 @@
 <?php
 use Fiserv\models\FiservObject;
 
-class GetPaymentLinkDetailsResponseContent extends FiservObject
+class GetPaymentLinkDetailsResponse extends ResponseInterface
 {
     public string $storeId;
     public paymentLink $paymentLink;
@@ -20,8 +20,4 @@ class GetPaymentLinkDetailsResponseContent extends FiservObject
     public sepaDirectDebit $sepaDirectDebit;
     public payPal $payPal;
 
-    public function __construct($json = false)
-    {
-        FiservObject::__construct($json, true);
-    }
 }

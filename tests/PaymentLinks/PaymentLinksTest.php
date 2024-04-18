@@ -35,7 +35,7 @@ class PaymentLinksTest extends TestCase
     public function testGetPaymentLinkDetails(): void
     {
         $this->assertTrue(true);
-        $res = new GetPaymentLinkDetailsResponseContent(Fixtures::paymentlinkResponseContent);
+        $res = new GetPaymentLinkDetailsResponse(Fixtures::paymentlinkResponseContent);
         // $res = PaymentLinks::getPaymentLinkDetails($this->client, $this->paymentLinkId);
         // $this->assertInstanceOf(GetCheckoutIdResponseContent::class, $res);
         // $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");

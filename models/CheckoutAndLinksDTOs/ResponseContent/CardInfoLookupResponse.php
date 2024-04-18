@@ -2,7 +2,9 @@
 
 namespace Fiserv\models;
 
-class CardInfoLookupResponse extends FiservObject
+use ResponseInterface;
+
+class CardInfoLookupResponse extends ResponseInterface
 {
     public string $type;
     public string $clientRequestId;

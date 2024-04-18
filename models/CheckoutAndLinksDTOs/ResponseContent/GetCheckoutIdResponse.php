@@ -1,7 +1,7 @@
 <?php
 use Fiserv\models\FiservObject;
 
-class GetCheckoutIdResponseContent extends FiservObject
+class GetCheckoutIdResponse extends ResponseInterface
 {
     public string $storeId;
     public string $checkoutId;
@@ -11,4 +11,5 @@ class GetCheckoutIdResponseContent extends FiservObject
     public string $transactionStatus;
     public requestSent $requestSent;
     public paymentLink $paymentLink;
+
 }
