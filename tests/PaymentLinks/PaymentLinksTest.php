@@ -2,7 +2,6 @@
 
 use Fiserv\Fixtures;
 use Fiserv\PaymentLinks\PaymentLinks;
-use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
 class PaymentLinksTest extends TestCase
@@ -22,22 +21,22 @@ class PaymentLinksTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->client = new Client();
+        // $this->client = curl_init();
     }
 
     public function testCreatePaymentLinkSuccess(): void
     {
-        // $req = new PaymentLinkRequestContent(Fixtures::paymentLinksRequestContent);
-        // $res = PaymentLinks::createPaymentLink($this->client, $req);
         $this->assertTrue(true);
+        $req = new PaymentLinkRequestContent(Fixtures::paymentLinksRequestContent);
+        $res = PaymentLinks::createPaymentLink($req);
+        $this->assertInstanceOf(PaymentsLinksCreatedResponse::class, $res, "Response schema is malformed");
     }
 
     public function testGetPaymentLinkDetails(): void
     {
         $this->assertTrue(true);
         $res = new GetPaymentLinkDetailsResponse(Fixtures::paymentlinkResponseContent);
-        // $res = PaymentLinks::getPaymentLinkDetails($this->client, $this->paymentLinkId);
-        // $this->assertInstanceOf(GetCheckoutIdResponseContent::class, $res);
-        // $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
+        $res = PaymentLinks::getPaymentLinkDetails($this->paymentLinkId);
+        $this->assertInstanceOf(GetPaymentLinkDetailsResponse::class, $res);
     }
 }

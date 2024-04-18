@@ -2,13 +2,12 @@
 
 use Fiserv\CheckoutSolution;
 use Fiserv\Fixtures;
-use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase
 {
     private $client = null;
-    private $DONT_TEST = true;
+    private $DONT_TEST = false;
 
     private string $mockCheckoutId = 'IUBsFE';
 
@@ -22,7 +21,7 @@ class CheckoutTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->client = new Client();
+        // $this->client = curl_init();
     }
 
     public function testMissingFieldException(): void
@@ -52,7 +51,7 @@ class CheckoutTest extends TestCase
             return;
 
         $req = new PaymentLinkRequestContent(Fixtures::paymentLinksRequestContent);
-        $res = CheckoutSolution::postCheckouts($this->client, $req);
+        $res = CheckoutSolution::postCheckouts($req);
         $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
@@ -64,7 +63,7 @@ class CheckoutTest extends TestCase
         if ($this->DONT_TEST)
             return;
 
-        $res = CheckoutSolution::getCheckoutId($this->client, $this->mockCheckoutId);
+        $res = CheckoutSolution::getCheckoutId($this->mockCheckoutId);
         $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
