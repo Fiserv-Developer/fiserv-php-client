@@ -3,7 +3,7 @@
 namespace Fiserv\models;
 
 use DataEncodingException;
-use DynamicPropertyException;
+use InvalidFieldException;
 use RequiredFieldMissingException;
 
 abstract class FiservObject
@@ -43,7 +43,7 @@ abstract class FiservObject
             }
 
             if (!property_exists($this, $key)) {
-                throw new DynamicPropertyException($key, $this::class);
+                throw new InvalidFieldException($key, $this::class);
             }
 
             $this->{$key} = $value;
