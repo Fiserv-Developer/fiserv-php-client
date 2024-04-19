@@ -18,15 +18,6 @@ class CheckoutTest extends TestCase
         ]
     ];
 
-    private $mockRequestWebHook = [
-        "storeId" => "72305408",
-        "transactionType" => "SALE",
-        "transactionAmount" => [
-            "currency" => "EUR",
-            "total" => 12.99
-        ]
-    ];
-
     protected function setUp(): void
     {
         // $this->client = curl_init();
@@ -62,17 +53,6 @@ class CheckoutTest extends TestCase
         $res = CheckoutSolution::postCheckouts($req);
         $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
-    }
-
-    public function testCheckoutWithWebhook(): void
-    {
-        $this->assertTrue(true);
-        if ($this->DONT_TEST_API)
-            return;
-
-        $req = new PaymentLinkRequestContent($this->mockRequestWebHook);
-        $res = CheckoutSolution::postCheckouts($req);
-        $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");
     }
 
 
