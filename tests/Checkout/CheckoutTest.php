@@ -7,8 +7,7 @@ use PHPUnit\Framework\TestCase;
 class CheckoutTest extends TestCase
 {
     private $client = null;
-    private $DONT_TEST = false;
-
+    private $DONT_TEST_API = false;
     private string $mockCheckoutId = 'IUBsFE';
 
     private $mockResponseCreated = [
@@ -16,6 +15,15 @@ class CheckoutTest extends TestCase
             "storeId" => "72305408",
             "checkoutId" => "IUBsFE",
             "redirectionUrl" => "https://checkout-lane.com/?checkoutId=IUBsFE",
+        ]
+    ];
+
+    private $mockRequestWebHook = [
+        "storeId" => "72305408",
+        "transactionType" => "SALE",
+        "transactionAmount" => [
+            "currency" => "EUR",
+            "total" => 12.99
         ]
     ];
 
@@ -47,7 +55,7 @@ class CheckoutTest extends TestCase
     public function testPostCheckoutsSuccess(): void
     {
         $this->assertTrue(true);
-        if ($this->DONT_TEST)
+        if ($this->DONT_TEST_API)
             return;
 
         $req = new PaymentLinkRequestContent(Fixtures::paymentLinksRequestContent);
@@ -56,11 +64,22 @@ class CheckoutTest extends TestCase
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
 
+    public function testCheckoutWithWebhook(): void
+    {
+        $this->assertTrue(true);
+        if ($this->DONT_TEST_API)
+            return;
+
+        $req = new PaymentLinkRequestContent($this->mockRequestWebHook);
+        $res = CheckoutSolution::postCheckouts($req);
+        $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");
+    }
+
 
     public function testGetCheckoutIdSuccess(): void
     {
         $this->assertTrue(true);
-        if ($this->DONT_TEST)
+        if ($this->DONT_TEST_API)
             return;
 
         $res = CheckoutSolution::getCheckoutId($this->mockCheckoutId);

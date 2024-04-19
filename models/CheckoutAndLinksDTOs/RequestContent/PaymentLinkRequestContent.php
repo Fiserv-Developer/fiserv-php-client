@@ -17,6 +17,7 @@ class PaymentLinkRequestContent extends FiservObject
             'storeId',
             'transactionType',
             'transactionAmount',
+            'paymentMethodDetails',
         ];
 
         FiservObject::__construct($json);
