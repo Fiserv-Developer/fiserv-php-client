@@ -18,8 +18,7 @@ class CheckoutSolution
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-
-        $data = new CheckoutCreatedResponse($res->data);
+        $data = new CheckoutCreatedResponse($res);
 
         return $data;
     }
@@ -32,8 +31,7 @@ class CheckoutSolution
     {
         $endpoint = self::endpointRoot . "/" . $checkoutId;
         $res = HttpClient::buildRequest(RequestType::GET, $endpoint);
-        $data = new GetCheckoutIdResponse($res->data);
-        $res->data = $data;
+        $data = new GetCheckoutIdResponse($res);
 
         return $data;
     }
