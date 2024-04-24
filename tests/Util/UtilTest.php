@@ -1,4 +1,5 @@
 <?php
+
 use Fiserv\CheckoutSolution;
 use Fiserv\HttpClient;
 use Fiserv\RequestType;
@@ -58,7 +59,7 @@ class UtilTest extends TestCase
             ],
         ];
 
-        $req = new PaymentLinkRequestContent($reqBody);
+        $req = new PaymentLinkRequestBody($reqBody);
         $res = CheckoutSolution::postCheckouts($req);
 
         // $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");

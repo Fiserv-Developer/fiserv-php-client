@@ -2,30 +2,36 @@
 
 namespace Fiserv;
 
-use CheckoutCreatedResponse;
+use PostCheckoutsResponse;
 use Fiserv\HttpClient;
 use GetCheckoutIdResponse;
-use PaymentLinkRequestContent;
+use PaymentLinkRequestBody;
 
 class CheckoutSolution
 {
     const endpointRoot = '/exp/v1/checkouts';
 
     /**
-     * $request - Request body for checkout link creation
+     * Create a checkout link to be used as checkout solution.
+     * Pass an optional webhook to receive status events from fiserv server.
+     * 
+     * @var PaymentLinkRequestBody $req - Request body containing checkout options
      */
-    public static function postCheckouts(PaymentLinkRequestContent $req): CheckoutCreatedResponse
+    public static function postCheckouts(PaymentLinkRequestBody $req): PostCheckoutsResponse
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-        $data = new CheckoutCreatedResponse($res);
+        $data = new PostCheckoutsResponse($res);
 
         return $data;
     }
 
 
     /**
-     * $checkoutId - String checkout ID to be queried  
+     * Query an existing checkout link object by given ID. 
+     * Responds with verbose list about checkout configuration.
+     * 
+     * @var string $checkoutId - String checkout ID to be queried  
      */
     public static function getCheckoutId(string $checkoutId): GetCheckoutIdResponse
     {

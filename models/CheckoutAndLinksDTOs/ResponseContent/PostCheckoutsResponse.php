@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class CheckoutCreatedResponse extends ResponseInterface
+class PostCheckoutsResponse extends ResponseInterface
 {
     public checkout $checkout;
 }

@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class PaymentLinkRequestContent extends FiservObject
+class PaymentLinkRequestBody extends FiservObject
 {
     public string $transactionOrigin;
     public string $transactionType;
@@ -23,4 +24,3 @@ class PaymentLinkRequestContent extends FiservObject
         FiservObject::__construct($json);
     }
 }
-
