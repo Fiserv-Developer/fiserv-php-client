@@ -66,7 +66,7 @@ class HttpClient
             CURLOPT_AUTOREFERER => 1,
             CURLOPT_USERAGENT => Config::$ORIGIN,
             CURLOPT_TIMEOUT => 10,
-            // CURLOPT_HEADER => 1,
+            CURLOPT_HEADER => 1,
             CURLOPT_HTTPHEADER => $headers,
         ];
 
@@ -76,23 +76,53 @@ class HttpClient
         }
 
         curl_setopt_array($handle, $options);
-        $data = curl_exec($handle);
+        $rawDataWithHeaders = curl_exec($handle);
 
         if (curl_errno($handle)) {
             $error = curl_error($handle);
             throw new CurlRequestException($error);
         }
 
-        // print_r($data);
+        $payload = self::parseRawHeader($rawDataWithHeaders);
+        $data = $payload['data'];
 
         $code = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
-        $traceId = 'uhhh';
+        $traceId = $payload['trace-id'];
 
         return [
             'data' => $data,
             'code' => $code,
             'traceId' => $traceId,
         ];
+    }
+
+    /**
+     * Parse raw data string returned by curl to readable PHP object.
+     * Map key and value as specified on header.
+     * 
+     * @var string $rawDataWithHeaders - String response data from request
+     */
+    private static function parseRawHeader(string $rawDataWithHeaders): array
+    {
+        $lines = explode("\n", $rawDataWithHeaders);
+
+        $parse = [];
+
+        foreach ($lines as $line) {
+            $fields = explode(": ", $line);
+
+            if (count($fields) !== 2) {
+                continue;
+            }
+
+            $key = $fields[0];
+            $value = $fields[1];
+            $parse[$key] = $value;
+        }
+
+        $parse['data'] = $lines[count($lines) - 1];
+
+        return $parse;
     }
 
     /**
