@@ -6,20 +6,40 @@ use DataEncodingException;
 use InvalidFieldException;
 use RequiredFieldMissingException;
 
+/**
+ * This class handles serialization and field validation for DTO from JSON server responses and requests.
+ * Every DTO sub class inherits this class.
+ */
 abstract class FiservObject
 {
+    /**
+     * List containing references to required fields. 
+     * Has to be ignored if not request.
+     */
     protected array $requiredFields = [];
-    protected bool $isReponseContent = false;
 
-    public function __construct($json = false, $isReponseContent = false)
+    /**
+     * This flags an object as non-request. If data is not for a request
+     * the require field checks are ignored.
+     */
+    protected bool $isResponseContent = false;
+
+    /**
+     * Constructor which calls setter.
+     * If $isResponseContent flag ist true, the fields should not be validated.
+     * 
+     * @param array|bool $json If not false, a JSON string to be serialized to DTO.
+     * @param bool $isResponseContent True if object is a response
+     */
+    public function __construct($json = false, $isResponseContent = false)
     {
-        $this->isReponseContent = $isReponseContent;
+        $this->isResponseContent = $isResponseContent;
 
         if ($json) {
             $this->set($json);
         }
 
-        if ($this->isReponseContent) {
+        if ($this->isResponseContent) {
             return;
         }
 
@@ -30,6 +50,12 @@ abstract class FiservObject
         }
     }
 
+    /**
+     * Dependy injection which is used to serialize JSON data from server to PHP
+     * objects and vice versa. The setter is recursively for nested objects.
+     * 
+     * @param mixed $data JSON data which has to parsed and inject into current object and children.
+     */
     private function set($data)
     {
         if (is_string($data)) {
@@ -38,7 +64,7 @@ abstract class FiservObject
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $nestedObj = new $key($value, $this->isReponseContent);
+                $nestedObj = new $key($value, $this->isResponseContent);
                 $value = $nestedObj;
             }
 

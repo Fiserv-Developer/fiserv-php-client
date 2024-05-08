@@ -13,7 +13,7 @@ class RequestHandlerTest extends TestCase
     public function testCurlRequest(): void
     {
         $url = 'https://jsonplaceholder.typicode.com/posts/1';
-        $res = HttpClient::curlRequest(RequestType::GET, $url);
+        $res = HttpClient::curlRequest(RequestType::GET, $url, '', false);
         $this->assertIsArray($res);
     }
 
@@ -34,6 +34,13 @@ class RequestHandlerTest extends TestCase
     {
         $this->expectExceptionMessageMatches('/^(?:.*\n){5,}/');
         $data = '{"errors":[{"title":"Internal server error","detail":"Sorry, something has gone wrong at our end. If this persists please contact support and provide the value of your Trace-Id header."}]}';
+        throw new BadRequestException('503', $data, 'c7b7681b5b0368dcff56985981294226');
+    }
+
+    public function testBadRequestExceptionStringMessage(): void
+    {
+        $this->expectExceptionMessage('503: No healthy upstream');
+        $data = 'No healthy upstream';
         throw new BadRequestException('503', $data, 'c7b7681b5b0368dcff56985981294226');
     }
 

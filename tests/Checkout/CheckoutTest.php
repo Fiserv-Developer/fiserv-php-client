@@ -50,6 +50,11 @@ class CheckoutTest extends TestCase
             return;
 
         $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+
+        // $req->checkoutSettings->redirectBackUrls = new redirectBackUrls([
+        //     "successUrl" => "store.com",
+        // ]);
+
         $res = CheckoutSolution::postCheckouts($req);
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");

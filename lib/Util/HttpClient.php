@@ -17,7 +17,14 @@ class HttpClient
     private const domain = 'https://prod.emea.api.fiservapps.com/';
     private static $url = Config::IS_PROD ? self::domain : self::domain . '/sandbox';
 
-    public static function buildHeadersWithMessage(string $content)
+    /**
+     * Create an header object that conforms to API specs. 
+     * A message signature is created by wrapping a hash (SHA256) calculation with the secret key.
+     * 
+     * @param string $content Request body for POST/PUT requests. May be empty (but not null).
+     * @return string Array representing the header
+     */
+    public static function buildHeadersWithMessage(string $content): array
     {
         $clientRequestId = Util::uuid_create();
         $timestamp = strval(intval(microtime(true) * 1000));
@@ -25,15 +32,6 @@ class HttpClient
 
         $signature = hash_hmac('sha256', $message, Config::$API_SECRET, true);
         $b64_sig = base64_encode($signature);
-
-        // $headers = [
-        //     'Api-Key' => self::$key,
-        //     'Timestamp' => $timestamp,
-        //     'Client-Request-Id' => $clientRequestId,
-        //     'Message-Signature' => $b64_sig,
-        //     'Content-Type' => 'application/json',
-        //     'accept' => 'application/json',
-        // ];
 
         $headers = [
             'Api-Key: ' . Config::$API_KEY,
@@ -54,7 +52,7 @@ class HttpClient
      * @param string $url Full URI with root and service path
      * @param string $req Request body for POST, PATCH requests as JSON string 
      */
-    public static function curlRequest(RequestType $type, string $url, string $req = ""): array
+    public static function curlRequest(RequestType $type, string $url, string $req = "", bool $isFiservApi = true): array
     {
         $handle = curl_init();
         $headers = self::buildHeadersWithMessage($req);
@@ -87,12 +85,15 @@ class HttpClient
         $data = $payload['data'];
 
         $code = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
-        $traceId = $payload['trace-id'];
+
+        if ($isFiservApi) {
+            $traceId = $payload['trace-id'];
+        }
 
         return [
             'data' => $data,
             'code' => $code,
-            'traceId' => $traceId,
+            'traceId' => $traceId ?? 'undefined',
         ];
     }
 
@@ -171,14 +172,26 @@ class HttpClient
             throw new ServerException('Internal Error: No healthy upstream. Try again at a later time');
         }
 
+        $encoded = json_encode($data);
+
         if ($code !== 201 && $code !== 200) {
-            throw new BadRequestException($code, json_encode($data), $response['traceId']);
+            $exceptionMessage = $encoded;
+
+            if ($exceptionMessage === 'null') {
+                $exceptionMessage = $response['data'];
+            }
+
+            throw new BadRequestException($code, $exceptionMessage, $response['traceId']);
         }
 
-        return json_decode(json_encode($data), true);
+        return json_decode($encoded, true);
     }
 }
 
+/**
+ * Enum for request types. 
+ * API currently only supports GET, POST and PATCH
+ */
 enum RequestType
 {
     case GET;

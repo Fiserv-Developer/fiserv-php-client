@@ -8,7 +8,14 @@ class BadRequestException extends Exception
 
     public function __construct(string $statusCode, string $message, string $traceId)
     {
-        $errors = json_decode($message, 1)['errors'];
+        $decoded = json_decode($message, 1);
+
+        if (!is_array($decoded)) {
+            $this->message = $statusCode . ': ' . $message;
+            return;
+        }
+
+        $errors = $decoded['errors'];
         $parse = "\n";
 
         foreach ($errors as $error) {
