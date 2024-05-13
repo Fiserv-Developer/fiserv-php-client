@@ -1,7 +1,7 @@
 {
     "name": "fiserv/php-api-wrapper",
     "description": "PHP wrapper for REST API",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "type": "library",
     "require": {
         "ext-curl": "*",
