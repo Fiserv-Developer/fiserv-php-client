@@ -1,17 +1,16 @@
 <?php
 
-use Fiserv\CheckoutSolution;
-use Fiserv\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 class UtilTest extends TestCase
 {
-    public function testPostCheckoutsSuccess(): void
+    public function testFieldStringValidation()
     {
-        $this->assertTrue(true);
-        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
-        $res = CheckoutSolution::postCheckouts($req);
-        $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
-        $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
+        $badUrl = "BAD_URL";
+        $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
+        new redirectBackUrls([
+            'successUrl' => 'https://www.successexample.com',
+            'failureUrl' => $badUrl,
+        ]);
     }
 }

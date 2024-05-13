@@ -25,6 +25,13 @@ abstract class FiservObject
     protected bool $isResponseContent = false;
 
     /**
+     * Regex pattern that may be used for certain fields for validation.
+     * If pattern matching fails thow serialization/validation error to user.
+     * No checking if false.
+     */
+    protected string | false $pattern = false;
+
+    /**
      * Constructor which calls setter.
      * If $isResponseContent flag ist true, the fields should not be validated.
      * 
@@ -34,6 +41,10 @@ abstract class FiservObject
     public function __construct($json = false, $isResponseContent = false)
     {
         $this->isResponseContent = $isResponseContent;
+
+        // if ($this instanceof PatternValidatable) {
+        //     $this->validate();
+        // }
 
         if ($json) {
             $this->set($json);
