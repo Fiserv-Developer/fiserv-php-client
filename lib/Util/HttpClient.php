@@ -52,7 +52,7 @@ class HttpClient
      * @param string $url Full URI with root and service path
      * @param string $req Request body for POST, PATCH requests as JSON string 
      */
-    public static function curlRequest(RequestType $type, string $url, string $req = "", bool $isFiservApi = true): array
+    private static function curlRequest(RequestType $type, string $url, string $req = '', bool $isFiservApi = true): array
     {
         $handle = curl_init();
         $headers = self::buildHeadersWithMessage($req);
@@ -93,8 +93,20 @@ class HttpClient
         return [
             'data' => $data,
             'code' => $code,
-            'traceId' => $traceId ?? 'undefined',
+            'traceId' => $traceId ?? 'null',
         ];
+    }
+
+    /**
+     * Wrapper for external HTTP requests (non-API calls)
+     * 
+     * @param RequestType $type GET, POST or PATCH
+     * @param string $url Full URI with root and service path
+     * @param string $req Request body for POST, PATCH requests as JSON string 
+     */
+    public static function externalCurlRequest(RequestType $type, string $url, string $req = '')
+    {
+        return self::curlRequest($type, $url, $req, false);
     }
 
     /**
@@ -167,12 +179,25 @@ class HttpClient
 
         $data = json_decode($response['data']);
         $code = $response['code'];
+        $encoded = json_encode($data);
 
+        self::handleStatusCodes($code, $encoded, $response);
+
+        return json_decode($encoded, true);
+    }
+
+    /**
+     * Block handling response error code by throwing
+     * 
+     * @param $code Reponse code
+     * @param $encoded Encoded response data
+     * @param $response Raw repsonse array
+     */
+    private static function handleStatusCodes($code, $encoded, $response)
+    {
         if ($code == 503) {
             throw new ServerException('Internal Error: No healthy upstream. Try again at a later time');
         }
-
-        $encoded = json_encode($data);
 
         if ($code !== 201 && $code !== 200) {
             $exceptionMessage = $encoded;
@@ -183,10 +208,9 @@ class HttpClient
 
             throw new BadRequestException($code, $exceptionMessage, $response['traceId']);
         }
-
-        return json_decode($encoded, true);
     }
 }
+
 
 /**
  * Enum for request types. 

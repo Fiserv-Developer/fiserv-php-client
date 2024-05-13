@@ -13,7 +13,7 @@ class RequestHandlerTest extends TestCase
     public function testCurlRequest(): void
     {
         $url = 'https://jsonplaceholder.typicode.com/posts/1';
-        $res = HttpClient::curlRequest(RequestType::GET, $url, '', false);
+        $res = HttpClient::externalCurlRequest(RequestType::GET, $url);
         $this->assertIsArray($res);
     }
 
@@ -24,7 +24,7 @@ class RequestHandlerTest extends TestCase
             return;
         }
 
-        $res = HttpClient::curlRequest(RequestType::POST, $this->NODE_URL, '{"data":"SDK - ' . date("Y-m-d\TH:i:sO") . '"}');
+        $res = HttpClient::externalCurlRequest(RequestType::POST, $this->NODE_URL, '{"data":"SDK - ' . date("Y-m-d\TH:i:sO") . '"}');
         $data = $res['data'];
 
         $this->assertIsString($data);
