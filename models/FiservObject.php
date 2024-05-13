@@ -5,6 +5,7 @@ namespace Fiserv\models;
 use DataEncodingException;
 use InvalidFieldException;
 use RequiredFieldMissingException;
+use ValidationInterface;
 
 /**
  * This class handles serialization and field validation for DTO from JSON server responses and requests.
@@ -42,10 +43,6 @@ abstract class FiservObject
     {
         $this->isResponseContent = $isResponseContent;
 
-        // if ($this instanceof PatternValidatable) {
-        //     $this->validate();
-        // }
-
         if ($json) {
             $this->set($json);
         }
@@ -59,7 +56,13 @@ abstract class FiservObject
                 throw new RequiredFieldMissingException($field, $this::class);
             }
         }
+
+        if ($this instanceof ValidationInterface) {
+            $this->validate();
+        }
     }
+
+    // abstract function checkValidate();
 
     /**
      * Dependy injection which is used to serialize JSON data from server to PHP

@@ -2,18 +2,21 @@
 
 use Fiserv\models\FiservObject;
 
-class redirectBackUrls extends FiservObject
+class redirectBackUrls extends FiservObject implements ValidationInterface
 {
-    use PatternValidatable;
+    use ValidationTrait;
 
     public string $successUrl;
     public string $failureUrl;
 
     public function __construct($json = false, $isReponseContent = false)
     {
-        $pattern = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/m';
-        FiservObject::__construct($json, $isReponseContent);
+        $this->pattern = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/m';
+        parent::__construct($json, $isReponseContent);
+    }
 
-        $this->validate($this, $pattern);
+    public function validate()
+    {
+        $this->checkString($this);
     }
 }

@@ -1,16 +1,51 @@
 <?php
 
+use Fiserv\CheckoutSolution;
+use Fiserv\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 class UtilTest extends TestCase
 {
-    public function testFieldStringValidation()
+    public function testFieldStringValidationOnConstruction()
     {
         $badUrl = "BAD_URL";
+
         $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
-        new redirectBackUrls([
-            'successUrl' => 'https://www.successexample.com',
-            'failureUrl' => $badUrl,
+
+        new checkoutSettings([
+            'redirectBackUrls' => [
+                'successUrl' => 'https://www.successexample.com',
+                'failureUrl' => $badUrl,
+            ]
         ]);
+    }
+
+    public function testFieldStringValidationManually()
+    {
+        $badUrl = "BAD_URL";
+
+        $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
+
+        $settings = new checkoutSettings([
+            'redirectBackUrls' => [
+                'successUrl' => 'https://www.successexample.com',
+                'failureUrl' => 'https://www.successexample.com',
+            ]
+        ]);
+
+        $settings->redirectBackUrls->failureUrl = $badUrl;
+        $settings->redirectBackUrls->validate();
+    }
+
+    public function testFieldStringValidationOnRequest()
+    {
+        $badUrl = "BAD_URL";
+
+        $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
+
+        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req->checkoutSettings->redirectBackUrls->failureUrl = $badUrl;
+
+        $res = CheckoutSolution::postCheckouts($req);
     }
 }

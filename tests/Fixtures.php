@@ -55,7 +55,10 @@ class Fixtures extends TestCase
         'transactionOrigin' => 'ECOM',
         'transactionType' => 'SALE',
         'transactionAmount' => ['total' => 130, 'currency' => 'EUR'],
-        'checkoutSettings' => ['locale' => 'en_GB'],
+        'checkoutSettings' => ['locale' => 'en_GB', "redirectBackUrls" => [
+            "successUrl" => "https://www.success.com/",
+            "failureUrl" => "https://www.failureexample.com"
+        ]],
         'paymentMethodDetails' => [
             'cards' => [
                 'authenticationPreferences' => [

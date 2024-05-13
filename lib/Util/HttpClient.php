@@ -9,6 +9,9 @@ use CurlRequestException;
 use Exception;
 use Fiserv\models\FiservObject;
 use Fiserv\Util\Util;
+use ValidationInterface;
+use ValidationTrait;
+use redirectBackUrls;
 use RequestBodyException;
 use ServerException;
 
@@ -170,6 +173,8 @@ class HttpClient
             throw new RequestBodyException($type);
         }
 
+        self::validateRequest($requestBody);
+
         try {
             $requestBodyJson = json_encode($requestBody);
             $response = self::curlRequest($type, self::$url . $endpoint, $requestBodyJson);
@@ -184,6 +189,25 @@ class HttpClient
         self::handleStatusCodes($code, $encoded, $response);
 
         return json_decode($encoded, true);
+    }
+
+    /**
+     * Run validation checks before request and
+     * throw on failure.
+     * 
+     * @param FiservObject $requestBody Request to be validated
+     */
+    private static function validateRequest(FiservObject $requestBody): void
+    {
+        foreach ($requestBody as $key => $value) {
+            if ($value instanceof FiservObject) {
+                self::validateRequest($value);
+            }
+
+            if ($value instanceof ValidationInterface) {
+                $value->validate();
+            }
+        }
     }
 
     /**
