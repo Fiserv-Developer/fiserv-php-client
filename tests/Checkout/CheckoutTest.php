@@ -2,6 +2,7 @@
 
 use Fiserv\CheckoutSolution;
 use Fiserv\Fixtures;
+use PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase
@@ -51,10 +52,6 @@ class CheckoutTest extends TestCase
 
         $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
 
-        // $req->checkoutSettings->redirectBackUrls = new redirectBackUrls([
-        //     "successUrl" => "store.com",
-        // ]);
-
         $res = CheckoutSolution::postCheckouts($req);
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
@@ -70,5 +67,27 @@ class CheckoutTest extends TestCase
         $res = CheckoutSolution::getCheckoutId($this->mockCheckoutId);
         $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
+    }
+
+    public function testFloatAmountSetter(): void
+    {
+        $total = 29.49;
+
+        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req->transactionAmount->total = $total;
+
+        $res = CheckoutSolution::postCheckouts($req);
+        $id = $res->checkout->checkoutId;
+
+        $details = CheckoutSolution::getCheckoutId($id);
+        $total_actual = $details->approvedAmount->total;
+
+        $this->assertEquals($total, $total_actual);
+    }
+
+    public function testCreateSEPACheckout(): void
+    {
+        $res = CheckoutSolution::createSEPACheckout(14.99, "https://success.com", "https://noooo.com");
+        $this->assertInstanceOf(PostCheckoutsResponse::class, $res);
     }
 }
