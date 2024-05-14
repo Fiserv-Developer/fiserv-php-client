@@ -2,6 +2,7 @@
 
 namespace Fiserv;
 
+use components;
 use PostCheckoutsResponse;
 use Fiserv\HttpClient;
 use GetCheckoutIdResponse;
@@ -38,10 +39,17 @@ class CheckoutSolution
      * @param string $successUrl URL that directs to Thank You page from checkout
      * @param string $failureUrl URL that directs to failure notifaction if checkout failed
      */
-    public static function createSEPACheckout(float $transactionTotal, string $successUrl, string $failureUrl): PostCheckoutsResponse
+    public static function createSEPACheckout(float $transactionTotal, string $successUrl, string $failureUrl, components | bool $components = false): PostCheckoutsResponse
     {
         $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $transactionTotal;
+
+        if ($components) {
+            $req->transactionAmount->components = $components;
+        } else {
+            unset($req->transactionAmount->components);
+        }
+
         $req->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
         $req->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
 

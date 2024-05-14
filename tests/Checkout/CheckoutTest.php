@@ -75,6 +75,9 @@ class CheckoutTest extends TestCase
 
         $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $total;
+        $req->transactionAmount->components->subtotal = $total - 0.99;
+        $req->transactionAmount->components->vatAmount = 0;
+        $req->transactionAmount->components->shipping = 0.99;
 
         $res = CheckoutSolution::postCheckouts($req);
         $id = $res->checkout->checkoutId;
@@ -87,7 +90,18 @@ class CheckoutTest extends TestCase
 
     public function testCreateSEPACheckout(): void
     {
-        $res = CheckoutSolution::createSEPACheckout(14.99, "https://success.com", "https://noooo.com");
+        $res = CheckoutSolution::createSEPACheckout(
+            14.99,
+            "https://success.com",
+            "https://noooo.com",
+            new components([
+                'shipping' => 0.99,
+                'vatAmount' => 2,
+                'subtotal' => 12,
+            ])
+        );
+
+
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res);
     }
 }

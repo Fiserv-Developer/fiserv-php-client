@@ -54,7 +54,15 @@ class Fixtures extends TestCase
     public const paymentLinksRequestContent = [
         'transactionOrigin' => 'ECOM',
         'transactionType' => 'SALE',
-        'transactionAmount' => ['total' => 130, 'currency' => 'EUR'],
+        'transactionAmount' => [
+            'total' => 130,
+            'currency' => 'EUR',
+            'components' => [
+                'subtotal' => 130,
+                'vatAmount' => 0,
+                'shipping' => 0,
+            ]
+        ],
         'checkoutSettings' => ['locale' => 'en_GB', "redirectBackUrls" => [
             "successUrl" => "https://www.success.com/",
             "failureUrl" => "https://www.failureexample.com"
