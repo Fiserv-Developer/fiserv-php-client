@@ -153,6 +153,10 @@ class HttpClient
         if (is_null(Config::$API_SECRET)) {
             throw new Exception("No valid API Secret has been provided. Set it in Config class");
         }
+
+        if (Config::$IS_SET) {
+            throw new Exception("Config has not been set. Please create a Config object.");
+        }
     }
 
     /**
@@ -173,7 +177,9 @@ class HttpClient
             throw new RequestBodyException($type);
         }
 
-        self::validateRequest($requestBody);
+        if ($requestBody instanceof FiservObject) {
+            self::validateRequest($requestBody);
+        }
 
         try {
             $requestBodyJson = json_encode($requestBody);
