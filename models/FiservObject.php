@@ -3,7 +3,7 @@
 namespace Fiserv\models;
 
 use DataEncodingException;
-use InvalidFieldException;
+use InvalidFieldWarning;
 use RequiredFieldMissingException;
 use ValidationInterface;
 
@@ -62,8 +62,6 @@ abstract class FiservObject
         }
     }
 
-    // abstract function checkValidate();
-
     /**
      * Dependy injection which is used to serialize JSON data from server to PHP
      * objects and vice versa. The setter is recursively for nested objects.
@@ -82,8 +80,8 @@ abstract class FiservObject
                 $value = $nestedObj;
             }
 
-            if (!property_exists($this, $key)) {
-                throw new InvalidFieldException($key, $this::class);
+            if (!property_exists($this, $key) && !$this->isResponseContent) {
+                new InvalidFieldWarning($key, $this::class);
             }
 
             $this->{$key} = $value;
