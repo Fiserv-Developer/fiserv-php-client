@@ -3,8 +3,11 @@
 namespace Fiserv\models;
 
 use DataEncodingException;
+use Error;
+use Exception;
 use InvalidFieldWarning;
 use RequiredFieldMissingException;
+use Throwable;
 use ValidationInterface;
 
 /**
@@ -76,7 +79,13 @@ abstract class FiservObject
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $nestedObj = new $key($value, $this->isResponseContent);
+                try {
+                    $nestedObj = new $key($value, $this->isResponseContent);
+                } catch (Error $th) {
+                    new InvalidFieldWarning($key, $this::class);
+                    continue;
+                }
+
                 $value = $nestedObj;
             }
 
@@ -86,5 +95,10 @@ abstract class FiservObject
 
             $this->{$key} = $value;
         }
+    }
+
+    public function __toString()
+    {
+        return json_encode($this, JSON_PRETTY_PRINT);
     }
 }

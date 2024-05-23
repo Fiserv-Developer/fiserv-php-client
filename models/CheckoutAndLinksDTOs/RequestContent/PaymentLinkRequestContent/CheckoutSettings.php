@@ -1,4 +1,5 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
 class checkoutSettings extends FiservObject
@@ -7,4 +8,5 @@ class checkoutSettings extends FiservObject
     public redirectBackUrls $redirectBackUrls;
     public string $webHooksUrl;
 
+    public fraud $fraud;
 }

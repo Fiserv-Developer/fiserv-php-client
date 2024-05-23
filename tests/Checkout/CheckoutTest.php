@@ -2,12 +2,10 @@
 
 use Fiserv\CheckoutSolution;
 use Fiserv\Fixtures;
-use PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase
 {
-    private $client = null;
     private $DONT_TEST_API = false;
     private string $mockCheckoutId = 'IUBsFE';
 
@@ -18,11 +16,6 @@ class CheckoutTest extends TestCase
             "redirectionUrl" => "https://checkout-lane.com/?checkoutId=IUBsFE",
         ]
     ];
-
-    protected function setUp(): void
-    {
-        // $this->client = curl_init();
-    }
 
     public function testMissingFieldException(): void
     {
@@ -56,7 +49,6 @@ class CheckoutTest extends TestCase
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
-
 
     public function testGetCheckoutIdSuccess(): void
     {
@@ -100,7 +92,6 @@ class CheckoutTest extends TestCase
                 'subtotal' => 12,
             ])
         );
-
 
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res);
     }
