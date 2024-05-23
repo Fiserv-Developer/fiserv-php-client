@@ -3,6 +3,7 @@
 namespace Fiserv;
 
 use components;
+use Config;
 use PostCheckoutsResponse;
 use Fiserv\HttpClient;
 use GetCheckoutIdResponse;
@@ -20,6 +21,7 @@ class CheckoutSolution
      */
     public static function postCheckouts(PaymentLinkRequestBody $req): PostCheckoutsResponse
     {
+        $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
         $data = new PostCheckoutsResponse($res);

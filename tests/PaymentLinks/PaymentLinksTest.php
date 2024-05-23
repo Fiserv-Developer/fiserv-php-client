@@ -21,7 +21,10 @@ class PaymentLinksTest extends TestCase
 
     protected function setUp(): void
     {
-        // $this->client = curl_init();
+        Config::$ORIGIN = 'PHP Unit';
+        Config::$API_KEY = '7V26q9EbRO2hCmpWARdFtOyrJ0A4cHEP';
+        Config::$API_SECRET = 'KCFGSj3JHY8CLOLzszFGHmlYQ1qI9OSqNEOUj24xTa0';
+        Config::$STORE_ID = '72305408';
     }
 
     public function testCreatePaymentLinkSuccess(): void
