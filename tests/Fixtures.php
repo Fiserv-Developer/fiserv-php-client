@@ -63,10 +63,14 @@ class Fixtures extends TestCase
                 'shipping' => 0,
             ]
         ],
-        'checkoutSettings' => ['locale' => 'en_GB', "redirectBackUrls" => [
-            "successUrl" => "https://www.success.com/",
-            "failureUrl" => "https://www.failureexample.com"
-        ]],
+        'checkoutSettings' => [
+            'locale' => 'en_GB',
+            'webHooksUrl' => 'https://www.success.com/',
+            'redirectBackUrls' => [
+                'successUrl' => "https://www.success.com/",
+                'failureUrl' => "https://www.failureexample.com"
+            ]
+        ],
         'paymentMethodDetails' => [
             'cards' => [
                 'authenticationPreferences' => [

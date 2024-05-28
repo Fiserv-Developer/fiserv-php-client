@@ -58,7 +58,7 @@ class HttpClient
     private static function curlRequest(RequestType $type, string $url, string $req = '', bool $isFiservApi = true): array
     {
         $handle = curl_init();
-        $headers = self::buildHeadersWithMessage($req);
+        $headers = $isFiservApi ? self::buildHeadersWithMessage($req) : ['Content-Type: application/json'];
 
         $options = [
             CURLOPT_URL => $url,
@@ -70,6 +70,7 @@ class HttpClient
             CURLOPT_HEADER => 1,
             CURLOPT_HTTPHEADER => $headers,
         ];
+
 
         if ($type === RequestType::POST && !is_null($req)) {
             $options[CURLOPT_POST] = 1;

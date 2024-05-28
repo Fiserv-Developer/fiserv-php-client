@@ -30,6 +30,22 @@ class CheckoutSolution
     }
 
     /**
+     * This version forwards to node server. Node sends mocked webhook events (approved sample data).
+     * 
+     * @param PaymentLinkRequestBody $req - Request body containing checkout options
+     */
+    public static function postCheckoutsWithSimulatedMock(PaymentLinkRequestBody $req): PostCheckoutsResponse
+    {
+        $req->storeId = Config::$STORE_ID;
+        $endpoint = self::endpointRoot;
+        $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
+        $data = new PostCheckoutsResponse($res);
+
+        return $data;
+    }
+
+
+    /**
      * Create a checkout link that uses default parameters for SEPA payment.
      * 
      * @todo Currently, the request object is inaccessible in this kind of function call.
