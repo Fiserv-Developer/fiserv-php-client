@@ -11,7 +11,7 @@ class PaymentLinkRequestBody extends FiservObject
     public paymentMethodDetails $paymentMethodDetails;
     public string $merchantTransactionId;
     public string $storeId;
-    public string $orderId;
+    public order $order;
 
     public function __construct($json = false)
     {
