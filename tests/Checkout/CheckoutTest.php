@@ -27,12 +27,12 @@ class CheckoutTest extends TestCase
 
     public function testMissingFieldException(): void
     {
-        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", PaymentLinkRequestBody::class));
+        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", CreateCheckoutRequest::class));
 
         $missingFieldContent = Fixtures::paymentLinksRequestContent;
         unset($missingFieldContent["storeId"]);
 
-        new PaymentLinkRequestBody($missingFieldContent);
+        new CreateCheckoutRequest($missingFieldContent);
     }
 
     public function testNestedMissingFieldException(): void
@@ -42,7 +42,7 @@ class CheckoutTest extends TestCase
         $missingFieldContent = Fixtures::paymentLinksRequestContent;
         unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
 
-        new PaymentLinkRequestBody($missingFieldContent);
+        new CreateCheckoutRequest($missingFieldContent);
     }
 
     public function testPostCheckoutsSuccess(): void
@@ -51,7 +51,7 @@ class CheckoutTest extends TestCase
         if ($this->DONT_TEST_API)
             return;
 
-        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
 
         $res = CheckoutSolution::postCheckouts($req);
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
@@ -73,7 +73,7 @@ class CheckoutTest extends TestCase
     {
         $total = 29.49;
 
-        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $total;
         $req->transactionAmount->components->subtotal = $total - 0.99;
         $req->transactionAmount->components->vatAmount = 0;

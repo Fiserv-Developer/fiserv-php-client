@@ -19,7 +19,7 @@ class WebhookTest extends TestCase
             return;
         }
 
-        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
         $req->checkoutSettings->webHooksUrl = 'http://fiserv-wp-dev.local/wp-json/fiserv_woocommerce_plugin/v1/events';
         $req->orderId = '99';
 

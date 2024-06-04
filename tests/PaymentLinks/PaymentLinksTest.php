@@ -30,7 +30,7 @@ class PaymentLinksTest extends TestCase
     public function testCreatePaymentLinkSuccess(): void
     {
         $this->assertTrue(true);
-        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
         $res = PaymentLinks::createPaymentLink($req);
         $this->assertInstanceOf(PaymentsLinksCreatedResponse::class, $res, "Response schema is malformed");
     }

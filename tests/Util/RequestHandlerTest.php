@@ -66,7 +66,7 @@ class RequestHandlerTest extends TestCase
             ],
         ];
 
-        $req = new PaymentLinkRequestBody($reqBody);
+        $req = new CreateCheckoutRequest($reqBody);
         $res = CheckoutSolution::postCheckouts($req);
 
         // $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");

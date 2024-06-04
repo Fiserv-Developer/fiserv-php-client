@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class PaymentLinkRequestBody extends FiservObject
+class CreateCheckoutRequest extends FiservObject
 {
     public string $transactionOrigin;
     public string $transactionType;

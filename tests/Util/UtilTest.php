@@ -43,7 +43,7 @@ class UtilTest extends TestCase
 
         $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
 
-        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
         $req->checkoutSettings->redirectBackUrls->failureUrl = $badUrl;
 
         $res = CheckoutSolution::postCheckouts($req);

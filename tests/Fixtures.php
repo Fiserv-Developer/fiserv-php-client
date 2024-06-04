@@ -2,7 +2,7 @@
 
 namespace Fiserv;
 
-use PaymentLinkRequestBody;
+use CreateCheckoutRequest;
 use PHPUnit\Framework\TestCase;
 
 
@@ -92,7 +92,7 @@ class Fixtures extends TestCase
 
     public function testDeserializedDeeplyNestedField(): void
     {
-        $data = new PaymentLinkRequestBody(self::paymentLinksRequestContent);
+        $data = new CreateCheckoutRequest(self::paymentLinksRequestContent);
         $this->assertEquals($data->paymentMethodDetails->cards->tokenBasedTransaction->transactionSequence, 'FIRST', 'Correct');
     }
 }

@@ -7,7 +7,7 @@ use Config;
 use PostCheckoutsResponse;
 use Fiserv\HttpClient;
 use GetCheckoutIdResponse;
-use PaymentLinkRequestBody;
+use CreateCheckoutRequest;
 
 class CheckoutSolution
 {
@@ -17,9 +17,9 @@ class CheckoutSolution
      * Create a checkout link to be used as checkout solution.
      * Pass an optional webhook to receive status events from fiserv server.
      * 
-     * @param PaymentLinkRequestBody $req - Request body containing checkout options
+     * @param CreateCheckoutRequest $req - Request body containing checkout options
      */
-    public static function postCheckouts(PaymentLinkRequestBody $req): PostCheckoutsResponse
+    public static function postCheckouts(CreateCheckoutRequest $req): PostCheckoutsResponse
     {
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
@@ -32,9 +32,9 @@ class CheckoutSolution
     /**
      * This version forwards to node server. Node sends mocked webhook events (approved sample data).
      * 
-     * @param PaymentLinkRequestBody $req - Request body containing checkout options
+     * @param CreateCheckoutRequest $req - Request body containing checkout options
      */
-    public static function postCheckoutsWithSimulatedMock(PaymentLinkRequestBody $req): PostCheckoutsResponse
+    public static function postCheckoutsWithSimulatedMock(CreateCheckoutRequest $req): PostCheckoutsResponse
     {
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
@@ -59,7 +59,7 @@ class CheckoutSolution
      */
     public static function createSEPACheckout(float $transactionTotal, string $successUrl, string $failureUrl, components | bool $components = false): PostCheckoutsResponse
     {
-        $req = new PaymentLinkRequestBody(Fixtures::paymentLinksRequestContent);
+        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $transactionTotal;
 
         if ($components) {
