@@ -7,6 +7,6 @@ class order extends FiservObject
     public string $orderId;
     public orderDetails $orderDetails;
     public string $basket;
-    public string $billing;
-    public string $shipping;
+    public billing $billing;
+    public billing $shipping;
 }

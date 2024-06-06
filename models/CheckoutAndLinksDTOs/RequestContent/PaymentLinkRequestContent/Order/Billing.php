@@ -4,7 +4,7 @@ use Fiserv\models\FiservObject;
 
 class billing extends FiservObject
 {
-    public string $person;
-    public string $contact;
-    public string $address;
+    public person $person;
+    public contact $contact;
+    public address $address;
 }
