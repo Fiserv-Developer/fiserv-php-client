@@ -23,6 +23,9 @@ class CheckoutSolution
     {
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
+
+        /** Floor transaction amount in case it got deformed */
+        $req->transactionAmount->total = floor($req->transactionAmount->total * 100) / 100;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
         $data = new PostCheckoutsResponse($res);
 
