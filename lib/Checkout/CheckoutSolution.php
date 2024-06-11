@@ -27,7 +27,9 @@ class CheckoutSolution
         /** Floor transaction amount in case it got deformed */
         $req->transactionAmount->total = floor($req->transactionAmount->total * 100) / 100;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-        $data = new PostCheckoutsResponse($res);
+
+        $data = new PostCheckoutsResponse($res['data']);
+        $data->traceId = $res['traceId'];
 
         return $data;
     }
@@ -42,7 +44,7 @@ class CheckoutSolution
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-        $data = new PostCheckoutsResponse($res);
+        $data = new PostCheckoutsResponse($res['data']);
 
         return $data;
     }
@@ -88,7 +90,7 @@ class CheckoutSolution
     {
         $endpoint = self::endpointRoot . "/" . $checkoutId;
         $res = HttpClient::buildRequest(RequestType::GET, $endpoint);
-        $data = new GetCheckoutIdResponse($res);
+        $data = new GetCheckoutIdResponse($res['data']);
 
         return $data;
     }

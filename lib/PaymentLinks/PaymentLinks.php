@@ -16,7 +16,7 @@ class PaymentLinks
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-        $data = new PaymentsLinksCreatedResponse($res);
+        $data = new PaymentsLinksCreatedResponse($res['data']);
 
         return $data;
     }
@@ -25,7 +25,7 @@ class PaymentLinks
     {
         $endpoint = self::endpointRoot . "/" . $paymentLinkId;
         $res = HttpClient::buildRequest(RequestType::GET, $endpoint);
-        $data = new GetPaymentLinkDetailsResponse($res);
+        $data = new GetPaymentLinkDetailsResponse($res['data']);
 
         return $data;
     }

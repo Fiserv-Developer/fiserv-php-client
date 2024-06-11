@@ -197,11 +197,16 @@ class HttpClient
 
         $data = json_decode($response['data']);
         $code = $response['code'];
+        $traceId = $response['traceId'];
         $encoded = json_encode($data);
 
         self::handleStatusCodes($code, $encoded, $response);
 
-        return json_decode($encoded, true);
+        return
+            [
+                'data' => json_decode($encoded, true),
+                'traceId' => $traceId,
+            ];
     }
 
     /**
