@@ -183,7 +183,11 @@ class HttpClient
         }
 
         try {
+            // var_dump($requestBody);
             $requestBodyJson = json_encode($requestBody);
+            echo "==== REQUEST SENT: ";
+            print_r($requestBodyJson);
+            echo "==== \n";
             $response = self::curlRequest($type, self::$url . $endpoint, $requestBodyJson);
         } catch (CurlRequestException $e) {
             throw $e;

@@ -71,7 +71,7 @@ class CheckoutTest extends TestCase
 
     public function testFloatAmountSetter(): void
     {
-        $total = 29.49;
+        $total = 29.99;
 
         $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $total;
@@ -93,7 +93,7 @@ class CheckoutTest extends TestCase
         $res = CheckoutSolution::createSEPACheckout(
             14.99,
             "https://success.com",
-            "https://noooo.com",
+            "https://failure.com",
             new components([
                 'shipping' => 0.99,
                 'vatAmount' => 2,

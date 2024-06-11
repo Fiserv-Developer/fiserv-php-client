@@ -1,9 +1,10 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
 class ipgTransactionDetails extends FiservObject
 {
     public string $ipgTransactionId;
-    public string $transactionStatus;
+    public TransactionStatus $transactionStatus;
     public string $approvalCode;
 }
