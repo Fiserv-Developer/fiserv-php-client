@@ -10,8 +10,6 @@ use Exception;
 use Fiserv\models\FiservObject;
 use Fiserv\Util\Util;
 use ValidationInterface;
-use ValidationTrait;
-use redirectBackUrls;
 use RequestBodyException;
 use ServerException;
 
@@ -19,6 +17,14 @@ class HttpClient
 {
     private const domain = 'https://prod.emea.api.fiservapps.com/';
     private static $url = Config::IS_PROD ? self::domain : self::domain . '/sandbox';
+
+    public function __construct()
+    {
+        if (version_compare(phpversion(), '7.1', '>=')) {
+            ini_set('precision', 17);
+            ini_set('serialize_precision', -1);
+        }
+    }
 
     /**
      * Create an header object that conforms to API specs. 
@@ -183,11 +189,6 @@ class HttpClient
         }
 
         try {
-            if (version_compare(phpversion(), '7.1', '>=')) {
-                ini_set('precision', 17);
-                ini_set('serialize_precision', -1);
-            }
-
             $requestBodyJson = json_encode($requestBody);
             $response = self::curlRequest($type, self::$url . $endpoint, $requestBodyJson);
         } catch (CurlRequestException $e) {
