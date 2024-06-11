@@ -184,9 +184,9 @@ class HttpClient
 
         try {
             $requestBodyJson = json_encode($requestBody);
-            // echo "==== REQUEST SENT: ";
-            // print_r($requestBodyJson);
-            // echo "==== \n";
+            echo "==== REQUEST SENT: ";
+            print_r($requestBodyJson);
+            echo "==== \n";
             $response = self::curlRequest($type, self::$url . $endpoint, $requestBodyJson);
         } catch (CurlRequestException $e) {
             throw $e;

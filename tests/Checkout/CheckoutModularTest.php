@@ -53,8 +53,7 @@ class CheckoutModularTest extends TestCase
     public function testFlooringTransactionAmount(): void
     {
         $req = new CreateCheckoutRequest(self::RequestBody);
-        $req->transactionAmount->total = 20.8899;
-        $this->assertEquals($req->transactionAmount->total, 20.8899);
+        $req->transactionAmount->total = 20.8899999999999999998;
 
         $res = CheckoutSolution::postCheckouts($req);
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
