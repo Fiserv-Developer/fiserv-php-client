@@ -10,8 +10,14 @@ class WebhookEvent extends FiservObject
     public string $orderId;
     public string $transactionType;
     public approvedAmount $approvedAmount;
-    public TransactionStatus $transactionStatus;
+    public transactionStatus $transactionStatus;
     public paymentMethodUsed $paymentMethodUsed;
     public ipgTransactionDetails $ipgTransactionDetails;
     public string $receivedAt;
+
+    public function __construct($json = false, $isReponseContent = true)
+    {
+        $this->receivedAt = date("Y-m-d H:i:s");
+        parent::__construct($json, $isReponseContent);
+    }
 }
