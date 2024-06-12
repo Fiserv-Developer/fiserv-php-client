@@ -68,13 +68,16 @@ class HttpClient
 
         $options = [
             CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_FOLLOWLOCATION => 1,
-            CURLOPT_AUTOREFERER => 1,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_AUTOREFERER => true,
             CURLOPT_USERAGENT => Config::$ORIGIN,
             CURLOPT_TIMEOUT => 10,
-            CURLOPT_HEADER => 1,
+            CURLOPT_HEADER => true,
             CURLOPT_HTTPHEADER => $headers,
+            /** SSL Options */
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
         ];
 
 

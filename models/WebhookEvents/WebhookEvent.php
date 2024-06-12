@@ -13,4 +13,5 @@ class WebhookEvent extends FiservObject
     public TransactionStatus $transactionStatus;
     public paymentMethodUsed $paymentMethodUsed;
     public ipgTransactionDetails $ipgTransactionDetails;
+    public string $receivedAt;
 }
