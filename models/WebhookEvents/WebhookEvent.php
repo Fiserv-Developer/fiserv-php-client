@@ -10,7 +10,7 @@ class WebhookEvent extends FiservObject
     public string $orderId;
     public string $transactionType;
     public approvedAmount $approvedAmount;
-    public transactionStatus $transactionStatus;
+    public transactionStatus | string $transactionStatus;
     public paymentMethodUsed $paymentMethodUsed;
     public ipgTransactionDetails $ipgTransactionDetails;
     public string $receivedAt;
