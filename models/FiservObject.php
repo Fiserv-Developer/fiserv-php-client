@@ -1,13 +1,11 @@
 <?php
 
-namespace Fiserv\models;
+namespace Fiserv\Models;
 
-use DataEncodingException;
 use Error;
-use Exception;
-use InvalidFieldWarning;
-use RequiredFieldMissingException;
-use ValidationInterface;
+use Fiserv\Exception\DataEncodingException;
+use Fiserv\Exception\InvalidFieldWarning;
+use Fiserv\Exception\RequiredFieldMissingException;
 
 /**
  * This class handles serialization and field validation for DTO from JSON server responses and requests.
@@ -79,19 +77,20 @@ abstract class FiservObject
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 try {
-                    $className = ucfirst($key);
+                    $className = 'Fiserv\\Models\\' . ucfirst($key);
                     $nestedObj = new $className($value, $this->isResponseContent);
                 } catch (Error $th) {
                     new InvalidFieldWarning($key, $this::class);
-                    continue;
+                    echo '===== FAILED HERE ' . $className;
+                    // continue;
                 }
 
                 $value = $nestedObj;
             }
 
-            if (!property_exists($this, $key) && !$this->isResponseContent) {
-                new InvalidFieldWarning($key, $this::class);
-            }
+            // if (!property_exists($this, $key) && !$this->isResponseContent) {
+            //     new InvalidFieldWarning($key, $this::class);
+            // }
 
             $this->{$key} = $value;
         }

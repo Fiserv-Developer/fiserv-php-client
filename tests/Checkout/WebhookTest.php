@@ -1,9 +1,9 @@
 <?php
 
-use Fiserv\FiservCheckoutClient;
-use Fiserv\Fixtures;
-use Fiserv\HttpClient;
-use Fiserv\RequestType;
+use Fiserv\HttpClient\HttpClient;
+use Fiserv\HttpClient\RequestType;
+use Fiserv\Models\CheckoutClientRequest;
+use Fiserv\Tests\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 class WebhookTest extends TestCase

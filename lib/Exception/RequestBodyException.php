@@ -1,5 +1,9 @@
 <?php
-use Fiserv\RequestType;
+
+namespace Fiserv\Exception;
+
+use Exception;
+use Fiserv\HttpClient\RequestType;
 
 class RequestBodyException extends Exception
 {

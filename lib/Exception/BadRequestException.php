@@ -1,5 +1,9 @@
 <?php
 
+namespace Fiserv\Exception;
+
+use Exception;
+
 class BadRequestException extends Exception
 {
     public string $title;

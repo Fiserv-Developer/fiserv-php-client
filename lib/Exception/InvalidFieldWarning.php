@@ -1,5 +1,7 @@
 <?php
 
+namespace Fiserv\Exception;
+
 class InvalidFieldWarning
 {
     public function __construct(string $field, string $class)

@@ -1,7 +1,13 @@
 <?php
 
-use Fiserv\FiservCheckoutClient;
-use Fiserv\Fixtures;
+use Fiserv\Checkout\CheckoutClient;
+use Fiserv\Config\ApiConfig;
+use Fiserv\Exception\RequiredFieldMissingException;
+use Fiserv\Models\CheckoutClientRequest;
+use Fiserv\Models\CheckoutClientResponse;
+use Fiserv\Models\CreateToken;
+use Fiserv\Models\GetCheckoutIdResponse;
+use Fiserv\Tests\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase
@@ -19,10 +25,10 @@ class CheckoutTest extends TestCase
 
     protected function setUp(): void
     {
-        Config::$ORIGIN = 'PHP Unit';
-        Config::$API_KEY = '7V26q9EbRO2hCmpWARdFtOyrJ0A4cHEP';
-        Config::$API_SECRET = 'KCFGSj3JHY8CLOLzszFGHmlYQ1qI9OSqNEOUj24xTa0';
-        Config::$STORE_ID = '72305408';
+        ApiConfig::$ORIGIN = 'PHP Unit';
+        ApiConfig::$API_KEY = '7V26q9EbRO2hCmpWARdFtOyrJ0A4cHEP';
+        ApiConfig::$API_SECRET = 'KCFGSj3JHY8CLOLzszFGHmlYQ1qI9OSqNEOUj24xTa0';
+        ApiConfig::$STORE_ID = '72305408';
     }
 
     public function testMissingFieldException(): void
@@ -53,7 +59,7 @@ class CheckoutTest extends TestCase
 
         $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
 
-        $res = FiservCheckoutClient::postCheckouts($req);
+        $res = CheckoutClient::postCheckouts($req);
         $this->assertInstanceOf(CheckoutClientResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
@@ -64,7 +70,7 @@ class CheckoutTest extends TestCase
         if ($this->DONT_TEST_API)
             return;
 
-        $res = FiservCheckoutClient::getCheckoutId($this->mockCheckoutId);
+        $res = CheckoutClient::getCheckoutId($this->mockCheckoutId);
         $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
@@ -79,10 +85,10 @@ class CheckoutTest extends TestCase
         $req->transactionAmount->components->vatAmount = 0;
         $req->transactionAmount->components->shipping = 0.99;
 
-        $res = FiservCheckoutClient::postCheckouts($req);
+        $res = CheckoutClient::postCheckouts($req);
         $id = $res->checkout->checkoutId;
 
-        $details = FiservCheckoutClient::getCheckoutId($id);
+        $details = CheckoutClient::getCheckoutId($id);
         $total_actual = $details->approvedAmount->total;
 
         $this->assertEquals($total, $total_actual);
@@ -90,13 +96,13 @@ class CheckoutTest extends TestCase
 
     public function testCreateBasicCheckout(): void
     {
-        $request = FiservCheckoutClient::createBasicCheckoutRequest(
+        $request = CheckoutClient::createBasicCheckoutRequest(
             14.99,
             "https://success.com",
             "https://noooo.com"
         );
 
-        $response = FiservCheckoutClient::postCheckouts($request);
+        $response = CheckoutClient::postCheckouts($request);
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
 }

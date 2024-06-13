@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiserv;
+namespace Fiserv\Tests;
 
 final class Fixtures
 {

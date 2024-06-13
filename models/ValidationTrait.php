@@ -1,6 +1,8 @@
 <?php
 
-use Fiserv\models\FiservObject;
+namespace Fiserv\Models;
+
+use Fiserv\Exception\ValidationException;
 
 /**
  * This interfaces handles validation of fields for
@@ -24,7 +26,7 @@ trait ValidationTrait
             if ($isFieldOfDto && is_string($value)) {
                 $match = preg_match($instance->pattern, $value);
                 if (!$match) {
-                    throw new Exception($value . " is not a valid " . $field);
+                    throw new ValidationException($value, $field);
                 }
             }
         }

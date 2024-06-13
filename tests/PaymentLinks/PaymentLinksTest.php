@@ -1,7 +1,11 @@
 <?php
 
-use Fiserv\Fixtures;
-use Fiserv\PaymentLinks\FiservPaymentLinksClient;
+use Fiserv\Config\ApiConfig;
+use Fiserv\Models\CheckoutClientRequest;
+use Fiserv\Models\GetPaymentLinkDetailsResponse;
+use Fiserv\Models\PaymentsLinksCreatedResponse;
+use Fiserv\PaymentLinks\PaymentLinksClient;
+use Fiserv\Tests\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 class PaymentLinksTest extends TestCase
@@ -21,17 +25,17 @@ class PaymentLinksTest extends TestCase
 
     protected function setUp(): void
     {
-        Config::$ORIGIN = 'PHP Unit';
-        Config::$API_KEY = '7V26q9EbRO2hCmpWARdFtOyrJ0A4cHEP';
-        Config::$API_SECRET = 'KCFGSj3JHY8CLOLzszFGHmlYQ1qI9OSqNEOUj24xTa0';
-        Config::$STORE_ID = '72305408';
+        ApiConfig::$ORIGIN = 'PHP Unit';
+        ApiConfig::$API_KEY = '7V26q9EbRO2hCmpWARdFtOyrJ0A4cHEP';
+        ApiConfig::$API_SECRET = 'KCFGSj3JHY8CLOLzszFGHmlYQ1qI9OSqNEOUj24xTa0';
+        ApiConfig::$STORE_ID = '72305408';
     }
 
     public function testCreatePaymentLinkSuccess(): void
     {
         $this->assertTrue(true);
         $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
-        $res = FiservPaymentLinksClient::createPaymentLink($req);
+        $res = PaymentLinksClient::createPaymentLink($req);
         $this->assertInstanceOf(PaymentsLinksCreatedResponse::class, $res, "Response schema is malformed");
     }
 
@@ -39,7 +43,7 @@ class PaymentLinksTest extends TestCase
     {
         $this->assertTrue(true);
         $res = new GetPaymentLinkDetailsResponse(Fixtures::paymentlinkResponseContent);
-        $res = FiservPaymentLinksClient::getPaymentLinkDetails($this->paymentLinkId);
+        $res = PaymentLinksClient::getPaymentLinkDetails($this->paymentLinkId);
         $this->assertInstanceOf(GetPaymentLinkDetailsResponse::class, $res);
     }
 }

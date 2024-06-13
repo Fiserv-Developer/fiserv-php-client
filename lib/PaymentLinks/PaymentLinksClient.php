@@ -2,13 +2,13 @@
 
 namespace Fiserv\PaymentLinks;
 
-use Fiserv\HttpClient;
-use Fiserv\RequestType;
-use GetPaymentLinkDetailsResponse;
-use CheckoutClientRequest;
-use PaymentsLinksCreatedResponse;
+use Fiserv\HttpClient\HttpClient;
+use Fiserv\HttpClient\RequestType;
+use Fiserv\Models\CheckoutClientRequest;
+use Fiserv\Models\GetPaymentLinkDetailsResponse;
+use Fiserv\Models\PaymentsLinksCreatedResponse;
 
-class FiservPaymentLinksClient
+class PaymentLinksClient
 {
     const endpointRoot = '/exp/v1/payment-links';
 

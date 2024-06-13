@@ -1,15 +1,17 @@
 <?php
 
-namespace Fiserv;
+namespace Fiserv\Checkout;
 
-use Components;
-use Config;
-use CheckoutClientResponse;
-use Fiserv\HttpClient;
-use GetCheckoutIdResponse;
-use CheckoutClientRequest;
+use Fiserv\Config\ApiConfig;
+use Fiserv\HttpClient\HttpClient;
+use Fiserv\HttpClient\RequestType;
+use Fiserv\Models\CheckoutClientRequest;
+use Fiserv\Models\CheckoutClientResponse;
+use Fiserv\Models\Components;
+use Fiserv\Models\GetCheckoutIdResponse;
+use Fiserv\Tests\Fixtures;
 
-class FiservCheckoutClient
+class CheckoutClient
 {
     const endpointRoot = '/exp/v1/checkouts';
 
@@ -21,7 +23,7 @@ class FiservCheckoutClient
      */
     public static function postCheckouts(CheckoutClientRequest $req): CheckoutClientResponse
     {
-        $req->storeId = Config::$STORE_ID;
+        $req->storeId = ApiConfig::$STORE_ID;
         $endpoint = self::endpointRoot;
 
         /** Floor transaction amount in case it got deformed */
@@ -57,7 +59,7 @@ class FiservCheckoutClient
      * Possibly create a callback option or simply return an array containing the response (like now)
      * and request data, both. 
      * 
-     * @see FiservCheckoutClient::postCheckouts
+     * @see CheckoutClient::postCheckouts
      * @param float $transactionTotal Total transaction amount (in EUR)
      * @param string $successUrl URL that directs to Thank You page from checkout
      * @param string $failureUrl URL that directs to failure notifaction if checkout failed

@@ -1,5 +1,9 @@
 <?php
 
+namespace Fiserv\Exception;
+
+use Exception;
+
 class DataEncodingException extends Exception
 {
 

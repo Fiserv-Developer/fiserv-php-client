@@ -1,6 +1,8 @@
 <?php
 
-namespace Fiserv\Exceptions;
+namespace Fiserv\Exception;
+
+use Exception;
 
 class ErrorHandler
 {
@@ -8,7 +10,7 @@ class ErrorHandler
     public string $detail;
 }
 
-class MalformedRequestException extends \Exception
+class MalformedRequestException extends Exception
 {
     public $message = "Request is malformed";
 }

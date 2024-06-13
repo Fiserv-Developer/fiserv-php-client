@@ -2,11 +2,6 @@
 
 namespace Fiserv\Payments;
 
-use Fiserv\HttpClient;
-use Fiserv\OrderModels\Order;
-use Fiserv\OrderModels\StandInDetails;
-use stdClass;
-
 class Payment
 {
     const endpointRoot = '/ipp/payments-gateway/v2/payments';
