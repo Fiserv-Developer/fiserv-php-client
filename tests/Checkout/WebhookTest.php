@@ -1,6 +1,6 @@
 <?php
 
-use Fiserv\CheckoutSolution;
+use Fiserv\FiservCheckoutClient;
 use Fiserv\Fixtures;
 use Fiserv\HttpClient;
 use Fiserv\RequestType;
@@ -19,7 +19,7 @@ class WebhookTest extends TestCase
             return;
         }
 
-        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
+        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
         $req->checkoutSettings->webHooksUrl = 'http://fiserv-wp-dev.local/wp-json/fiserv_woocommerce_plugin/v1/events';
         $req->orderId = '99';
 

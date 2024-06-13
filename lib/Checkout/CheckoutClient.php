@@ -7,9 +7,9 @@ use Config;
 use PostCheckoutsResponse;
 use Fiserv\HttpClient;
 use GetCheckoutIdResponse;
-use CreateCheckoutRequest;
+use CheckoutClientRequest;
 
-class CheckoutSolution
+class FiservCheckoutClient
 {
     const endpointRoot = '/exp/v1/checkouts';
 
@@ -17,9 +17,9 @@ class CheckoutSolution
      * Create a checkout link to be used as checkout solution.
      * Pass an optional webhook to receive status events from fiserv server.
      * 
-     * @param CreateCheckoutRequest $req - Request body containing checkout options
+     * @param CheckoutClientRequest $req - Request body containing checkout options
      */
-    public static function postCheckouts(CreateCheckoutRequest $req): PostCheckoutsResponse
+    public static function postCheckouts(CheckoutClientRequest $req): PostCheckoutsResponse
     {
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
@@ -37,9 +37,9 @@ class CheckoutSolution
     /**
      * This version forwards to node server. Node sends mocked webhook events (approved sample data).
      * 
-     * @param CreateCheckoutRequest $req - Request body containing checkout options
+     * @param CheckoutClientRequest $req - Request body containing checkout options
      */
-    public static function postCheckoutsWithSimulatedMock(CreateCheckoutRequest $req): PostCheckoutsResponse
+    public static function postCheckoutsWithSimulatedMock(CheckoutClientRequest $req): PostCheckoutsResponse
     {
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
@@ -57,14 +57,14 @@ class CheckoutSolution
      * Possibly create a callback option or simply return an array containing the response (like now)
      * and request data, both. 
      * 
-     * @see CheckoutSolution::postCheckouts
+     * @see FiservCheckoutClient::postCheckouts
      * @param float $transactionTotal Total transaction amount (in EUR)
      * @param string $successUrl URL that directs to Thank You page from checkout
      * @param string $failureUrl URL that directs to failure notifaction if checkout failed
      */
-    public static function createSEPACheckout(float $transactionTotal, string $successUrl, string $failureUrl, components | bool $components = false): PostCheckoutsResponse
+    public static function createBasicCheckout(float $transactionTotal, string $successUrl, string $failureUrl, components | bool $components = false): PostCheckoutsResponse
     {
-        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
+        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $transactionTotal;
 
         if ($components) {
@@ -79,6 +79,15 @@ class CheckoutSolution
         return self::postCheckouts($req);
     }
 
+    public static function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
+    {
+        $req = new CheckoutClientRequest(Fixtures::minimalCheckoutRequestContent);
+        $req->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
+        $req->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
+        $req->transactionAmount->total = $transactionTotal;
+
+        return $req;
+    }
 
     /**
      * Query an existing checkout link object by given ID. 

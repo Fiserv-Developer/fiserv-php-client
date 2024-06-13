@@ -1,6 +1,6 @@
 <?php
 
-use Fiserv\CheckoutSolution;
+use Fiserv\FiservCheckoutClient;
 use Fiserv\HttpClient;
 use Fiserv\RequestType;
 use PHPUnit\Framework\TestCase;
@@ -66,8 +66,8 @@ class RequestHandlerTest extends TestCase
             ],
         ];
 
-        $req = new CreateCheckoutRequest($reqBody);
-        $res = CheckoutSolution::postCheckouts($req);
+        $req = new CheckoutClientRequest($reqBody);
+        $res = FiservCheckoutClient::postCheckouts($req);
 
         // $this->assertInstanceOf(CheckoutCreatedResponse::class, $res, "Response schema is malformed");
         // $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");

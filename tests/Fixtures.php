@@ -2,11 +2,7 @@
 
 namespace Fiserv;
 
-use CreateCheckoutRequest;
-use PHPUnit\Framework\TestCase;
-
-
-class Fixtures extends TestCase
+final class Fixtures
 {
     public const paymentlinkResponseContent = [
         "storeId" => "72305408",
@@ -90,9 +86,38 @@ class Fixtures extends TestCase
         'storeId' => '72305408',
     ];
 
-    public function testDeserializedDeeplyNestedField(): void
-    {
-        $data = new CreateCheckoutRequest(self::paymentLinksRequestContent);
-        $this->assertEquals($data->paymentMethodDetails->cards->tokenBasedTransaction->transactionSequence, 'FIRST', 'Correct');
-    }
+    public const minimalCheckoutRequestContent = [
+        'transactionOrigin' => 'ECOM',
+        'transactionType' => 'SALE',
+        'transactionAmount' => [
+            'total' => 0,
+            'currency' => 'EUR'
+        ],
+        'checkoutSettings' => [
+            'locale' => 'en_GB',
+            'webHooksUrl' => 'https://nonce.com',
+            'redirectBackUrls' => [
+                'successUrl' => 'https://nonce.com',
+                'failureUrl' => 'https://nonce.com'
+            ]
+        ],
+        'paymentMethodDetails' => [
+            'cards' => [
+                'createToken' => [
+                    'toBeUsedFor' => 'UNSCHEDULED',
+                ],
+            ],
+        ],
+        'storeId' => 'NULL',
+        'order' => [
+            'orderDetails' => [
+                'purchaseOrderNumber' => 0,
+            ],
+            'billing' => [
+                'person' => [],
+                'contact' => [],
+                'address' => [],
+            ]
+        ]
+    ];
 }

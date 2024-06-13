@@ -1,7 +1,7 @@
 <?php
 
 use Fiserv\Fixtures;
-use Fiserv\PaymentLinks\PaymentLinks;
+use Fiserv\PaymentLinks\FiservPaymentLinksClient;
 use PHPUnit\Framework\TestCase;
 
 class PaymentLinksTest extends TestCase
@@ -30,8 +30,8 @@ class PaymentLinksTest extends TestCase
     public function testCreatePaymentLinkSuccess(): void
     {
         $this->assertTrue(true);
-        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
-        $res = PaymentLinks::createPaymentLink($req);
+        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
+        $res = FiservPaymentLinksClient::createPaymentLink($req);
         $this->assertInstanceOf(PaymentsLinksCreatedResponse::class, $res, "Response schema is malformed");
     }
 
@@ -39,7 +39,7 @@ class PaymentLinksTest extends TestCase
     {
         $this->assertTrue(true);
         $res = new GetPaymentLinkDetailsResponse(Fixtures::paymentlinkResponseContent);
-        $res = PaymentLinks::getPaymentLinkDetails($this->paymentLinkId);
+        $res = FiservPaymentLinksClient::getPaymentLinkDetails($this->paymentLinkId);
         $this->assertInstanceOf(GetPaymentLinkDetailsResponse::class, $res);
     }
 }

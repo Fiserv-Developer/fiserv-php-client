@@ -4,6 +4,7 @@ namespace Fiserv\models;
 
 use DataEncodingException;
 use Error;
+use Exception;
 use InvalidFieldWarning;
 use RequiredFieldMissingException;
 use ValidationInterface;
@@ -40,7 +41,7 @@ abstract class FiservObject
      * @param array|bool $json If not false, a JSON string to be serialized to DTO.
      * @param bool $isResponseContent True if object is a response
      */
-    public function __construct($json = false, $isResponseContent = false)
+    public function __construct(array | false $json = false, bool $isResponseContent = false)
     {
         $this->isResponseContent = $isResponseContent;
 

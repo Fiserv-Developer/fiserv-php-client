@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class transactionAmount extends FiservObject
+class TransactionAmount extends FiservObject
 {
     public float $total;
     public string $currency;

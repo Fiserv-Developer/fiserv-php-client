@@ -1,6 +1,6 @@
 <?php
 
-use Fiserv\CheckoutSolution;
+use Fiserv\FiservCheckoutClient;
 use Fiserv\Fixtures;
 use PHPUnit\Framework\TestCase;
 
@@ -27,12 +27,12 @@ class CheckoutTest extends TestCase
 
     public function testMissingFieldException(): void
     {
-        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", CreateCheckoutRequest::class));
+        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", CheckoutClientRequest::class));
 
         $missingFieldContent = Fixtures::paymentLinksRequestContent;
         unset($missingFieldContent["storeId"]);
 
-        new CreateCheckoutRequest($missingFieldContent);
+        new CheckoutClientRequest($missingFieldContent);
     }
 
     public function testNestedMissingFieldException(): void
@@ -42,7 +42,7 @@ class CheckoutTest extends TestCase
         $missingFieldContent = Fixtures::paymentLinksRequestContent;
         unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
 
-        new CreateCheckoutRequest($missingFieldContent);
+        new CheckoutClientRequest($missingFieldContent);
     }
 
     public function testPostCheckoutsSuccess(): void
@@ -51,9 +51,9 @@ class CheckoutTest extends TestCase
         if ($this->DONT_TEST_API)
             return;
 
-        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
+        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
 
-        $res = CheckoutSolution::postCheckouts($req);
+        $res = FiservCheckoutClient::postCheckouts($req);
         $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
@@ -64,7 +64,7 @@ class CheckoutTest extends TestCase
         if ($this->DONT_TEST_API)
             return;
 
-        $res = CheckoutSolution::getCheckoutId($this->mockCheckoutId);
+        $res = FiservCheckoutClient::getCheckoutId($this->mockCheckoutId);
         $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
@@ -73,34 +73,30 @@ class CheckoutTest extends TestCase
     {
         $total = 29.99;
 
-        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
+        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $total;
         $req->transactionAmount->components->subtotal = $total - 0.99;
         $req->transactionAmount->components->vatAmount = 0;
         $req->transactionAmount->components->shipping = 0.99;
 
-        $res = CheckoutSolution::postCheckouts($req);
+        $res = FiservCheckoutClient::postCheckouts($req);
         $id = $res->checkout->checkoutId;
 
-        $details = CheckoutSolution::getCheckoutId($id);
+        $details = FiservCheckoutClient::getCheckoutId($id);
         $total_actual = $details->approvedAmount->total;
 
         $this->assertEquals($total, $total_actual);
     }
 
-    public function testCreateSEPACheckout(): void
+    public function testCreateBasicCheckout(): void
     {
-        $res = CheckoutSolution::createSEPACheckout(
+        $request = FiservCheckoutClient::createBasicCheckoutRequest(
             14.99,
             "https://success.com",
-            "https://failure.com",
-            new components([
-                'shipping' => 0.99,
-                'vatAmount' => 2,
-                'subtotal' => 12,
-            ])
+            "https://noooo.com"
         );
 
-        $this->assertInstanceOf(PostCheckoutsResponse::class, $res);
+        $response = FiservCheckoutClient::postCheckouts($request);
+        $this->assertInstanceOf(GetCheckoutIdResponse::class, $response);
     }
 }

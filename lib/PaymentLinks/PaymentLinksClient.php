@@ -5,14 +5,14 @@ namespace Fiserv\PaymentLinks;
 use Fiserv\HttpClient;
 use Fiserv\RequestType;
 use GetPaymentLinkDetailsResponse;
-use CreateCheckoutRequest;
+use CheckoutClientRequest;
 use PaymentsLinksCreatedResponse;
 
-class PaymentLinks
+class FiservPaymentLinksClient
 {
     const endpointRoot = '/exp/v1/payment-links';
 
-    public static function createPaymentLink(CreateCheckoutRequest $req): PaymentsLinksCreatedResponse
+    public static function createPaymentLink(CheckoutClientRequest $req): PaymentsLinksCreatedResponse
     {
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);

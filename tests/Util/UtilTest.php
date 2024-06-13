@@ -1,6 +1,6 @@
 <?php
 
-use Fiserv\CheckoutSolution;
+use Fiserv\FiservCheckoutClient;
 use Fiserv\Fixtures;
 use PHPUnit\Framework\TestCase;
 
@@ -43,9 +43,9 @@ class UtilTest extends TestCase
 
         $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
 
-        $req = new CreateCheckoutRequest(Fixtures::paymentLinksRequestContent);
+        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
         $req->checkoutSettings->redirectBackUrls->failureUrl = $badUrl;
 
-        $res = CheckoutSolution::postCheckouts($req);
+        $res = FiservCheckoutClient::postCheckouts($req);
     }
 }
