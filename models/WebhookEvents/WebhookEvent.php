@@ -9,10 +9,10 @@ class WebhookEvent extends FiservObject
     public string $checkoutId;
     public string $orderId;
     public string $transactionType;
-    public approvedAmount $approvedAmount;
+    public ApprovedAmount $approvedAmount;
     public transactionStatus | string $transactionStatus;
-    public paymentMethodUsed $paymentMethodUsed;
-    public ipgTransactionDetails $ipgTransactionDetails;
+    public PaymentMethodUsed $paymentMethodUsed;
+    public IpgTransactionDetails $ipgTransactionDetails;
     public string $receivedAt;
 
     public function __construct($json = false, $isReponseContent = true)

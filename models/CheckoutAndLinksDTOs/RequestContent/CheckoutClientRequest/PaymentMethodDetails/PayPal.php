@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class payPal extends FiservObject
+class PayPal extends FiservObject
 {
-    public riskData $riskData;
+    public RiskData $riskData;
 }

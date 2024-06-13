@@ -1,4 +1,5 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
 class GetCheckoutIdResponse extends ResponseInterface
@@ -7,9 +8,8 @@ class GetCheckoutIdResponse extends ResponseInterface
     public string $checkoutId;
     public string $orderId;
     public string $transactionType;
-    public approvedAmount $approvedAmount;
+    public ApprovedAmount $approvedAmount;
     public string $transactionStatus;
-    public requestSent $requestSent;
-    public paymentLink $paymentLink;
-
+    public RequestSent $requestSent;
+    public PaymentLink $paymentLink;
 }

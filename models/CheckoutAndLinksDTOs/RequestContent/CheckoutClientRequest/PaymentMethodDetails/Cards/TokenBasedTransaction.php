@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class tokenBasedTransaction extends FiservObject
+class TokenBasedTransaction extends FiservObject
 {
     public string $value;
     public string $transactionSequence;

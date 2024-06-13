@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class person extends FiservObject
+class Person extends FiservObject
 {
     public string $firstName;
     public string $lastName;

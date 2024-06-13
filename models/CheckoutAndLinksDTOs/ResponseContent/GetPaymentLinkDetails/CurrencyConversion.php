@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class currencyConversion extends FiservObject
+class CurrencyConversion extends FiservObject
 {
     public bool $dccOffered;
     public string $exchangeRate;

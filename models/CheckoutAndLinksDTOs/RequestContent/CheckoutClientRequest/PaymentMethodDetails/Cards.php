@@ -1,11 +1,12 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class cards extends FiservObject
+class Cards extends FiservObject
 {
-    public authenticationPreferences $authenticationPreferences;
-    public tokenBasedTransaction $tokenBasedTransaction;
-    public createToken $createToken;
+    public AuthenticationPreferences $authenticationPreferences;
+    public TokenBasedTransaction $tokenBasedTransaction;
+    public CreateToken $createToken;
 
     public function __construct($json = false, $isReponseContent = false)
     {

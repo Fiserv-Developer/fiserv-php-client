@@ -1,10 +1,11 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class paymentMethodUsed extends FiservObject
+class PaymentMethodUsed extends FiservObject
 {
-    public cards $cards;
-    public tokenBasedTransaction $tokenBasedTransaction;
-    public payPal $payPal;
+    public Cards $cards;
+    public TokenBasedTransaction $tokenBasedTransaction;
+    public PayPal $payPal;
     public string $paymentMethodType;
 }

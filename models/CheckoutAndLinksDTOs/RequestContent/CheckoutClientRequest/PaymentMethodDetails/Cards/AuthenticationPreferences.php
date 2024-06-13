@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class authenticationPreferences extends FiservObject
+class AuthenticationPreferences extends FiservObject
 {
     public string $challengeIndicator;
     public bool $skipTra;

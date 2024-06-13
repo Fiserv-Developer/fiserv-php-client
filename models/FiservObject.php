@@ -65,7 +65,7 @@ abstract class FiservObject
     }
 
     /**
-     * Dependy injection which is used to serialize JSON data from server to PHP
+     * Dependency injection which is used to serialize JSON data from server to PHP
      * objects and vice versa. The setter is recursively for nested objects.
      * 
      * @param mixed $data JSON data which has to parsed and inject into current object and children.
@@ -79,7 +79,8 @@ abstract class FiservObject
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 try {
-                    $nestedObj = new $key($value, $this->isResponseContent);
+                    $className = ucfirst($key);
+                    $nestedObj = new $className($value, $this->isResponseContent);
                 } catch (Error $th) {
                     new InvalidFieldWarning($key, $this::class);
                     continue;

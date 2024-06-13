@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class orderDetails extends FiservObject
+class OrderDetails extends FiservObject
 {
     public string $customerId;
     public string $dynamicMerchantName;

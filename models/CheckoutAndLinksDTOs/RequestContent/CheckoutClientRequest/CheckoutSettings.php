@@ -2,11 +2,11 @@
 
 use Fiserv\models\FiservObject;
 
-class checkoutSettings extends FiservObject
+class CheckoutSettings extends FiservObject
 {
     public string $locale;
     public string $preSelectedPaymentMethod;
-    public redirectBackUrls $redirectBackUrls;
+    public RedirectBackUrls $redirectBackUrls;
     public string $webHooksUrl;
-    public fraud $fraud;
+    public Fraud $fraud;
 }

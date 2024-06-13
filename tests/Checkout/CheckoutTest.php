@@ -37,7 +37,7 @@ class CheckoutTest extends TestCase
 
     public function testNestedMissingFieldException(): void
     {
-        $this->expectExceptionObject(new RequiredFieldMissingException("toBeUsedFor", createToken::class));
+        $this->expectExceptionObject(new RequiredFieldMissingException("toBeUsedFor", CreateToken::class));
 
         $missingFieldContent = Fixtures::paymentLinksRequestContent;
         unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
@@ -54,7 +54,7 @@ class CheckoutTest extends TestCase
         $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
 
         $res = FiservCheckoutClient::postCheckouts($req);
-        $this->assertInstanceOf(PostCheckoutsResponse::class, $res, "Response schema is malformed");
+        $this->assertInstanceOf(CheckoutClientResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
 
@@ -69,7 +69,7 @@ class CheckoutTest extends TestCase
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
 
-    public function testFloatAmountSetter(): void
+    public function testOrderWithSubcomponents(): void
     {
         $total = 29.99;
 
@@ -97,6 +97,6 @@ class CheckoutTest extends TestCase
         );
 
         $response = FiservCheckoutClient::postCheckouts($request);
-        $this->assertInstanceOf(GetCheckoutIdResponse::class, $response);
+        $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
 }

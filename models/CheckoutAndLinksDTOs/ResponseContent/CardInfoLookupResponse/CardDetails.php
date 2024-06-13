@@ -2,7 +2,7 @@
 
 namespace Fiserv\models;
 
-class cardDetails extends FiservObject
+class CardDetails extends FiservObject
 {
     public string $brand;
     public string $brandProductId;

@@ -7,11 +7,11 @@ class CheckoutClientRequest extends FiservObject
     public string $transactionOrigin;
     public string $transactionType;
     public TransactionAmount $transactionAmount;
-    public checkoutSettings $checkoutSettings;
-    public paymentMethodDetails $paymentMethodDetails;
+    public CheckoutSettings $checkoutSettings;
+    public PaymentMethodDetails $paymentMethodDetails;
     public string $merchantTransactionId;
     public string $storeId;
-    public order $order;
+    public Order $order;
 
     public function __construct($json = false)
     {

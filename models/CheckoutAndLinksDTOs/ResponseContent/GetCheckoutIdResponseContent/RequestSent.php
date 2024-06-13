@@ -2,10 +2,10 @@
 
 use Fiserv\models\FiservObject;
 
-class requestSent extends FiservObject
+class RequestSent extends FiservObject
 {
-    public orderDetails $orderDetails;
-    public checkoutSettings $checkoutSettings;
-    public paymentMethodDetails $paymentMethodDetails;
+    public OrderDetails $orderDetails;
+    public CheckoutSettings $checkoutSettings;
+    public PaymentMethodDetails $paymentMethodDetails;
     public string $merchantTransactionId;
 }

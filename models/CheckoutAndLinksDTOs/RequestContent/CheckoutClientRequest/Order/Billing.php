@@ -2,9 +2,9 @@
 
 use Fiserv\models\FiservObject;
 
-class billing extends FiservObject
+class Billing extends FiservObject
 {
-    public person $person;
-    public contact $contact;
-    public address $address;
+    public Person $person;
+    public Contact $contact;
+    public Address $address;
 }

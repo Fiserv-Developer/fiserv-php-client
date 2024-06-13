@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class sepaDirectDebit extends FiservObject
+class SepaDirectDebit extends FiservObject
 {
     public string $transactionSequenceType;
 }

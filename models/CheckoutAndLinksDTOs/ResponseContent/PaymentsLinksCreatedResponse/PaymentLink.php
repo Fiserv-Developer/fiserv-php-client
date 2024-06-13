@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class paymentLink extends FiservObject
+class PaymentLink extends FiservObject
 {
     public string $storeId;
     public string $orderId;

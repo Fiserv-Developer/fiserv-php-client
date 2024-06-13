@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class createToken extends FiservObject
+class CreateToken extends FiservObject
 {
     public bool $declineDuplicateToken;
     public bool $reusable;

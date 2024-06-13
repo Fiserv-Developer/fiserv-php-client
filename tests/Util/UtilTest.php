@@ -12,7 +12,7 @@ class UtilTest extends TestCase
 
         $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
 
-        new checkoutSettings([
+        new CheckoutSettings([
             'redirectBackUrls' => [
                 'successUrl' => 'https://www.successexample.com',
                 'failureUrl' => $badUrl,
@@ -26,7 +26,7 @@ class UtilTest extends TestCase
 
         $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
 
-        $settings = new checkoutSettings([
+        $settings = new CheckoutSettings([
             'redirectBackUrls' => [
                 'successUrl' => 'https://www.successexample.com',
                 'failureUrl' => 'https://www.successexample.com',

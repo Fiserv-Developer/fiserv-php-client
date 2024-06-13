@@ -1,7 +1,8 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class transactionFailure extends FiservObject
+class TransactionFailure extends FiservObject
 {
     public string $code;
     public string $reason;

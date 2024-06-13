@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class redirectBackUrls extends FiservObject implements ValidationInterface
+class RedirectBackUrls extends FiservObject implements ValidationInterface
 {
     use ValidationTrait;
 

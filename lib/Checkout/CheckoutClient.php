@@ -2,9 +2,9 @@
 
 namespace Fiserv;
 
-use components;
+use Components;
 use Config;
-use PostCheckoutsResponse;
+use CheckoutClientResponse;
 use Fiserv\HttpClient;
 use GetCheckoutIdResponse;
 use CheckoutClientRequest;
@@ -19,7 +19,7 @@ class FiservCheckoutClient
      * 
      * @param CheckoutClientRequest $req - Request body containing checkout options
      */
-    public static function postCheckouts(CheckoutClientRequest $req): PostCheckoutsResponse
+    public static function postCheckouts(CheckoutClientRequest $req): CheckoutClientResponse
     {
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
@@ -28,7 +28,7 @@ class FiservCheckoutClient
         $req->transactionAmount->total = floor($req->transactionAmount->total * 100) / 100;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
 
-        $data = new PostCheckoutsResponse($res['data']);
+        $data = new CheckoutClientResponse($res['data']);
         $data->traceId = $res['traceId'];
 
         return $data;
@@ -39,12 +39,12 @@ class FiservCheckoutClient
      * 
      * @param CheckoutClientRequest $req - Request body containing checkout options
      */
-    public static function postCheckoutsWithSimulatedMock(CheckoutClientRequest $req): PostCheckoutsResponse
+    public static function postCheckoutsWithSimulatedMock(CheckoutClientRequest $req): CheckoutClientResponse
     {
         $req->storeId = Config::$STORE_ID;
         $endpoint = self::endpointRoot;
         $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-        $data = new PostCheckoutsResponse($res['data']);
+        $data = new CheckoutClientResponse($res['data']);
 
         return $data;
     }
@@ -62,7 +62,7 @@ class FiservCheckoutClient
      * @param string $successUrl URL that directs to Thank You page from checkout
      * @param string $failureUrl URL that directs to failure notifaction if checkout failed
      */
-    public static function createBasicCheckout(float $transactionTotal, string $successUrl, string $failureUrl, components | bool $components = false): PostCheckoutsResponse
+    public static function createBasicCheckout(float $transactionTotal, string $successUrl, string $failureUrl, Components | bool $components = false): CheckoutClientResponse
     {
         $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
         $req->transactionAmount->total = $transactionTotal;

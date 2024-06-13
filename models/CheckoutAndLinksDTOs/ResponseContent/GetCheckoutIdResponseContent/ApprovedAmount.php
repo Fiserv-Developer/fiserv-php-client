@@ -2,9 +2,9 @@
 
 use Fiserv\models\FiservObject;
 
-class approvedAmount extends FiservObject
+class ApprovedAmount extends FiservObject
 {
     public float $total;
     public string $currency;
-    public components $components;
+    public Components $components;
 }

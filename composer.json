@@ -17,7 +17,6 @@
         "classmap": [
             "lib/",
             "models/",
-            "models/CheckoutAndLinksDTOs/RequestContent/PaymentLinkRequestContent/",
             "tests/"
         ]
     }

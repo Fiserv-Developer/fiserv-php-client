@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class address extends FiservObject
+class Address extends FiservObject
 {
     public string $address1;
     public string $address2;

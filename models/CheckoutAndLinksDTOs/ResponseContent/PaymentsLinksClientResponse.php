@@ -2,5 +2,5 @@
 
 class PaymentsLinksCreatedResponse extends ResponseInterface
 {
-    public paymentLink $paymentLink;
+    public PaymentLink $paymentLink;
 }

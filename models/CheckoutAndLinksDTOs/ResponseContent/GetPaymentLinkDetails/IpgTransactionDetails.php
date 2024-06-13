@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class ipgTransactionDetails extends FiservObject
+class IpgTransactionDetails extends FiservObject
 {
     public string $ipgTransactionId;
     public transactionStatus | string $transactionStatus;

@@ -1,6 +1,6 @@
 <?php
 
-class PostCheckoutsResponse extends ResponseInterface
+class CheckoutClientResponse extends ResponseInterface
 {
-    public checkout $checkout;
+    public Checkout $checkout;
 }

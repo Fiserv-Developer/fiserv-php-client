@@ -1,12 +1,13 @@
 <?php
+
 use Fiserv\models\FiservObject;
 
-class paymentMethodDetails extends FiservObject
+class PaymentMethodDetails extends FiservObject
 {
-    public cards $cards;
-    public sepaDirectDebit $sepaDirectDebit;
-    public payPal $payPal;
-    public tokenBasedTransaction $tokenBasedTransaction;
+    public Cards $cards;
+    public SepaDirectDebit $sepaDirectDebit;
+    public PayPal $payPal;
+    public TokenBasedTransaction $tokenBasedTransaction;
 
     public function __construct($json = false, $isReponseContent = false)
     {

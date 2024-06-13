@@ -2,6 +2,6 @@
 
 use Fiserv\models\FiservObject;
 
-class fraud extends FiservObject
+class Fraud extends FiservObject
 {
 }

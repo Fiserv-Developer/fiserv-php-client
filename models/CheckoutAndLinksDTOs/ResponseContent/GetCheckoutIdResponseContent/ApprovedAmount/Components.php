@@ -2,7 +2,7 @@
 
 use Fiserv\models\FiservObject;
 
-class components extends FiservObject
+class Components extends FiservObject
 {
     public float $subtotal;
     public float $vatAmount;
