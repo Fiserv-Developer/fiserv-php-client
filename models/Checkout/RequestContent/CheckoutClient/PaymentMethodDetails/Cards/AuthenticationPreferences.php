@@ -4,6 +4,7 @@ namespace Fiserv\Models;
 
 class AuthenticationPreferences extends FiservObject
 {
-    public string $challengeIndicator;
+    public ChallengeIndicator $challengeIndicator;
+    public ScaExemptionType $scaExemptionType;
     public bool $skipTra;
 }

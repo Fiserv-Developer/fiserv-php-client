@@ -2,11 +2,12 @@
 
 namespace Fiserv\Models;
 
+
 class CreateToken extends FiservObject
 {
     public bool $declineDuplicateToken;
     public bool $reusable;
-    public string $toBeUsedFor;
+    public ToBeUsedFor $toBeUsedFor;
     public bool $declineDuplicates;
 
     public function __construct($json = false)

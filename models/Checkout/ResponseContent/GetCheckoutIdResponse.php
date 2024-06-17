@@ -2,6 +2,7 @@
 
 namespace Fiserv\Models;
 
+
 class GetCheckoutIdResponse extends ResponseInterface
 {
     public string $storeId;
@@ -9,7 +10,7 @@ class GetCheckoutIdResponse extends ResponseInterface
     public string $orderId;
     public string $transactionType;
     public ApprovedAmount $approvedAmount;
-    public string $transactionStatus;
+    public TransactionStatus $transactionStatus;
     public RequestSent $requestSent;
     public PaymentLink $paymentLink;
 }

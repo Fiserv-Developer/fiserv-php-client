@@ -5,6 +5,6 @@ namespace Fiserv\Models;
 class ApprovedAmount extends FiservObject
 {
     public float $total;
-    public string $currency;
+    public Currency $currency;
     public Components $components;
 }

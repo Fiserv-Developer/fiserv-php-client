@@ -2,10 +2,10 @@
 
 namespace Fiserv\Models\WebhookEvent;
 
-use Fiserv\Models\Checkout\ResponseContent\GetCheckoutIdResponseContent\ApprovedAmount;
-use Fiserv\Models\Checkout\ResponseContent\GetPaymentLinkDetails\IpgTransactionDetails;
-use Fiserv\Models\Checkout\ResponseContent\GetPaymentLinkDetails\PaymentMethodUsed;
+use Fiserv\Models\ApprovedAmount;
 use Fiserv\Models\FiservObject;
+use Fiserv\Models\IpgTransactionDetails;
+use Fiserv\Models\PaymentMethodUsed;
 
 class WebhookEvent extends FiservObject
 {
@@ -15,7 +15,7 @@ class WebhookEvent extends FiservObject
     public string $orderId;
     public string $transactionType;
     public ApprovedAmount $approvedAmount;
-    public transactionStatus | string $transactionStatus;
+    public TransactionStatus $transactionStatus;
     public PaymentMethodUsed $paymentMethodUsed;
     public IpgTransactionDetails $ipgTransactionDetails;
     public string $receivedAt;

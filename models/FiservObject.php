@@ -3,9 +3,13 @@
 namespace Fiserv\Models;
 
 use Error;
+use Exception;
 use Fiserv\Exception\DataEncodingException;
 use Fiserv\Exception\InvalidFieldWarning;
 use Fiserv\Exception\RequiredFieldMissingException;
+use Fiserv\Models\WebhookEvent\TransactionStatus;
+use ReflectionProperty;
+use TypeError;
 
 /**
  * This class handles serialization and field validation for DTO from JSON server responses and requests.
@@ -36,27 +40,41 @@ abstract class FiservObject
      * Constructor which calls setter.
      * If $isResponseContent flag ist true, the fields should not be validated.
      * 
-     * @param array|bool $json If not false, a JSON string to be serialized to DTO.
+     * @param array|string|bool $json If not false, a JSON string to be serialized to DTO.
      * @param bool $isResponseContent True if object is a response
      */
-    public function __construct(array | false $json = false, bool $isResponseContent = false)
+    public function __construct(array | string | false $json = false, bool $isResponseContent = false)
     {
         $this->isResponseContent = $isResponseContent;
 
+        /** Ensure JSON payload is array */
+        if (is_string($json)) {
+            $json = json_decode($json, true);
+        }
+
+        /** Is JSON valid? */
+        if (is_null($json)) {
+            throw new Exception('JSON payload is invalid');
+        }
+
+        /** Serialize */
         if ($json) {
             $this->set($json);
         }
 
+        /** Don't validate if object is a response */
         if ($this->isResponseContent) {
             return;
         }
 
+        /** Check if all required properties are set */
         foreach ($this->requiredFields as $field) {
             if (!isset($this->{$field})) {
                 throw new RequiredFieldMissingException($field, $this::class);
             }
         }
 
+        /** Validate if of validation interface */
         if ($this instanceof ValidationInterface) {
             $this->validate();
         }
@@ -68,31 +86,38 @@ abstract class FiservObject
      * 
      * @param mixed $data JSON data which has to parsed and inject into current object and children.
      */
-    private function set($data)
+    private function set(array $data)
     {
-        if (is_string($data)) {
-            throw new DataEncodingException($data);
-        }
-
         foreach ($data as $key => $value) {
+            /** Serialize nested properties */
             if (is_array($value)) {
                 try {
                     $className = 'Fiserv\\Models\\' . ucfirst($key);
                     $nestedObj = new $className($value, $this->isResponseContent);
                 } catch (Error $th) {
                     new InvalidFieldWarning($key, $this::class);
-                    echo '===== FAILED HERE ' . $className;
-                    // continue;
+                    continue;
                 }
 
                 $value = $nestedObj;
             }
 
-            // if (!property_exists($this, $key) && !$this->isResponseContent) {
-            //     new InvalidFieldWarning($key, $this::class);
-            // }
+            if (!property_exists($this, $key) && !$this->isResponseContent) {
+                new InvalidFieldWarning($key, $this::class);
+            }
 
-            $this->{$key} = $value;
+            /** Handle enums */
+            try {
+                $this->{$key} = $value;
+            } catch (TypeError $th) {
+                $rp = new ReflectionProperty($this, $key);
+                if (enum_exists($rp->getType())) {
+                    $enumType = $rp->getName();
+                    $className = 'Fiserv\\Models\\' . ucfirst($enumType);
+                    $this->{$key} = $className::from($value);
+                    // $this->{$key} = TransactionStatus::from($value);
+                }
+            }
         }
     }
 

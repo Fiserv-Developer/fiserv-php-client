@@ -1,15 +1,15 @@
 <?php
 
-namespace Fiserv\Models\WebhookEvent;
+namespace Fiserv\Models;
 
-abstract class transactionStatus
+enum TransactionStatus: string
 {
-    const APPROVED = 'APPROVED';
-    const WAITING = 'WAITING';
-    const PARTIAL = 'PARTIAL';
-    const VALIDATION_FAILED = 'VALIDATION_FAILED';
-    const PROCESSING_FAILED = 'PROCESSING_FAILED';
-    const DECLINED = 'DECLINED';
-    const FRAUD = 'FRAUD';
-    const FAILED  = 'FAILED';
+    case APPROVED = 'APPROVED';
+    case WAITING = 'WAITING';
+    case PARTIAL = 'PARTIAL';
+    case VALIDATION_FAILED = 'VALIDATION_FAILED';
+    case PROCESSING_FAILED = 'PROCESSING_FAILED';
+    case DECLINED = 'DECLINED';
+    case FRAUD = 'FRAUD';
+    case FAILED = 'FAILED';
 }

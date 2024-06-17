@@ -1,9 +1,6 @@
 <?php
 
-use Fiserv\Checkout\CheckoutClient;
-use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\CheckoutSettings;
-use Fiserv\Tests\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 class UtilTest extends TestCase

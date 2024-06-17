@@ -2,9 +2,10 @@
 
 namespace Fiserv\Models;
 
+
 class CheckoutClientRequest extends FiservObject
 {
-    public string $transactionOrigin;
+    public TransactionOrigin $transactionOrigin;
     public string $transactionType;
     public TransactionAmount $transactionAmount;
     public CheckoutSettings $checkoutSettings;
