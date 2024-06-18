@@ -1,7 +1,6 @@
 <?php
 
 use Fiserv\Checkout\CheckoutClient;
-use Fiserv\HttpClient\HttpClient;
 use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\CheckoutClientResponse;
 use PHPUnit\Framework\TestCase;
@@ -59,8 +58,6 @@ class CheckoutModularTest extends TestCase
     public function testCreateBasicCheckout(): void
     {
         $request = new CheckoutClientRequest(self::requestBody);
-        // $request = FiservCheckoutClientRequest::start();
-        // $request = FiservCheckoutClient::createBasicCheckoutRequest(14.99, 'https://success.de', 'https://success.de');
         $response = $this->client->createCheckout($request);
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }

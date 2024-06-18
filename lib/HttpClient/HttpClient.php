@@ -63,9 +63,11 @@ abstract class HttpClient
      */
     protected function buildHeadersWithMessage(string $content): array
     {
+
+
         $clientRequestId = self::generateUuid();
         $timestamp = self::generateTimestamp();
-        $message = $this->apiConfig['api_key'] . $clientRequestId . $timestamp . strval($content);
+        $message = $this->apiConfig['api_key'] . $clientRequestId . $timestamp . $content;
         $requestHeaders = self::DEFAULT_HEADERS;
         $requestHeaders['Api-Key'] = $this->apiConfig['api_key'];
         $requestHeaders['Timestamp'] = $timestamp;
@@ -75,6 +77,7 @@ abstract class HttpClient
         foreach ($requestHeaders as $key => $value) {
             $headers[] = $key . ': ' . $value;
         }
+
         return $headers;
     }
 
@@ -113,6 +116,7 @@ abstract class HttpClient
         $headers = [];
 
         $options = [
+            CURLOPT_POST => false,
             CURLOPT_URL => $url,
             CURLOPT_USERAGENT => self::whichUserAgent(),
             CURLOPT_HTTPHEADER => self::buildHeadersWithMessage($request),
@@ -128,18 +132,18 @@ abstract class HttpClient
         switch ($type) {
             case RequestType::POST:
             case RequestType::PATCH:
-                $options[CURLOPT_POST] = 1;
                 $options[CURLOPT_POSTFIELDS] = $request;
         }
 
         curl_setopt_array($this->curl, $options + self::DEFAULT_CURL_OPTIONS);
-
         $response = curl_exec($this->curl);
 
         if (curl_errno($this->curl)) {
             throw new CurlRequestException(curl_error(($this->curl)));
         }
+
         $httpCode = curl_getinfo($this->curl, CURLINFO_RESPONSE_CODE);
+
         switch ($httpCode) {
             case 200:
             case 201:
@@ -184,16 +188,12 @@ abstract class HttpClient
     protected function buildRequest(RequestType $type, string $endpoint, FiservObject $requestBody = null, string $responseClass = null): mixed
     {
         if ($requestBody instanceof FiservObject) {
-            self::validateRequest($requestBody);
+            $this->validateRequest($requestBody);
             $requestBody->storeId = $this->apiConfig['store_id'];
         }
 
-        if ($requestBody instanceof ValidationInterface) {
-            $requestBody->validate();
-        }
-
         try {
-            $response = self::curlRequest($type, $this->url . $endpoint, json_encode($requestBody));
+            $response = $this->curlRequest($type, $this->url . $endpoint, is_null($requestBody) ? "" : json_encode($requestBody));
         } catch (CurlRequestException $e) {
             throw $e;
         }

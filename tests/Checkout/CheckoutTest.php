@@ -84,10 +84,9 @@ class CheckoutTest extends TestCase
         $id = $res->checkout->checkoutId;
 
         $details = $this->client->getCheckoutId($id);
-        // $total_actual = $details->approvedAmount->total;
+        $total_actual = $details->approvedAmount->total;
 
-        // $this->assertEquals($total, $total_actual);
-        $this->assertIsString($id);
+        $this->assertEquals($total, $total_actual);
     }
 
     // public function testCreateBasicCheckout(): void
