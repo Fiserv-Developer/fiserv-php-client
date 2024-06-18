@@ -10,8 +10,4 @@ abstract class ResponseInterface extends FiservObject
     {
         FiservObject::__construct($json, true);
     }
-
-    public function trace()
-    {
-    }
 }

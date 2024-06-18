@@ -6,8 +6,8 @@ use Exception;
 
 class ValidationException extends Exception
 {
-    public function __construct(string $value, mixed $field)
+    public function __construct(string $value, mixed $field, string $details = '')
     {
-        $this->message = $value . " is not a valid " . $field;
+        $this->message =  $value . " value could not be validated as field " . $field . '. ' . $details;
     }
 }

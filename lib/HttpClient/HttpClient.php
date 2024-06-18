@@ -9,16 +9,19 @@ use Fiserv\Exception\CurlRequestException;
 use Fiserv\Exception\ServerException;
 use Fiserv\Models\FiservObject;
 use Fiserv\Models\ResponseInterface;
+use Fiserv\Models\ValidationInterface;
 
 abstract class HttpClient
 {
-    private const domain = 'https://prod.emea.api.fiservapps.com/';
+    public const VERSION = '0.1.4';
+    public const USER = '';
+    private const DOMAIN = 'https://prod.emea.api.fiservapps.com/';
     protected string $endpointRoot;
     protected array $apiConfig;
     private string $url;
     private $curl;
 
-    private const DEFAULF_HEADERS = [
+    private const DEFAULT_HEADERS = [
         'Content-Type' => 'application/json',
         'Accept ' => 'application/json',
     ];
@@ -36,14 +39,19 @@ abstract class HttpClient
     {
         $this->endpointRoot = $endpointRoot;
         $this->apiConfig = $config;
-        $this->url = $config['is_prod'] ? self::domain : self::domain . '/sandbox';
+        $this->url = $config['is_prod'] ? self::DOMAIN : self::DOMAIN . '/sandbox';
         $this->curl = curl_init();
         self::validateApiConfigParams();
+
+        if (version_compare(phpversion(), '7.1', '>=')) {
+            ini_set('precision', 17);
+            ini_set('serialize_precision', -1);
+        }
     }
 
-    private function getOrigin()
+    private function whichUserAgent()
     {
-        return "Fiserv 1.0.3 / WooCommerce Plugin 1.0.1";
+        return 'FiservPHPClient/' . self::VERSION . ' ' . self::USER;
     }
 
     /**
@@ -58,7 +66,7 @@ abstract class HttpClient
         $clientRequestId = self::generateUuid();
         $timestamp = self::generateTimestamp();
         $message = $this->apiConfig['api_key'] . $clientRequestId . $timestamp . strval($content);
-        $requestHeaders = self::DEFAULF_HEADERS;
+        $requestHeaders = self::DEFAULT_HEADERS;
         $requestHeaders['Api-Key'] = $this->apiConfig['api_key'];
         $requestHeaders['Timestamp'] = $timestamp;
         $requestHeaders['Client-Request-Id'] = $clientRequestId;
@@ -106,7 +114,7 @@ abstract class HttpClient
 
         $options = [
             CURLOPT_URL => $url,
-            CURLOPT_USERAGENT => self::getOrigin(),
+            CURLOPT_USERAGENT => self::whichUserAgent(),
             CURLOPT_HTTPHEADER => self::buildHeadersWithMessage($request),
             CURLOPT_HEADERFUNCTION => function ($curl, $header) use (&$headers) {
                 if (str_contains($header, ':')) {
@@ -180,17 +188,16 @@ abstract class HttpClient
             $requestBody->storeId = $this->apiConfig['store_id'];
         }
 
+        if ($requestBody instanceof ValidationInterface) {
+            $requestBody->validate();
+        }
 
         try {
-            /*todo Check if neccessary here*/
-            if (version_compare(phpversion(), '7.1', '>=')) {
-                ini_set('precision', 17);
-                ini_set('serialize_precision', -1);
-            }
             $response = self::curlRequest($type, $this->url . $endpoint, json_encode($requestBody));
         } catch (CurlRequestException $e) {
             throw $e;
         }
+
         $responseObject = new $responseClass($response['data']);
         if ($responseObject instanceof ResponseInterface) {
             $responseObject->traceId = $response['trace-id'];
