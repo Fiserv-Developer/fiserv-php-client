@@ -34,41 +34,41 @@ class CheckoutTest extends TestCase
         ]);
     }
 
-    // public function testMissingFieldException(): void
-    // {
-    //     $this->expectExceptionObject(new RequiredFieldMissingException("storeId", CheckoutClientRequest::class));
+    public function testMissingFieldException(): void
+    {
+        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", CheckoutClientRequest::class));
 
-    //     $missingFieldContent = Fixtures::paymentLinksRequestContent;
-    //     unset($missingFieldContent["storeId"]);
+        $missingFieldContent = Fixtures::paymentLinksRequestContent;
+        unset($missingFieldContent["storeId"]);
 
-    //     new CheckoutClientRequest($missingFieldContent);
-    // }
+        new CheckoutClientRequest($missingFieldContent);
+    }
 
-    // public function testNestedMissingFieldException(): void
-    // {
-    //     $this->expectExceptionObject(new RequiredFieldMissingException("toBeUsedFor", CreateToken::class));
+    public function testNestedMissingFieldException(): void
+    {
+        $this->expectExceptionObject(new RequiredFieldMissingException("toBeUsedFor", CreateToken::class));
 
-    //     $missingFieldContent = Fixtures::paymentLinksRequestContent;
-    //     unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
+        $missingFieldContent = Fixtures::paymentLinksRequestContent;
+        unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
 
-    //     new CheckoutClientRequest($missingFieldContent);
-    // }
+        new CheckoutClientRequest($missingFieldContent);
+    }
 
-    // public function testPostCheckoutsSuccess(): void
-    // {
-    //     $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
+    public function testPostCheckoutsSuccess(): void
+    {
+        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
 
-    //     $res = $this->client->createCheckout($req);
-    //     $this->assertInstanceOf(CheckoutClientResponse::class, $res, "Response schema is malformed");
-    //     $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
-    // }
+        $res = $this->client->createCheckout($req);
+        $this->assertInstanceOf(CheckoutClientResponse::class, $res, "Response schema is malformed");
+        $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
+    }
 
-    // public function testGetCheckoutIdSuccess(): void
-    // {
-    //     $res = $this->client->getCheckoutId($this->mockCheckoutId);
-    //     $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
-    //     $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
-    // }
+    public function testGetCheckoutIdSuccess(): void
+    {
+        $res = $this->client->getCheckoutId($this->mockCheckoutId);
+        $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
+        $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
+    }
 
     public function testOrderWithSubcomponents(): void
     {
@@ -89,15 +89,15 @@ class CheckoutTest extends TestCase
         $this->assertEquals($total, $total_actual);
     }
 
-    // public function testCreateBasicCheckout(): void
-    // {
-    //     $request = $this->client->createBasicCheckoutRequest(
-    //         14.99,
-    //         "https://success.com",
-    //         "https://noooo.com"
-    //     );
+    public function testCreateBasicCheckout(): void
+    {
+        $request = $this->client->createBasicCheckoutRequest(
+            14.99,
+            "https://success.com",
+            "https://noooo.com"
+        );
 
-    //     $response = $this->client->createCheckout($request);
-    //     $this->assertInstanceOf(CheckoutClientResponse::class, $response);
-    // }
+        $response = $this->client->createCheckout($request);
+        $this->assertInstanceOf(CheckoutClientResponse::class, $response);
+    }
 }

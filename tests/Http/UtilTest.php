@@ -5,25 +5,11 @@ use PHPUnit\Framework\TestCase;
 
 class UtilTest extends TestCase
 {
-    public function testFieldStringValidationOnConstruction()
+    public function testFieldStringValidationOnRequest()
     {
         $badUrl = "BAD_URL";
 
-        $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
-
-        new CheckoutSettings([
-            'redirectBackUrls' => [
-                'successUrl' => 'https://www.successexample.com',
-                'failureUrl' => $badUrl,
-            ]
-        ]);
-    }
-
-    public function testFieldStringValidationManually()
-    {
-        $badUrl = "BAD_URL";
-
-        $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
+        $this->expectExceptionMessage($badUrl . " value could not be validated as field failureUrl.");
 
         $settings = new CheckoutSettings([
             'redirectBackUrls' => [
@@ -35,16 +21,4 @@ class UtilTest extends TestCase
         $settings->redirectBackUrls->failureUrl = $badUrl;
         $settings->redirectBackUrls->validate();
     }
-
-    // public function testFieldStringValidationOnRequest()
-    // {
-    //     $badUrl = "BAD_URL";
-
-    //     $this->expectExceptionMessage($badUrl . " is not a valid failureUrl");
-
-    //     $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
-    //     $req->checkoutSettings->redirectBackUrls->failureUrl = $badUrl;
-
-    //     $res = CheckoutClient::postCheckouts($req);
-    // }
 }

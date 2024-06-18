@@ -2,7 +2,6 @@
 
 namespace Fiserv\PaymentLinks;
 
-use Fiserv\Config\ApiConfig;
 use Fiserv\HttpClient\HttpClient;
 use Fiserv\HttpClient\RequestType;
 use Fiserv\Models\CheckoutClientRequest;
@@ -19,11 +18,11 @@ final class PaymentLinksClient extends HttpClient
 
     public function createPaymentLink(CheckoutClientRequest $request): PaymentsLinksCreatedResponse
     {
-        return $this->buildRequest(RequestType::POST, parent::$endpointRoot, $request, PaymentsLinksCreatedResponse::class);
+        return $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, PaymentsLinksCreatedResponse::class);
     }
 
     public function getPaymentLinkDetails($paymentLinkId): GetPaymentLinkDetailsResponse
     {
-        return $this->buildRequest(RequestType::GET, parent::$endpointRoot . "/" . $paymentLinkId, null, PaymentsLinksCreatedResponse::class);
+        return $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $paymentLinkId, null, PaymentsLinksCreatedResponse::class);
     }
 }
