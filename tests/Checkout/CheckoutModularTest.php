@@ -1,19 +1,24 @@
 <?php
 
 use Fiserv\Checkout\CheckoutClient;
-use Fiserv\Config\ApiConfig;
+use Fiserv\HttpClient\HttpClient;
 use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\CheckoutClientResponse;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutModularTest extends TestCase
 {
+
+    private CheckoutClient $client;
+
     protected function setUp(): void
     {
-        ApiConfig::$ORIGIN = 'PHP Unit Test';
-        ApiConfig::$API_KEY = '7V26q9EbRO2hCmpWARdFtOyrJ0A4cHEP';
-        ApiConfig::$API_SECRET = 'KCFGSj3JHY8CLOLzszFGHmlYQ1qI9OSqNEOUj24xTa0';
-        ApiConfig::$STORE_ID = '72305408';
+        $this->client = new CheckoutClient([
+            'is_prod' => false,
+            'api_key' => '7V26q9EbRO2hCmpWARdFtOyrJ0A4cHEP',
+            'api_secret' => 'KCFGSj3JHY8CLOLzszFGHmlYQ1qI9OSqNEOUj24xTa0',
+            'store_id' => '72305408',
+        ]);
     }
 
     private const requestBody = [
@@ -53,11 +58,10 @@ class CheckoutModularTest extends TestCase
 
     public function testCreateBasicCheckout(): void
     {
+        $request = new CheckoutClientRequest(self::requestBody);
         // $request = FiservCheckoutClientRequest::start();
         // $request = FiservCheckoutClient::createBasicCheckoutRequest(14.99, 'https://success.de', 'https://success.de');
-        $request = new CheckoutClientRequest(self::requestBody);
-        // $response = CheckoutClient::postCheckouts($request);
-        // $this->assertInstanceOf(CheckoutClientResponse::class, $response);
-        $this->assertTrue(true);
+        $response = $this->client->createCheckout($request);
+        $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
 }

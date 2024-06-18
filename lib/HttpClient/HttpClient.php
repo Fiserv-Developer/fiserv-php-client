@@ -4,25 +4,46 @@ namespace Fiserv\HttpClient;
 
 use CurlHandle;
 use Exception;
-use Fiserv\Config\ApiConfig;
 use Fiserv\Exception\BadRequestException;
 use Fiserv\Exception\CurlRequestException;
-use Fiserv\Exception\RequestBodyException;
 use Fiserv\Exception\ServerException;
 use Fiserv\Models\FiservObject;
-use Fiserv\Util\Util;
+use Fiserv\Models\ResponseInterface;
 
-class HttpClient
+abstract class HttpClient
 {
     private const domain = 'https://prod.emea.api.fiservapps.com/';
-    private static $url = ApiConfig::IS_PROD ? self::domain : self::domain . '/sandbox';
+    protected string $endpointRoot;
+    protected array $apiConfig;
+    private string $url;
+    private $curl;
 
-    public function __construct()
+    private const DEFAULF_HEADERS = [
+        'Content-Type' => 'application/json',
+        'Accept ' => 'application/json',
+    ];
+
+    private const DEFAULT_CURL_OPTIONS = [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_AUTOREFERER => true,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_SSL_VERIFYHOST => false,
+        CURLOPT_SSL_VERIFYPEER => false,
+    ];
+
+    protected function __construct(string $endpointRoot, array $config)
     {
-        if (version_compare(phpversion(), '7.1', '>=')) {
-            ini_set('precision', 17);
-            ini_set('serialize_precision', -1);
-        }
+        $this->endpointRoot = $endpointRoot;
+        $this->apiConfig = $config;
+        $this->url = $config['is_prod'] ? self::domain : self::domain . '/sandbox';
+        $this->curl = curl_init();
+        self::validateApiConfigParams();
+    }
+
+    private function getOrigin()
+    {
+        return "Fiserv 1.0.3 / WooCommerce Plugin 1.0.1";
     }
 
     /**
@@ -32,25 +53,44 @@ class HttpClient
      * @param string $content Request body for POST/PUT requests. May be empty (but not null).
      * @return string Array representing the header
      */
-    public static function buildHeadersWithMessage(string $content): array
+    protected function buildHeadersWithMessage(string $content): array
     {
-        $clientRequestId = Util::uuid_create();
-        $timestamp = strval(intval(microtime(true) * 1000));
-        $message = ApiConfig::$API_KEY . $clientRequestId . $timestamp . strval($content);
-
-        $signature = hash_hmac('sha256', $message, ApiConfig::$API_SECRET, true);
-        $b64_sig = base64_encode($signature);
-
-        $headers = [
-            'Api-Key: ' . ApiConfig::$API_KEY,
-            'Timestamp: ' . $timestamp,
-            'Client-Request-Id: ' . $clientRequestId,
-            'Message-Signature: ' . $b64_sig,
-            'Content-Type: ' . 'application/json',
-            'accept: ' . 'application/json',
-        ];
-
+        $clientRequestId = self::generateUuid();
+        $timestamp = self::generateTimestamp();
+        $message = $this->apiConfig['api_key'] . $clientRequestId . $timestamp . strval($content);
+        $requestHeaders = self::DEFAULF_HEADERS;
+        $requestHeaders['Api-Key'] = $this->apiConfig['api_key'];
+        $requestHeaders['Timestamp'] = $timestamp;
+        $requestHeaders['Client-Request-Id'] = $clientRequestId;
+        $requestHeaders['Message-Signature'] = self::calculcateMessageSignature($message);
+        $headers = [];
+        foreach ($requestHeaders as $key => $value) {
+            $headers[] = $key . ': ' . $value;
+        }
         return $headers;
+    }
+
+    private function calculcateMessageSignature(string $content): string
+    {
+        return base64_encode(hash_hmac('sha256', $content, $this->apiConfig['api_secret'], true));
+    }
+
+    private static function generateUuid(): string
+    {
+        $out = bin2hex(random_bytes(18));
+
+        $out[8] = "-";
+        $out[13] = "-";
+        $out[18] = "-";
+        $out[23] = "-";
+        $out[14] = "4";
+        $out[19] = ["8", "9", "a", "b"][random_int(0, 3)];
+        return $out;
+    }
+
+    private static function generateTimestamp()
+    {
+        return intval(microtime(true) * 1000);
     }
 
     /**
@@ -60,111 +100,67 @@ class HttpClient
      * @param string $url Full URI with root and service path
      * @param string $req Request body for POST, PATCH requests as JSON string 
      */
-    private static function curlRequest(RequestType $type, string $url, string $req = '', bool $isFiservApi = true): array
+    protected function curlRequest(RequestType $type, string $url, string $request = ''): array
     {
-        $handle = curl_init();
-        $headers = $isFiservApi ? self::buildHeadersWithMessage($req) : ['Content-Type: application/json'];
+        $headers = [];
 
         $options = [
             CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_AUTOREFERER => true,
-            CURLOPT_USERAGENT => ApiConfig::$ORIGIN,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_HEADER => true,
-            CURLOPT_HTTPHEADER => $headers,
-            /** SSL Options */
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-        ];
-
-
-        if ($type === RequestType::POST && !is_null($req)) {
-            $options[CURLOPT_POST] = 1;
-            $options[CURLOPT_POSTFIELDS] = $req;
-        }
-
-        curl_setopt_array($handle, $options);
-        $rawDataWithHeaders = curl_exec($handle);
-
-        if (curl_errno($handle)) {
-            $error = curl_error($handle);
-            throw new CurlRequestException($error);
-        }
-
-        $payload = self::parseRawHeader($rawDataWithHeaders);
-        $data = $payload['data'];
-
-        $code = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
-
-        if ($isFiservApi) {
-            $traceId = $payload['trace-id'];
-        }
-
-        return [
-            'data' => $data,
-            'code' => $code,
-            'traceId' => $traceId ?? 'null',
-        ];
-    }
-
-    /**
-     * Wrapper for external HTTP requests (non-API calls)
-     * 
-     * @param RequestType $type GET, POST or PATCH
-     * @param string $url Full URI with root and service path
-     * @param string $req Request body for POST, PATCH requests as JSON string 
-     */
-    public static function externalCurlRequest(RequestType $type, string $url, string $req = '')
-    {
-        return self::curlRequest($type, $url, $req, false);
-    }
-
-    /**
-     * Parse raw data string returned by curl to readable PHP object.
-     * Map key and value as specified on header.
-     * 
-     * @var string $rawDataWithHeaders - String response data from request
-     */
-    private static function parseRawHeader(string $rawDataWithHeaders): array
-    {
-        $lines = explode("\n", $rawDataWithHeaders);
-
-        $parse = [];
-
-        foreach ($lines as $line) {
-            $fields = explode(": ", $line);
-
-            if (count($fields) !== 2) {
-                continue;
+            CURLOPT_USERAGENT => self::getOrigin(),
+            CURLOPT_HTTPHEADER => self::buildHeadersWithMessage($request),
+            CURLOPT_HEADERFUNCTION => function ($curl, $header) use (&$headers) {
+                if (str_contains($header, ':')) {
+                    list($key, $value) = explode(':', $header, 2);
+                    $headers[$key] = trim($value);
+                }
+                return strlen($header);
             }
+        ];
 
-            $key = $fields[0];
-            $value = $fields[1];
-            $parse[$key] = $value;
+        switch ($type) {
+            case RequestType::POST:
+            case RequestType::PATCH:
+                $options[CURLOPT_POST] = 1;
+                $options[CURLOPT_POSTFIELDS] = $request;
         }
 
-        $parse['data'] = $lines[count($lines) - 1];
+        curl_setopt_array($this->curl, $options + self::DEFAULT_CURL_OPTIONS);
 
-        return $parse;
+        $response = curl_exec($this->curl);
+
+        if (curl_errno($this->curl)) {
+            throw new CurlRequestException(curl_error(($this->curl)));
+        }
+        $httpCode = curl_getinfo($this->curl, CURLINFO_RESPONSE_CODE);
+        switch ($httpCode) {
+            case 200:
+            case 201:
+                return [
+                    'data' => $response,
+                    'trace-id' => $headers['trace-id']
+                ];
+            case 400:
+                throw new BadRequestException($httpCode, $response['detail'], $headers['trace-id']);
+            default:
+                throw new ServerException($httpCode . ' : ' .  $response);
+        }
     }
 
     /**
      * Check ApiConfig parameters and prevent requests on missing params.
      */
-    private static function validateApiConfigParams(): void
+    protected function validateApiConfigParams(): void
     {
-        if (is_null(ApiConfig::$API_KEY)) {
+        if (is_null($this->apiConfig['api_key'])) {
             throw new Exception("No valid API key has been provided. Set it in ApiConfig class");
         }
 
-        if (is_null(ApiConfig::$API_SECRET)) {
+        if (is_null($this->apiConfig['api_secret'])) {
             throw new Exception("No valid API Secret has been provided. Set it in ApiConfig class");
         }
 
-        if (ApiConfig::$IS_SET) {
-            throw new Exception("ApiConfig has not been set. Please create a ApiConfig object.");
+        if (is_null($this->apiConfig['store_id'])) {
+            throw new Exception("No valid API Secret has been provided. Set it in ApiConfig class");
         }
     }
 
@@ -176,44 +172,31 @@ class HttpClient
      * @param FiservObject $requestBody Optional request body which is null on GET requests
      * @param CurlHandle $client Optional handle object which should be passed to running requests to prevent reconnects
      * 
-     * @return array Associative array that should be parsed to its according DTO 
      */
-    public static function buildRequest(RequestType $type, string $endpoint, FiservObject $requestBody = null, CurlHandle $client = null): array
+    protected function buildRequest(RequestType $type, string $endpoint, FiservObject $requestBody = null, string $responseClass = null): mixed
     {
-        self::validateApiConfigParams();
-
-        if ($type === RequestType::GET xor is_null($requestBody)) {
-            throw new RequestBodyException($type);
-        }
-
         if ($requestBody instanceof FiservObject) {
             self::validateRequest($requestBody);
+            $requestBody->storeId = $this->apiConfig['store_id'];
         }
 
+
         try {
+            /*todo Check if neccessary here*/
             if (version_compare(phpversion(), '7.1', '>=')) {
                 ini_set('precision', 17);
                 ini_set('serialize_precision', -1);
             }
-
-            $requestBodyJson = json_encode($requestBody);
-            $response = self::curlRequest($type, self::$url . $endpoint, $requestBodyJson);
+            $response = self::curlRequest($type, $this->url . $endpoint, json_encode($requestBody));
         } catch (CurlRequestException $e) {
             throw $e;
         }
+        $responseObject = new $responseClass($response['data']);
+        if ($responseObject instanceof ResponseInterface) {
+            $responseObject->traceId = $response['trace-id'];
+        }
 
-        $data = json_decode($response['data']);
-        $code = $response['code'];
-        $traceId = $response['traceId'];
-        $encoded = json_encode($data);
-
-        self::handleStatusCodes($code, $encoded, $response);
-
-        return
-            [
-                'data' => json_decode($encoded, true),
-                'traceId' => $traceId,
-            ];
+        return $responseObject;
     }
 
     /**
@@ -222,7 +205,7 @@ class HttpClient
      * 
      * @param FiservObject $requestBody Request to be validated
      */
-    private static function validateRequest(FiservObject $requestBody): void
+    private function validateRequest(FiservObject $requestBody): void
     {
         foreach ($requestBody as $key => $value) {
             if ($value instanceof FiservObject) {
@@ -232,30 +215,6 @@ class HttpClient
             if ($value instanceof ValidationInterface) {
                 $value->validate();
             }
-        }
-    }
-
-    /**
-     * Block handling response error code by throwing
-     * 
-     * @param $code Reponse code
-     * @param $encoded Encoded response data
-     * @param $response Raw repsonse array
-     */
-    private static function handleStatusCodes($code, $encoded, $response)
-    {
-        if ($code == 503) {
-            throw new ServerException('Internal Error: No healthy upstream. Try again at a later time');
-        }
-
-        if ($code !== 201 && $code !== 200) {
-            $exceptionMessage = $encoded;
-
-            if ($exceptionMessage === 'null') {
-                $exceptionMessage = $response['data'];
-            }
-
-            throw new BadRequestException($code, $exceptionMessage, $response['traceId']);
         }
     }
 }

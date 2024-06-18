@@ -4,10 +4,8 @@ namespace Fiserv\Models;
 
 use Error;
 use Exception;
-use Fiserv\Exception\DataEncodingException;
 use Fiserv\Exception\InvalidFieldWarning;
 use Fiserv\Exception\RequiredFieldMissingException;
-use Fiserv\Models\WebhookEvent\TransactionStatus;
 use ReflectionProperty;
 use TypeError;
 
@@ -115,7 +113,6 @@ abstract class FiservObject
                     $enumType = $rp->getName();
                     $className = 'Fiserv\\Models\\' . ucfirst($enumType);
                     $this->{$key} = $className::from($value);
-                    // $this->{$key} = TransactionStatus::from($value);
                 }
             }
         }

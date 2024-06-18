@@ -2,31 +2,28 @@
 
 namespace Fiserv\PaymentLinks;
 
+use Fiserv\Config\ApiConfig;
 use Fiserv\HttpClient\HttpClient;
 use Fiserv\HttpClient\RequestType;
 use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\GetPaymentLinkDetailsResponse;
 use Fiserv\Models\PaymentsLinksCreatedResponse;
 
-class PaymentLinksClient
+final class PaymentLinksClient extends HttpClient
 {
-    const endpointRoot = '/exp/v1/payment-links';
 
-    public static function createPaymentLink(CheckoutClientRequest $req): PaymentsLinksCreatedResponse
+    public function __construct(array $apiConfig)
     {
-        $endpoint = self::endpointRoot;
-        $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-        $data = new PaymentsLinksCreatedResponse($res['data']);
-
-        return $data;
+        parent::__construct('/exp/v1/payment-links', $apiConfig);
     }
 
-    public static function getPaymentLinkDetails($paymentLinkId): GetPaymentLinkDetailsResponse
+    public function createPaymentLink(CheckoutClientRequest $request): PaymentsLinksCreatedResponse
     {
-        $endpoint = self::endpointRoot . "/" . $paymentLinkId;
-        $res = HttpClient::buildRequest(RequestType::GET, $endpoint);
-        $data = new GetPaymentLinkDetailsResponse($res['data']);
+        return $this->buildRequest(RequestType::POST, parent::$endpointRoot, $request, PaymentsLinksCreatedResponse::class);
+    }
 
-        return $data;
+    public function getPaymentLinkDetails($paymentLinkId): GetPaymentLinkDetailsResponse
+    {
+        return $this->buildRequest(RequestType::GET, parent::$endpointRoot . "/" . $paymentLinkId, null, PaymentsLinksCreatedResponse::class);
     }
 }

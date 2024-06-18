@@ -6,6 +6,7 @@ use Fiserv\Models\ApprovedAmount;
 use Fiserv\Models\FiservObject;
 use Fiserv\Models\IpgTransactionDetails;
 use Fiserv\Models\PaymentMethodUsed;
+use Fiserv\Models\TransactionStatus;
 
 class WebhookEvent extends FiservObject
 {

@@ -2,7 +2,6 @@
 
 namespace Fiserv\Checkout;
 
-use Fiserv\Config\ApiConfig;
 use Fiserv\HttpClient\HttpClient;
 use Fiserv\HttpClient\RequestType;
 use Fiserv\Models\CheckoutClientRequest;
@@ -11,9 +10,12 @@ use Fiserv\Models\Components;
 use Fiserv\Models\GetCheckoutIdResponse;
 use Fiserv\Tests\Fixtures;
 
-class CheckoutClient
+final class CheckoutClient extends HttpClient
 {
-    const endpointRoot = '/exp/v1/checkouts';
+    public function __construct(array $config)
+    {
+        parent::__construct('/exp/v1/checkouts', $config);
+    }
 
     /**
      * Create a checkout link to be used as checkout solution.
@@ -21,34 +23,11 @@ class CheckoutClient
      * 
      * @param CheckoutClientRequest $req - Request body containing checkout options
      */
-    public static function postCheckouts(CheckoutClientRequest $req): CheckoutClientResponse
+    public function createCheckout(CheckoutClientRequest $request): CheckoutClientResponse
     {
-        $req->storeId = ApiConfig::$STORE_ID;
-        $endpoint = self::endpointRoot;
-
         /** Floor transaction amount in case it got deformed */
-        $req->transactionAmount->total = floor($req->transactionAmount->total * 100) / 100;
-        $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-
-        $data = new CheckoutClientResponse($res['data']);
-        $data->traceId = $res['traceId'];
-
-        return $data;
-    }
-
-    /**
-     * This version forwards to node server. Node sends mocked webhook events (approved sample data).
-     * 
-     * @param CheckoutClientRequest $req - Request body containing checkout options
-     */
-    public static function postCheckoutsWithSimulatedMock(CheckoutClientRequest $req): CheckoutClientResponse
-    {
-        $req->storeId = Config::$STORE_ID;
-        $endpoint = self::endpointRoot;
-        $res = HttpClient::buildRequest(RequestType::POST, $endpoint, $req);
-        $data = new CheckoutClientResponse($res['data']);
-
-        return $data;
+        $request->transactionAmount->total = floor($request->transactionAmount->total * 100) / 100;
+        return $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, CheckoutClientResponse::class);
     }
 
 
@@ -59,36 +38,36 @@ class CheckoutClient
      * Possibly create a callback option or simply return an array containing the response (like now)
      * and request data, both. 
      * 
-     * @see CheckoutClient::postCheckouts
+     * @see CheckoutClient::createCheckout
      * @param float $transactionTotal Total transaction amount (in EUR)
      * @param string $successUrl URL that directs to Thank You page from checkout
      * @param string $failureUrl URL that directs to failure notifaction if checkout failed
      */
-    public static function createBasicCheckout(float $transactionTotal, string $successUrl, string $failureUrl, Components | bool $components = false): CheckoutClientResponse
+    public function createBasicCheckout(float $transactionTotal, string $successUrl, string $failureUrl, Components | bool $components = false): CheckoutClientResponse
     {
-        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
-        $req->transactionAmount->total = $transactionTotal;
+        $request = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
+        $request->transactionAmount->total = $transactionTotal;
 
         if ($components) {
-            $req->transactionAmount->components = $components;
+            $request->transactionAmount->components = $components;
         } else {
-            unset($req->transactionAmount->components);
+            unset($request->transactionAmount->components);
         }
 
-        $req->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
-        $req->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
+        $request->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
+        $request->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
 
-        return self::postCheckouts($req);
+        return $this->createCheckout($request);
     }
 
-    public static function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
+    public function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
     {
-        $req = new CheckoutClientRequest(Fixtures::minimalCheckoutRequestContent);
-        $req->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
-        $req->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
-        $req->transactionAmount->total = $transactionTotal;
+        $request = new CheckoutClientRequest(Fixtures::minimalCheckoutRequestContent);
+        $request->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
+        $request->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
+        $request->transactionAmount->total = $transactionTotal;
 
-        return $req;
+        return $request;
     }
 
     /**
@@ -97,12 +76,8 @@ class CheckoutClient
      * 
      * @param string $checkoutId - String checkout ID to be queried  
      */
-    public static function getCheckoutId(string $checkoutId): GetCheckoutIdResponse
+    public function getCheckoutId(string $checkoutId): GetCheckoutIdResponse
     {
-        $endpoint = self::endpointRoot . "/" . $checkoutId;
-        $res = HttpClient::buildRequest(RequestType::GET, $endpoint);
-        $data = new GetCheckoutIdResponse($res['data']);
-
-        return $data;
+        return $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $checkoutId, null, GetCheckoutIdResponse::class);
     }
 }
