@@ -6,7 +6,6 @@ use Fiserv\HttpClient\HttpClient;
 use Fiserv\HttpClient\RequestType;
 use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\CheckoutClientResponse;
-use Fiserv\Models\Components;
 use Fiserv\Models\GetCheckoutIdResponse;
 use Fiserv\Tests\Fixtures;
 
@@ -30,7 +29,6 @@ final class CheckoutClient extends HttpClient
         return $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, CheckoutClientResponse::class);
     }
 
-
     /**
      * Create a checkout link that uses default parameters for SEPA payment.
      * 
@@ -43,24 +41,7 @@ final class CheckoutClient extends HttpClient
      * @param string $successUrl URL that directs to Thank You page from checkout
      * @param string $failureUrl URL that directs to failure notifaction if checkout failed
      */
-    public function createBasicCheckout(float $transactionTotal, string $successUrl, string $failureUrl, Components | bool $components = false): CheckoutClientResponse
-    {
-        $request = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
-        $request->transactionAmount->total = $transactionTotal;
-
-        if ($components) {
-            $request->transactionAmount->components = $components;
-        } else {
-            unset($request->transactionAmount->components);
-        }
-
-        $request->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
-        $request->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
-
-        return $this->createCheckout($request);
-    }
-
-    public function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
+    public static function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
     {
         $request = new CheckoutClientRequest(Fixtures::minimalCheckoutRequestContent);
         $request->checkoutSettings->redirectBackUrls->successUrl = $successUrl;

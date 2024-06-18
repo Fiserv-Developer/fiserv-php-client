@@ -3,9 +3,11 @@
 use Fiserv\Models\CheckoutSettings;
 use PHPUnit\Framework\TestCase;
 
+use function PHPUnit\Framework\assertTrue;
+
 class UtilTest extends TestCase
 {
-    public function testFieldStringValidationOnRequest()
+    public function testFieldStringValidationOnRequest(): void
     {
         $badUrl = "BAD_URL";
 

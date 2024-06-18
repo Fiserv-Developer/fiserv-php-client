@@ -27,14 +27,12 @@ class PaymentLinksTest extends TestCase
     {
         $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
         $res = $this->client->createPaymentLink($req);
-        // $this->assertInstanceOf(PaymentsLinksCreatedResponse::class, $res, "Response schema is malformed");
-        $this->assertTrue(true);
+        $this->assertInstanceOf(PaymentsLinksCreatedResponse::class, $res, "Response schema is malformed");
     }
 
-    // public function testGetPaymentLinkDetails(): void
-    // {
-    //     $res = new GetPaymentLinkDetailsResponse(Fixtures::paymentlinkResponseContent);
-    //     $res = $this->client->getPaymentLinkDetails($this->paymentLinkId);
-    //     $this->assertInstanceOf(GetPaymentLinkDetailsResponse::class, $res);
-    // }
+    public function testGetPaymentLinkDetails(): void
+    {
+        $res = $this->client->getPaymentLinkDetails($this->paymentLinkId);
+        $this->assertInstanceOf(GetPaymentLinkDetailsResponse::class, $res);
+    }
 }

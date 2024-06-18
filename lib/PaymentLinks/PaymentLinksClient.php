@@ -23,6 +23,12 @@ final class PaymentLinksClient extends HttpClient
 
     public function getPaymentLinkDetails($paymentLinkId): GetPaymentLinkDetailsResponse
     {
-        return $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $paymentLinkId, null, PaymentsLinksCreatedResponse::class);
+        return $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $paymentLinkId, null, GetPaymentLinkDetailsResponse::class);
+    }
+
+    /** @todo Remove. */
+    public function somePatchRequest(CheckoutClientRequest $request): PaymentsLinksCreatedResponse
+    {
+        return $this->buildRequest(RequestType::PATCH, $this->endpointRoot, $request, PaymentsLinksCreatedResponse::class);
     }
 }

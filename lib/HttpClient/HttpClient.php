@@ -13,8 +13,7 @@ use Fiserv\Models\ValidationInterface;
 
 abstract class HttpClient
 {
-    public const VERSION = '0.1.4';
-    public const USER = '';
+    private const VERSION = '0.1.4';
     private const DOMAIN = 'https://prod.emea.api.fiservapps.com/';
     protected string $endpointRoot;
     protected array $apiConfig;
@@ -39,6 +38,7 @@ abstract class HttpClient
     {
         $this->endpointRoot = $endpointRoot;
         $this->apiConfig = $config;
+
         $this->url = $config['is_prod'] ? self::DOMAIN : self::DOMAIN . '/sandbox';
         $this->curl = curl_init();
         self::validateApiConfigParams();
@@ -51,7 +51,7 @@ abstract class HttpClient
 
     private function whichUserAgent()
     {
-        return 'FiservPHPClient/' . self::VERSION . ' ' . self::USER;
+        return 'FiservPHPClient/' . self::VERSION . ' ' . ($this->apiConfig['user'] ?? '');
     }
 
     /**
@@ -61,10 +61,8 @@ abstract class HttpClient
      * @param string $content Request body for POST/PUT requests. May be empty (but not null).
      * @return string Array representing the header
      */
-    protected function buildHeadersWithMessage(string $content): array
+    protected function authenticate(string $content): array
     {
-
-
         $clientRequestId = self::generateUuid();
         $timestamp = self::generateTimestamp();
         $message = $this->apiConfig['api_key'] . $clientRequestId . $timestamp . $content;
@@ -118,8 +116,9 @@ abstract class HttpClient
         $options = [
             CURLOPT_POST => false,
             CURLOPT_URL => $url,
+            CURLOPT_CUSTOMREQUEST => $type->value,
             CURLOPT_USERAGENT => self::whichUserAgent(),
-            CURLOPT_HTTPHEADER => self::buildHeadersWithMessage($request),
+            CURLOPT_HTTPHEADER => self::authenticate($request),
             CURLOPT_HEADERFUNCTION => function ($curl, $header) use (&$headers) {
                 if (str_contains($header, ':')) {
                     list($key, $value) = explode(':', $header, 2);
@@ -132,6 +131,7 @@ abstract class HttpClient
         switch ($type) {
             case RequestType::POST:
             case RequestType::PATCH:
+                $options[CURLOPT_POST] = true;
                 $options[CURLOPT_POSTFIELDS] = $request;
         }
 
