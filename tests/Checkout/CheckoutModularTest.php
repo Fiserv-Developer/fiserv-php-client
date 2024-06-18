@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class CheckoutModularTest extends TestCase
 {
-
     private CheckoutClient $client;
 
     protected function setUp(): void

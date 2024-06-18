@@ -1,13 +1,12 @@
 <?php
 
-use Composer\InstalledVersions;
 use Fiserv\Checkout\CheckoutClient;
 use Fiserv\Exception\RequiredFieldMissingException;
 use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\CheckoutClientResponse;
 use Fiserv\Models\CreateToken;
+use Fiserv\Models\Fixtures;
 use Fiserv\Models\GetCheckoutIdResponse;
-use Fiserv\Tests\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase

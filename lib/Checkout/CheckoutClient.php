@@ -6,8 +6,8 @@ use Fiserv\HttpClient\HttpClient;
 use Fiserv\HttpClient\RequestType;
 use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\CheckoutClientResponse;
+use Fiserv\Models\Fixtures;
 use Fiserv\Models\GetCheckoutIdResponse;
-use Fiserv\Tests\Fixtures;
 
 final class CheckoutClient extends HttpClient
 {
