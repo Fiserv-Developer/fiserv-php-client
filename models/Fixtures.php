@@ -91,7 +91,8 @@ final class Fixtures
         'transactionType' => 'SALE',
         'transactionAmount' => [
             'total' => 0,
-            'currency' => 'EUR'
+            'currency' => 'EUR',
+            'components' => []
         ],
         'checkoutSettings' => [
             'locale' => 'en_GB',
@@ -117,7 +118,8 @@ final class Fixtures
                 'person' => [],
                 'contact' => [],
                 'address' => [],
-            ]
+            ],
+            'basket' => []
         ]
     ];
 }
