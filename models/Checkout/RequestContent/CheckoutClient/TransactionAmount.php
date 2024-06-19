@@ -16,6 +16,12 @@ class TransactionAmount extends FiservObject implements ValidationInterface
             return;
         }
 
+        /** @todo This is weird (sanitization in validator) */
+        if (!isset($this->components->subtotal)) {
+            unset($this->components);
+            return;
+        }
+
         $componentsTotal = $this->components->subtotal + $this->components->vatAmount + $this->components->shipping;
         if ($componentsTotal !== $this->total) {
             throw new ValidationException($componentsTotal, self::class, 'The total of subtotal, vatAmount and shipping has to match given total.');
