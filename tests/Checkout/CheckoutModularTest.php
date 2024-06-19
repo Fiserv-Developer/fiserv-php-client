@@ -3,6 +3,7 @@
 use Fiserv\Checkout\CheckoutClient;
 use Fiserv\Models\CheckoutClientRequest;
 use Fiserv\Models\CheckoutClientResponse;
+use Fiserv\Models\LineItem;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutModularTest extends TestCase
@@ -50,7 +51,8 @@ class CheckoutModularTest extends TestCase
                 'person' => [],
                 'contact' => [],
                 'address' => [],
-            ]
+            ],
+            'basket' => []
         ]
     ];
 
@@ -58,6 +60,27 @@ class CheckoutModularTest extends TestCase
     {
         $request = new CheckoutClientRequest(self::requestBody);
         $response = $this->client->createCheckout($request);
+        $this->assertInstanceOf(CheckoutClientResponse::class, $response);
+    }
+
+    public function testCheckoutWithBasket(): void
+    {
+        $request = new CheckoutClientRequest(self::requestBody);
+        $request->order->basket->lineItems[] = new LineItem([
+            'name' => 'Thing',
+            'quantity' => 3,
+            'price' => 24.99,
+        ]);
+
+        $request->order->basket->lineItems[] = new LineItem([
+            'name' => 'Another',
+            'quantity' => 1,
+            'price' => 8.99,
+            'total' => 8.99,
+        ]);
+
+        $response = $this->client->createCheckout($request);
+
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
 }
