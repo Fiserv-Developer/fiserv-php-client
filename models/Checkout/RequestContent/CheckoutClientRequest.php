@@ -3,7 +3,7 @@
 namespace Fiserv\Models;
 
 
-class CheckoutClientRequest extends FiservObject
+class CheckoutClientRequest extends ResponseInterface
 {
     public TransactionOrigin $transactionOrigin;
     public string $transactionType;
@@ -14,7 +14,7 @@ class CheckoutClientRequest extends FiservObject
     public string $storeId;
     public Order $order;
 
-    public function __construct($json = false)
+    public function __construct(array | string | false $json = false)
     {
         $this->requiredFields = [
             'storeId',

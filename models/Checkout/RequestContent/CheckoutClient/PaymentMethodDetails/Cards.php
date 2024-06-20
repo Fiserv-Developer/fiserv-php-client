@@ -11,7 +11,12 @@ class Cards extends FiservObject
     public ExpiryDate $expiryDate;
     public CreateToken $createToken;
 
-    public function __construct($json = false, $isReponseContent = false)
+    /**
+     * Constructor 
+     * 
+     * @param array<string, mixed> | string | false $json
+     */
+    public function __construct(array | string | false $json = false, bool $isReponseContent = false)
     {
         $this->requiredFields = [
             'createToken',

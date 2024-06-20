@@ -4,5 +4,5 @@ namespace Fiserv\Models;
 
 interface ValidationInterface
 {
-    public function validate();
+    public function validate(): void;
 }

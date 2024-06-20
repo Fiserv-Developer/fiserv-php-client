@@ -6,7 +6,12 @@ abstract class ResponseInterface extends FiservObject
 {
     public string $traceId;
 
-    public function __construct($json = false)
+    /**
+     * Constructor 
+     * 
+     * @param array<string, mixed> | string | false $json
+     */
+    public function __construct(array | string | false $json = false)
     {
         FiservObject::__construct($json, true);
     }

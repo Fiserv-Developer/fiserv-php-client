@@ -5,6 +5,6 @@ namespace Fiserv\Models;
 class IpgTransactionDetails extends FiservObject
 {
     public string $ipgTransactionId;
-    public transactionStatus | string $transactionStatus;
+    public TransactionStatus $transactionStatus;
     public string $approvalCode;
 }

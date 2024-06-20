@@ -21,9 +21,12 @@ class WebhookEvent extends FiservObject
     public IpgTransactionDetails $ipgTransactionDetails;
     public string $receivedAt;
 
-    public function __construct($json = false, $isReponseContent = true)
+    /**
+     * @param string | false | array<string, mixed> $json JSON string or array
+     */
+    public function __construct(string | false | array $json = false)
     {
         $this->receivedAt = date("Y-m-d H:i:s");
-        parent::__construct($json, $isReponseContent);
+        parent::__construct($json, true);
     }
 }

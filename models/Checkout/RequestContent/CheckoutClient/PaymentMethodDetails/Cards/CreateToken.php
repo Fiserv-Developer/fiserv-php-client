@@ -10,7 +10,12 @@ class CreateToken extends FiservObject
     public ToBeUsedFor $toBeUsedFor;
     public bool $declineDuplicates;
 
-    public function __construct($json = false)
+    /**
+     * Constructor 
+     * 
+     * @param array<string, mixed> | string | false $json
+     */
+    public function __construct(array | string | false $json = false)
     {
         $this->requiredFields = [
             'toBeUsedFor',

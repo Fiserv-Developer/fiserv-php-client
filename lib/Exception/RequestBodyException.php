@@ -9,6 +9,6 @@ class RequestBodyException extends Exception
 {
     public function __construct(RequestType $type)
     {
-        $message = "Invalid Request. " . $type . " request needs (no) request body.";
+        $message = "Invalid Request. " . $type->value . " request needs (no) request body.";
     }
 }

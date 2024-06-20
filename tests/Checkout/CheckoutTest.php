@@ -13,14 +13,6 @@ class CheckoutTest extends TestCase
 {
     private string $mockCheckoutId = 'IUBsFE';
 
-    private $mockResponseCreated = [
-        "checkout" => [
-            "storeId" => "72305408",
-            "checkoutId" => "IUBsFE",
-            "redirectionUrl" => "https://checkout-lane.com/?checkoutId=IUBsFE",
-        ]
-    ];
-
     private CheckoutClient $client;
 
     protected function setUp(): void

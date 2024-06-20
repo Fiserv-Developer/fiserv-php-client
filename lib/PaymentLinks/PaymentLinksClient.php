@@ -2,6 +2,7 @@
 
 namespace Fiserv\PaymentLinks;
 
+use Fiserv\Exception\ResponseMalformedException;
 use Fiserv\HttpClient\HttpClient;
 use Fiserv\HttpClient\RequestType;
 use Fiserv\Models\CheckoutClientRequest;
@@ -11,24 +12,40 @@ use Fiserv\Models\PaymentsLinksCreatedResponse;
 final class PaymentLinksClient extends HttpClient
 {
 
+    /**
+     * Constructor 
+     * 
+     * @param array<string, mixed> $apiConfig
+     */
     public function __construct(array $apiConfig)
     {
         parent::__construct('/exp/v1/payment-links', $apiConfig);
     }
 
+    /**
+     * Create payment link
+     * 
+     * @param CheckoutClientRequest $request Request object
+     */
     public function createPaymentLink(CheckoutClientRequest $request): PaymentsLinksCreatedResponse
     {
-        return $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, PaymentsLinksCreatedResponse::class);
+        $repsonse = $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, PaymentsLinksCreatedResponse::class); 
+        
+        if (!$repsonse instanceof PaymentsLinksCreatedResponse) {
+            throw new ResponseMalformedException();
+        }
+
+        return $repsonse;
     }
 
-    public function getPaymentLinkDetails($paymentLinkId): GetPaymentLinkDetailsResponse
+    public function getPaymentLinkDetails(string $paymentLinkId): GetPaymentLinkDetailsResponse
     {
-        return $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $paymentLinkId, null, GetPaymentLinkDetailsResponse::class);
-    }
+        $repsonse = $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $paymentLinkId, null, GetPaymentLinkDetailsResponse::class);
 
-    /** @todo Remove. */
-    public function somePatchRequest(CheckoutClientRequest $request): PaymentsLinksCreatedResponse
-    {
-        return $this->buildRequest(RequestType::PATCH, $this->endpointRoot, $request, PaymentsLinksCreatedResponse::class);
+        if (!$repsonse instanceof GetPaymentLinkDetailsResponse) {
+            throw new ResponseMalformedException();
+        }
+
+        return $repsonse;
     }
 }

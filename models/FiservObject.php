@@ -2,6 +2,7 @@
 
 namespace Fiserv\Models;
 
+use BackedEnum;
 use Error;
 use Exception;
 use Fiserv\Exception\InvalidFieldWarning;
@@ -18,6 +19,8 @@ abstract class FiservObject
     /**
      * List containing references to required fields. 
      * Has to be ignored if not request.
+     * 
+     * @var array<string>
      */
     protected array $requiredFields = [];
 
@@ -34,11 +37,13 @@ abstract class FiservObject
      */
     protected string | false $pattern = false;
 
+    private const NAMESPACE_PREFIX = 'Fiserv\\Models\\';
+
     /**
      * Constructor which calls setter.
      * If $isResponseContent flag ist true, the fields should not be validated.
      * 
-     * @param array|string|bool $json If not false, a JSON string to be serialized to DTO.
+     * @param array<string, mixed> | string | false $json If not false, a JSON string to be serialized to DTO.
      * @param bool $isResponseContent True if object is a response
      */
     public function __construct(array | string | false $json = false, bool $isResponseContent = false)
@@ -73,19 +78,20 @@ abstract class FiservObject
         }
     }
 
+
     /**
      * Dependency injection which is used to serialize JSON data from server to PHP
      * objects and vice versa. The setter is recursively for nested objects.
      * 
-     * @param mixed $data JSON data which has to parsed and inject into current object and children.
+     * @param array<string, string | mixed | array<string, mixed>> $data JSON data which has to parsed and inject into current object and children.
      */
-    private function set(array $data)
+    private function set(array $data): void
     {
         foreach ($data as $key => $value) {
             /** Serialize nested properties */
             if (is_array($value)) {
                 try {
-                    $className = 'Fiserv\\Models\\' . ucfirst($key);
+                    $className = self::NAMESPACE_PREFIX . ucfirst($key);
                     $nestedObj = new $className($value, $this->isResponseContent);
                 } catch (Error $th) {
                     new InvalidFieldWarning($key, $this::class);
@@ -104,17 +110,23 @@ abstract class FiservObject
                 $this->{$key} = $value;
             } catch (TypeError $th) {
                 $rp = new ReflectionProperty($this, $key);
-                if (enum_exists($rp->getType())) {
+                if (enum_exists(strval($rp->getType()))) {
                     $enumType = $rp->getName();
-                    $className = 'Fiserv\\Models\\' . ucfirst($enumType);
+                    $className = self::NAMESPACE_PREFIX . ucfirst($enumType);
                     $this->{$key} = $className::from($value);
                 }
             }
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return json_encode($this, JSON_PRETTY_PRINT);
+        $json = json_encode($this, JSON_PRETTY_PRINT);
+        
+        if (!$json) {
+            $json = 'Could not parse object';
+        }
+        
+        return $json;
     }
 }

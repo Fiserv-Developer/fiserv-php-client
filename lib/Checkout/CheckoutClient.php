@@ -2,6 +2,7 @@
 
 namespace Fiserv\Checkout;
 
+use Exception;
 use Fiserv\HttpClient\HttpClient;
 use Fiserv\HttpClient\RequestType;
 use Fiserv\Models\CheckoutClientRequest;
@@ -11,6 +12,11 @@ use Fiserv\Models\GetCheckoutIdResponse;
 
 final class CheckoutClient extends HttpClient
 {
+    /**
+     * Checkout client constructor
+     * 
+     * @param array<string, string | bool> $config Config paramter as key value array
+     */
     public function __construct(array $config)
     {
         parent::__construct('/exp/v1/checkouts', $config);
@@ -20,13 +26,19 @@ final class CheckoutClient extends HttpClient
      * Create a checkout link to be used as checkout solution.
      * Pass an optional webhook to receive status events from fiserv server.
      * 
-     * @param CheckoutClientRequest $req - Request body containing checkout options
+     * @param CheckoutClientRequest $request - Request body containing checkout options
      */
     public function createCheckout(CheckoutClientRequest $request): CheckoutClientResponse
     {
         /** Floor transaction amount in case it got deformed */
         $request->transactionAmount->total = floor($request->transactionAmount->total * 100) / 100;
-        return $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, CheckoutClientResponse::class);
+        $response = $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, CheckoutClientResponse::class);
+
+        if (!$response instanceof CheckoutClientResponse) {
+            throw new Exception('Response is of malformed type');
+        }
+
+        return $response;
     }
 
     /**
@@ -59,6 +71,12 @@ final class CheckoutClient extends HttpClient
      */
     public function getCheckoutId(string $checkoutId): GetCheckoutIdResponse
     {
-        return $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $checkoutId, null, GetCheckoutIdResponse::class);
+        $response = $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $checkoutId, null, GetCheckoutIdResponse::class);
+
+        if (!$response instanceof GetCheckoutIdResponse) {
+            throw new Exception('Response is of malformed type');
+        }
+
+        return $response;
     }
 }

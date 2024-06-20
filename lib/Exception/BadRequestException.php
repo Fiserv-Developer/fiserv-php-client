@@ -10,12 +10,12 @@ class BadRequestException extends Exception
     public string $detail;
     public string $source;
 
-    public function __construct(string $statusCode, string $message, string $traceId)
+    public function __construct(int $statusCode, string $message, string $traceId)
     {
-        $decoded = json_decode($message, 1);
+        $decoded = json_decode($message, true);
 
         if (!is_array($decoded)) {
-            $this->message = $statusCode . ': ' . $message;
+            $this->message = strval($statusCode) . ': ' . $message;
             return;
         }
 
@@ -30,6 +30,6 @@ class BadRequestException extends Exception
         }
         $parse = $parse . "Trace-Id: " . $traceId . "\n";
 
-        $this->message = $statusCode . ': ' . $parse;
+        $this->message = strval($statusCode) . ': ' . $parse;
     }
 }

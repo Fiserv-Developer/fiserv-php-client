@@ -9,7 +9,7 @@ class PaymentMethodDetails extends FiservObject
     public PayPal $payPal;
     public TokenBasedTransaction $tokenBasedTransaction;
 
-    public function __construct($json = false, $isReponseContent = false)
+    public function __construct(array | string | false $json = false, bool $isReponseContent = false)
     {
         $this->requiredFields = [
             'cards',
