@@ -1,6 +1,6 @@
 <?php
 
-use Fiserv\Models\CheckoutSettings;
+use Fisrv\Models\CheckoutSettings;
 use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertTrue;

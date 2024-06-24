@@ -1,23 +1,23 @@
 {
-    "name": "fiserv/php-client",
-    "description": "PHP client for the Fiserv API.",
-    "version": "0.1.4",
-    "type": "library",
-    "require": {
-        "ext-curl": "*",
-        "ext-json": "*",
-        "ext-mbstring": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^11.1",
-        "friendsofphp/php-cs-fixer": "^3.52",
-        "phpstan/phpstan": "^1.10"
-    },
-    "autoload": {
-        "classmap": [
-            "lib/",
-            "models/",
-            "tests/"
-        ]
-    }
+  "name": "fisrv/php-client",
+  "description": "PHP client for the fisrv API.",
+  "version": "0.1.4",
+  "type": "library",
+  "require": {
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.1",
+    "friendsofphp/php-cs-fixer": "^3.52",
+    "phpstan/phpstan": "^1.10"
+  },
+  "autoload": {
+    "classmap": [
+      "lib/",
+      "models/",
+      "tests/"
+    ]
+  }
 }

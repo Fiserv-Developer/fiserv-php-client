@@ -1,14 +1,14 @@
 <?php
 
-namespace Fiserv\Models\WebhookEvent;
+namespace Fisrv\Models\WebhookEvent;
 
-use Fiserv\Models\ApprovedAmount;
-use Fiserv\Models\FiservObject;
-use Fiserv\Models\IpgTransactionDetails;
-use Fiserv\Models\PaymentMethodUsed;
-use Fiserv\Models\TransactionStatus;
+use Fisrv\Models\ApprovedAmount;
+use Fisrv\Models\fisrvObject;
+use Fisrv\Models\IpgTransactionDetails;
+use Fisrv\Models\PaymentMethodUsed;
+use Fisrv\Models\TransactionStatus;
 
-class WebhookEvent extends FiservObject
+class WebhookEvent extends fisrvObject
 {
     public int $retryNumber;
     public string $storeId;

@@ -1,17 +1,17 @@
 <?php
 
-namespace Fiserv\HttpClient;
+namespace Fisrv\HttpClient;
 
 use CurlHandle;
 use Exception;
-use Fiserv\Exception\BadRequestException;
-use Fiserv\Exception\CurlRequestException;
-use Fiserv\Exception\ResponseMalformedException;
-use Fiserv\Exception\ServerException;
-use Fiserv\Models\FiservObject;
-use Fiserv\Models\RequestInterface;
-use Fiserv\Models\ResponseInterface;
-use Fiserv\Models\ValidationInterface;
+use Fisrv\Exception\BadRequestException;
+use Fisrv\Exception\CurlRequestException;
+use Fisrv\Exception\ResponseMalformedException;
+use Fisrv\Exception\ServerException;
+use Fisrv\Models\fisrvObject;
+use Fisrv\Models\RequestInterface;
+use Fisrv\Models\ResponseInterface;
+use Fisrv\Models\ValidationInterface;
 
 abstract class HttpClient
 {
@@ -75,7 +75,7 @@ abstract class HttpClient
 
     private function whichUserAgent(): string
     {
-        return 'FiservPHPClient/' . self::VERSION . ' ' . ($this->config['user'] ?? '');
+        return 'fisrvPHPClient/' . self::VERSION . ' ' . ($this->config['user'] ?? '');
     }
 
     /**
@@ -175,7 +175,7 @@ abstract class HttpClient
         $response = curl_exec($this->session);
 
         if (is_bool($response)) {
-            throw new Exception('CURLOPT_RETURNTRANSFER is not set to true. Could not retrieve response data.');
+            throw new Exception('CURLOPT_RETURNTRANSFER is not set to true. Could not retrieve response data.' . $response);
         }
 
         if (curl_errno($this->session)) {
@@ -221,12 +221,12 @@ abstract class HttpClient
      * 
      * @param RequestType $type GET, POST or PATCH
      * @param string $endpoint Path of URL to call without root
-     * @param FiservObject $requestBody Optional request body which is null on GET requests
+     * @param fisrvObject $requestBody Optional request body which is null on GET requests
      * @param string $responseClass Response class type of ResponseInterface
      * 
      * @return ResponseInterface Response object
      */
-    protected function buildRequest(RequestType $type, string $endpoint, FiservObject $requestBody = null, string $responseClass = null): ResponseInterface
+    protected function buildRequest(RequestType $type, string $endpoint, fisrvObject $requestBody = null, string $responseClass = null): ResponseInterface
     {
         if ($requestBody instanceof RequestInterface) {
             $this->validateRequest($requestBody);
@@ -259,12 +259,12 @@ abstract class HttpClient
      * Run validation checks before request and
      * throw on failure.
      * 
-     * @param FiservObject $requestBody Request to be validated
+     * @param fisrvObject $requestBody Request to be validated
      */
-    private function validateRequest(FiservObject $requestBody): void
+    private function validateRequest(fisrvObject $requestBody): void
     {
         foreach (get_object_vars($requestBody) as $value) {
-            if ($value instanceof FiservObject) {
+            if ($value instanceof fisrvObject) {
                 self::validateRequest($value);
             }
 

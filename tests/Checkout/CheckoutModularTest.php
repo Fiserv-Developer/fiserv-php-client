@@ -1,9 +1,9 @@
 <?php
 
-use Fiserv\Checkout\CheckoutClient;
-use Fiserv\Models\CheckoutClientRequest;
-use Fiserv\Models\CheckoutClientResponse;
-use Fiserv\Models\LineItem;
+use Fisrv\Checkout\CheckoutClient;
+use Fisrv\Models\CheckoutClientRequest;
+use Fisrv\Models\CheckoutClientResponse;
+use Fisrv\Models\LineItem;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutModularTest extends TestCase

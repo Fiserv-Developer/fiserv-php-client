@@ -1,12 +1,12 @@
 <?php
 
-namespace Fiserv\Models;
+namespace Fisrv\Models;
 
 use BackedEnum;
 use Error;
 use Exception;
-use Fiserv\Exception\InvalidFieldWarning;
-use Fiserv\Exception\RequiredFieldMissingException;
+use Fisrv\Exception\InvalidFieldWarning;
+use Fisrv\Exception\RequiredFieldMissingException;
 use ReflectionProperty;
 use TypeError;
 
@@ -14,7 +14,7 @@ use TypeError;
  * This class handles serialization and field validation for DTO from JSON server responses and requests.
  * Every DTO sub class inherits this class.
  */
-abstract class FiservObject
+abstract class fisrvObject
 {
     /**
      * List containing references to required fields. 
@@ -37,7 +37,7 @@ abstract class FiservObject
      */
     protected string | false $pattern = false;
 
-    private const NAMESPACE_PREFIX = 'Fiserv\\Models\\';
+    private const NAMESPACE_PREFIX = 'Fisrv\\Models\\';
 
     /**
      * Constructor which calls setter.

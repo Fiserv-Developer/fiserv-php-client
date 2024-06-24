@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiserv\Exception;
+namespace Fisrv\Exception;
 
 class InvalidFieldWarning
 {

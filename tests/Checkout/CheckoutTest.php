@@ -1,12 +1,12 @@
 <?php
 
-use Fiserv\Checkout\CheckoutClient;
-use Fiserv\Exception\RequiredFieldMissingException;
-use Fiserv\Models\CheckoutClientRequest;
-use Fiserv\Models\CheckoutClientResponse;
-use Fiserv\Models\CreateToken;
-use Fiserv\Models\Fixtures;
-use Fiserv\Models\GetCheckoutIdResponse;
+use Fisrv\Checkout\CheckoutClient;
+use Fisrv\Exception\RequiredFieldMissingException;
+use Fisrv\Models\CheckoutClientRequest;
+use Fisrv\Models\CheckoutClientResponse;
+use Fisrv\Models\CreateToken;
+use Fisrv\Models\Fixtures;
+use Fisrv\Models\GetCheckoutIdResponse;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase

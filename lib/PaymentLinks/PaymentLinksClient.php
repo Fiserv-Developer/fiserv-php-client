@@ -1,13 +1,13 @@
 <?php
 
-namespace Fiserv\PaymentLinks;
+namespace Fisrv\PaymentLinks;
 
-use Fiserv\Exception\ResponseMalformedException;
-use Fiserv\HttpClient\HttpClient;
-use Fiserv\HttpClient\RequestType;
-use Fiserv\Models\CheckoutClientRequest;
-use Fiserv\Models\GetPaymentLinkDetailsResponse;
-use Fiserv\Models\PaymentsLinksCreatedResponse;
+use Fisrv\Exception\ResponseMalformedException;
+use Fisrv\HttpClient\HttpClient;
+use Fisrv\HttpClient\RequestType;
+use Fisrv\Models\CheckoutClientRequest;
+use Fisrv\Models\GetPaymentLinkDetailsResponse;
+use Fisrv\Models\PaymentsLinksCreatedResponse;
 
 final class PaymentLinksClient extends HttpClient
 {

@@ -1,10 +1,10 @@
 <?php
 
-use Fiserv\Models\CheckoutClientRequest;
-use Fiserv\Models\Fixtures;
-use Fiserv\Models\GetPaymentLinkDetailsResponse;
-use Fiserv\Models\PaymentsLinksCreatedResponse;
-use Fiserv\PaymentLinks\PaymentLinksClient;
+use Fisrv\Models\CheckoutClientRequest;
+use Fisrv\Models\Fixtures;
+use Fisrv\Models\GetPaymentLinkDetailsResponse;
+use Fisrv\Models\PaymentsLinksCreatedResponse;
+use Fisrv\PaymentLinks\PaymentLinksClient;
 use PHPUnit\Framework\TestCase;
 
 class PaymentLinksTest extends TestCase

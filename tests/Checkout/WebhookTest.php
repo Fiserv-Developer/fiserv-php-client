@@ -1,6 +1,6 @@
 <?php
 
-use Fiserv\Models\WebhookEvent\WebhookEvent;
+use Fisrv\Models\WebhookEvent\WebhookEvent;
 use PHPUnit\Framework\TestCase;
 
 class WebhookTest extends TestCase

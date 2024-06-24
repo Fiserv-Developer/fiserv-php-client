@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiserv\Models;
+namespace Fisrv\Models;
 
 interface ValidationInterface
 {

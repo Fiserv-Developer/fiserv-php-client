@@ -1,6 +1,6 @@
 <?php
 
-namespace Fiserv\HttpClient;
+namespace Fisrv\HttpClient;
 
 /**
  * Enum for request types. 

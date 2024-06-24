@@ -1,14 +1,14 @@
 <?php
 
-namespace Fiserv\Checkout;
+namespace Fisrv\Checkout;
 
 use Exception;
-use Fiserv\HttpClient\HttpClient;
-use Fiserv\HttpClient\RequestType;
-use Fiserv\Models\CheckoutClientRequest;
-use Fiserv\Models\CheckoutClientResponse;
-use Fiserv\Models\Fixtures;
-use Fiserv\Models\GetCheckoutIdResponse;
+use Fisrv\HttpClient\HttpClient;
+use Fisrv\HttpClient\RequestType;
+use Fisrv\Models\CheckoutClientRequest;
+use Fisrv\Models\CheckoutClientResponse;
+use Fisrv\Models\Fixtures;
+use Fisrv\Models\GetCheckoutIdResponse;
 
 final class CheckoutClient extends HttpClient
 {
@@ -24,7 +24,7 @@ final class CheckoutClient extends HttpClient
 
     /**
      * Create a checkout link to be used as checkout solution.
-     * Pass an optional webhook to receive status events from fiserv server.
+     * Pass an optional webhook to receive status events from fisrv server.
      * 
      * @param CheckoutClientRequest $request - Request body containing checkout options
      */
