@@ -2,12 +2,12 @@
 
 namespace Fisrv\Models;
 
-abstract class RequestInterface extends fisrvObject
+abstract class RequestInterface extends FisrvObject
 {
     public string $storeId;
 
     public function __construct(array | string | false $json = false)
     {
-        fisrvObject::__construct($json, false);
+        FisrvObject::__construct($json, false);
     }
 }

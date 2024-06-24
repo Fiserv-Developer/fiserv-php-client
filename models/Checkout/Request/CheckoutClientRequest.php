@@ -23,6 +23,6 @@ class CheckoutClientRequest extends RequestInterface
             'paymentMethodDetails',
         ];
 
-        fisrvObject::__construct($json);
+        FisrvObject::__construct($json);
     }
 }

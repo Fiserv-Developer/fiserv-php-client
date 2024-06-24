@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class OrderDetails extends fisrvObject
+class OrderDetails extends FisrvObject
 {
     public string $customerId;
     public string $dynamicMerchantName;

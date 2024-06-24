@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-abstract class ResponseInterface extends fisrvObject
+abstract class ResponseInterface extends FisrvObject
 {
     public string $traceId;
 
@@ -13,6 +13,6 @@ abstract class ResponseInterface extends fisrvObject
      */
     public function __construct(array | string | false $json = false)
     {
-        fisrvObject::__construct($json, true);
+        FisrvObject::__construct($json, true);
     }
 }

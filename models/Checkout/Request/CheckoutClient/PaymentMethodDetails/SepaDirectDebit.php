@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class SepaDirectDebit extends fisrvObject
+class SepaDirectDebit extends FisrvObject
 {
     public string $transactionSequenceType;
 }

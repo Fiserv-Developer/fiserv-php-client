@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Address extends fisrvObject
+class Address extends FisrvObject
 {
     public string $address1;
     public string $address2;

@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class RequestSent extends fisrvObject
+class RequestSent extends FisrvObject
 {
     public OrderDetails $orderDetails;
     public CheckoutSettings $checkoutSettings;

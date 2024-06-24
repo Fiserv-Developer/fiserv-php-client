@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class LineItem extends fisrvObject
+class LineItem extends FisrvObject
 {
     public string $itemIdentifier;
     public string $name;

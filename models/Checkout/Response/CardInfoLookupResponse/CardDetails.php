@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class CardDetails extends fisrvObject
+class CardDetails extends FisrvObject
 {
     public string $brand;
     public string $brandProductId;

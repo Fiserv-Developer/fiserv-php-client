@@ -3,12 +3,12 @@
 namespace Fisrv\Models\WebhookEvent;
 
 use Fisrv\Models\ApprovedAmount;
-use Fisrv\Models\fisrvObject;
+use Fisrv\Models\FisrvObject;
 use Fisrv\Models\IpgTransactionDetails;
 use Fisrv\Models\PaymentMethodUsed;
 use Fisrv\Models\TransactionStatus;
 
-class WebhookEvent extends fisrvObject
+class WebhookEvent extends FisrvObject
 {
     public int $retryNumber;
     public string $storeId;

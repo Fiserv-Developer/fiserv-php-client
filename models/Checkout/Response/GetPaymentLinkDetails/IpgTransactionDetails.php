@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class IpgTransactionDetails extends fisrvObject
+class IpgTransactionDetails extends FisrvObject
 {
     public string $ipgTransactionId;
     public TransactionStatus $transactionStatus;

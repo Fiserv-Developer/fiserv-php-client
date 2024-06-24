@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class CheckoutSettings extends fisrvObject
+class CheckoutSettings extends FisrvObject
 {
     public Locale $locale;
     public PreSelectedPaymentMethod $preSelectedPaymentMethod;

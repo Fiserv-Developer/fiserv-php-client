@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class PaymentMethodUsed extends fisrvObject
+class PaymentMethodUsed extends FisrvObject
 {
     public Cards $cards;
     public TokenBasedTransaction $tokenBasedTransaction;

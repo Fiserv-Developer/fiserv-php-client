@@ -4,7 +4,7 @@ namespace Fisrv\Models;
 
 use Fisrv\Exception\ValidationException;
 
-class TransactionAmount extends fisrvObject implements ValidationInterface
+class TransactionAmount extends FisrvObject implements ValidationInterface
 {
     public float $total;
     public Currency $currency;

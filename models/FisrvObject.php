@@ -2,7 +2,6 @@
 
 namespace Fisrv\Models;
 
-use BackedEnum;
 use Error;
 use Exception;
 use Fisrv\Exception\InvalidFieldWarning;
@@ -14,7 +13,7 @@ use TypeError;
  * This class handles serialization and field validation for DTO from JSON server responses and requests.
  * Every DTO sub class inherits this class.
  */
-abstract class fisrvObject
+abstract class FisrvObject
 {
     /**
      * List containing references to required fields. 

@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Components extends fisrvObject
+class Components extends FisrvObject
 {
     public float $subtotal;
     public float $vatAmount;

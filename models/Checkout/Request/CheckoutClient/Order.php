@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Order extends fisrvObject
+class Order extends FisrvObject
 {
     public string $orderId;
     public OrderDetails $orderDetails;

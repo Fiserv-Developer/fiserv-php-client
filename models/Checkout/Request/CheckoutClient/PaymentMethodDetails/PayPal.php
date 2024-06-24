@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class PayPal extends fisrvObject
+class PayPal extends FisrvObject
 {
     public RiskData $riskData;
 }

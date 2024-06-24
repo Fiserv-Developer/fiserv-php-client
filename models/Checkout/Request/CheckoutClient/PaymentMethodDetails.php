@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class PaymentMethodDetails extends fisrvObject
+class PaymentMethodDetails extends FisrvObject
 {
     public Cards $cards;
     public SepaDirectDebit $sepaDirectDebit;
@@ -15,6 +15,6 @@ class PaymentMethodDetails extends fisrvObject
             'cards',
         ];
 
-        fisrvObject::__construct($json, $isReponseContent);
+        FisrvObject::__construct($json, $isReponseContent);
     }
 }

@@ -3,7 +3,7 @@
 namespace Fisrv\Models;
 use Fisrv\Exception\ValidationException;
 
-class RedirectBackUrls extends fisrvObject implements ValidationInterface
+class RedirectBackUrls extends FisrvObject implements ValidationInterface
 {
     public string $successUrl;
     public string $failureUrl;

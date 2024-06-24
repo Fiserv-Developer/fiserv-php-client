@@ -2,8 +2,8 @@
 
 namespace Fisrv\Models;
 
-use Fisrv\Models\fisrvObject;
+use Fisrv\Models\FisrvObject;
 
-class RiskData extends fisrvObject
+class RiskData extends FisrvObject
 {
 }

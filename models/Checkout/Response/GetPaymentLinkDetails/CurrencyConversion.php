@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class CurrencyConversion extends fisrvObject
+class CurrencyConversion extends FisrvObject
 {
     public bool $dccOffered;
     public string $exchangeRate;

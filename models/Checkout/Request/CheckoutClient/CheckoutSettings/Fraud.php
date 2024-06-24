@@ -2,6 +2,6 @@
 
 namespace Fisrv\Models;
 
-class Fraud extends fisrvObject
+class Fraud extends FisrvObject
 {
 }

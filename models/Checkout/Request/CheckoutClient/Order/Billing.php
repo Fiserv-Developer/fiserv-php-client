@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Billing extends fisrvObject
+class Billing extends FisrvObject
 {
     public Person $person;
     public Contact $contact;

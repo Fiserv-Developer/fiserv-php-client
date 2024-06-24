@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Checkout extends fisrvObject
+class Checkout extends FisrvObject
 {
     public string $storeId;
     public string $checkoutId;

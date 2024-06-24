@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class PaymentLink extends fisrvObject
+class PaymentLink extends FisrvObject
 {
     public string $storeId;
     public string $orderId;

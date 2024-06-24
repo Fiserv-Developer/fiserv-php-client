@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class ApprovedAmount extends fisrvObject
+class ApprovedAmount extends FisrvObject
 {
     public float $total;
     public Currency $currency;

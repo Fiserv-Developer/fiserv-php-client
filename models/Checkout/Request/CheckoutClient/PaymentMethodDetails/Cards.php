@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Cards extends fisrvObject
+class Cards extends FisrvObject
 {
     public AuthenticationPreferences $authenticationPreferences;
     public TokenBasedTransaction $tokenBasedTransaction;
@@ -22,6 +22,6 @@ class Cards extends fisrvObject
             'createToken',
         ];
 
-        fisrvObject::__construct($json, $isReponseContent);
+        FisrvObject::__construct($json, $isReponseContent);
     }
 }

@@ -3,7 +3,7 @@
 namespace Fisrv\Models;
 
 
-class CreateToken extends fisrvObject
+class CreateToken extends FisrvObject
 {
     public bool $declineDuplicateToken;
     public bool $reusable;
@@ -21,6 +21,6 @@ class CreateToken extends fisrvObject
             'toBeUsedFor',
         ];
 
-        fisrvObject::__construct($json);
+        FisrvObject::__construct($json);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class AuthenticationPreferences extends fisrvObject
+class AuthenticationPreferences extends FisrvObject
 {
     public ChallengeIndicator $challengeIndicator;
     public ScaExemptionType $scaExemptionType;

@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Contact extends fisrvObject
+class Contact extends FisrvObject
 {
     public string $phone;
     public string $mobilePhone;

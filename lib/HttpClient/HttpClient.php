@@ -8,7 +8,7 @@ use Fisrv\Exception\BadRequestException;
 use Fisrv\Exception\CurlRequestException;
 use Fisrv\Exception\ResponseMalformedException;
 use Fisrv\Exception\ServerException;
-use Fisrv\Models\fisrvObject;
+use Fisrv\Models\FisrvObject;
 use Fisrv\Models\RequestInterface;
 use Fisrv\Models\ResponseInterface;
 use Fisrv\Models\ValidationInterface;
@@ -221,12 +221,12 @@ abstract class HttpClient
      * 
      * @param RequestType $type GET, POST or PATCH
      * @param string $endpoint Path of URL to call without root
-     * @param fisrvObject $requestBody Optional request body which is null on GET requests
+     * @param FisrvObject $requestBody Optional request body which is null on GET requests
      * @param string $responseClass Response class type of ResponseInterface
      * 
      * @return ResponseInterface Response object
      */
-    protected function buildRequest(RequestType $type, string $endpoint, fisrvObject $requestBody = null, string $responseClass = null): ResponseInterface
+    protected function buildRequest(RequestType $type, string $endpoint, FisrvObject $requestBody = null, string $responseClass = null): ResponseInterface
     {
         if ($requestBody instanceof RequestInterface) {
             $this->validateRequest($requestBody);
@@ -259,12 +259,12 @@ abstract class HttpClient
      * Run validation checks before request and
      * throw on failure.
      * 
-     * @param fisrvObject $requestBody Request to be validated
+     * @param FisrvObject $requestBody Request to be validated
      */
-    private function validateRequest(fisrvObject $requestBody): void
+    private function validateRequest(FisrvObject $requestBody): void
     {
         foreach (get_object_vars($requestBody) as $value) {
-            if ($value instanceof fisrvObject) {
+            if ($value instanceof FisrvObject) {
                 self::validateRequest($value);
             }
 

@@ -2,7 +2,7 @@
 
 namespace Fisrv\Models;
 
-class Person extends fisrvObject
+class Person extends FisrvObject
 {
     public string $firstName;
     public string $lastName;
