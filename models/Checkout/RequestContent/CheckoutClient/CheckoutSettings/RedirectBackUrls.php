@@ -2,6 +2,7 @@
 
 namespace Fiserv\Models;
 use Fiserv\Exception\ValidationException;
+use PhpCsFixer\Fixer\FunctionNotation\VoidReturnFixer;
 
 class RedirectBackUrls extends FiservObject implements ValidationInterface
 {
@@ -26,16 +27,19 @@ class RedirectBackUrls extends FiservObject implements ValidationInterface
      */
     public function validate(): void
     {
-        foreach (get_class_vars($this) as $field => $value) {
+        $this->checkPatternMatch('successUrl', $this->successUrl);
+        $this->checkPatternMatch('failureUrl', $this->failureUrl);
+    }
+    
+    private function checkPatternMatch(string $field, string $value): void
+    {
+        if (!$this->pattern) {
+            return;
+        }
 
-            $isFieldOfDto = !property_exists(parent::class, $field);
-
-            if ($isFieldOfDto && is_string($value) && $this->pattern != false) {
-                $match = preg_match($this->pattern, $value);
-                if (!$match) {
-                    throw new ValidationException($value, $field);
-                }
-            }
+        $match = preg_match($this->pattern, $value);
+        if (!$match) {
+            throw new ValidationException($value, $field);
         }
     }
 }

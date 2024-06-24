@@ -3,7 +3,7 @@
 namespace Fiserv\Models;
 
 
-class CheckoutClientRequest extends ResponseInterface
+class CheckoutClientRequest extends RequestInterface
 {
     public TransactionOrigin $transactionOrigin;
     public string $transactionType;

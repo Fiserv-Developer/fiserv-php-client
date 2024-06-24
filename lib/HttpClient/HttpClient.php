@@ -192,7 +192,7 @@ abstract class HttpClient
                     'trace-id' => $headers['trace-id']
                 ];
             case 400:
-                throw new BadRequestException($httpCode, $response, $headers['trace-id']);
+                throw new BadRequestException($httpCode, $response, $headers['trace-id'] ?? 'NO_TRACE_ID');
             default:
                 throw new ServerException($httpCode . ' : ' .  $response);
         }
