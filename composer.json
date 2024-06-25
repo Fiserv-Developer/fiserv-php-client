@@ -22,7 +22,7 @@
   },
   "scripts": {
     "format": [
-        "vendor/bin/php-cs-fixer fix"
+        "vendor/bin/php-cs-fixer fix --dry-run --diff"
     ]
   }
 }
