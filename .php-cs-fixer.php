@@ -1,7 +1,5 @@
 <?php
 
-// php-cs-fixer 3.0 distributed config file
-
 $config = new PhpCsFixer\Config();
 $config
     ->setRules([
@@ -18,7 +16,7 @@ $config
         ],
         // only converts simple strings in double quotes to single quotes
         // ignores strings using variables, escape characters or single quotes inside
-        'single_quote' => true,
+        'single_quote' => false,
         // there should be a single space b/w the cast and it's operand
         'cast_spaces' => ['space' => 'single'],
         // there shouldn't be any trailing whitespace at the end of a non-blank line
