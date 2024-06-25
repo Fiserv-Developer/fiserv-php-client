@@ -7,11 +7,47 @@ use Fisrv\HttpClient\HttpClient;
 use Fisrv\HttpClient\RequestType;
 use Fisrv\Models\CheckoutClientRequest;
 use Fisrv\Models\CheckoutClientResponse;
-use Fisrv\Models\Fixtures;
 use Fisrv\Models\GetCheckoutIdResponse;
 
 final class CheckoutClient extends HttpClient
 {
+    public const minimalCheckoutRequestContent = [
+        'transactionOrigin' => 'ECOM',
+        'transactionType' => 'SALE',
+        'transactionAmount' => [
+            'total' => 0,
+            'currency' => 'EUR',
+            'components' => []
+        ],
+        'checkoutSettings' => [
+            'locale' => 'en_GB',
+            'webHooksUrl' => 'https://nonce.com',
+            'redirectBackUrls' => [
+                'successUrl' => 'https://nonce.com',
+                'failureUrl' => 'https://nonce.com'
+            ]
+        ],
+        'paymentMethodDetails' => [
+            'cards' => [
+                'createToken' => [
+                    'toBeUsedFor' => 'UNSCHEDULED',
+                ],
+            ],
+        ],
+        'storeId' => 'NULL',
+        'order' => [
+            'orderDetails' => [
+                'purchaseOrderNumber' => 0,
+            ],
+            'billing' => [
+                'person' => [],
+                'contact' => [],
+                'address' => [],
+            ],
+            'basket' => []
+        ]
+    ];
+
     /**
      * Checkout client constructor
      *
@@ -44,10 +80,6 @@ final class CheckoutClient extends HttpClient
     /**
      * Create a checkout link that uses default parameters for SEPA payment.
      *
-     * @todo Currently, the request object is inaccessible in this kind of function call.
-     * Possibly create a callback option or simply return an array containing the response (like now)
-     * and request data, both.
-     *
      * @see CheckoutClient::createCheckout
      * @param float $transactionTotal Total transaction amount (in EUR)
      * @param string $successUrl URL that directs to Thank You page from checkout
@@ -55,7 +87,7 @@ final class CheckoutClient extends HttpClient
      */
     public static function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
     {
-        $request = new CheckoutClientRequest(Fixtures::minimalCheckoutRequestContent);
+        $request = new CheckoutClientRequest(self::minimalCheckoutRequestContent);
         $request->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
         $request->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
         $request->transactionAmount->total = $transactionTotal;

@@ -15,7 +15,7 @@ class PaymentMethodDetails extends FisrvObject
     public function __construct(array | string | false $json = false, bool $isReponseContent = false)
     {
         $this->requiredFields = [
-            'cards',
+            'cards'
         ];
 
         FisrvObject::__construct($json, $isReponseContent);

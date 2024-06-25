@@ -5,12 +5,50 @@ use Fisrv\Exception\RequiredFieldMissingException;
 use Fisrv\Models\CheckoutClientRequest;
 use Fisrv\Models\CheckoutClientResponse;
 use Fisrv\Models\CreateToken;
-use Fisrv\Models\Fixtures;
 use Fisrv\Models\GetCheckoutIdResponse;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase
 {
+    private const paymentLinksRequestContent = [
+        'transactionOrigin' => 'ECOM',
+        'transactionType' => 'SALE',
+        'transactionAmount' => [
+            'total' => 130,
+            'currency' => 'EUR',
+            'components' => [
+                'subtotal' => 130,
+                'vatAmount' => 0,
+                'shipping' => 0,
+            ]
+        ],
+        'checkoutSettings' => [
+            'locale' => 'en_GB',
+            'webHooksUrl' => 'https://www.success.com/',
+            'redirectBackUrls' => [
+                'successUrl' => "https://www.success.com/",
+                'failureUrl' => "https://www.failureexample.com"
+            ]
+        ],
+        'paymentMethodDetails' => [
+            'cards' => [
+                'authenticationPreferences' => [
+                    'challengeIndicator' => '01',
+                    'skipTra' => false,
+                ],
+                'createToken' => [
+                    'declineDuplicateToken' => false,
+                    'reusable' => true,
+                    'toBeUsedFor' => 'UNSCHEDULED',
+                ],
+                'tokenBasedTransaction' => ['transactionSequence' => 'FIRST']
+            ],
+            'sepaDirectDebit' => ['transactionSequenceType' => 'SINGLE']
+        ],
+        'merchantTransactionId' => 'AB-1234',
+        'storeId' => '72305408',
+    ];
+
     private string $mockCheckoutId = 'IUBsFE';
 
     private CheckoutClient $client;
@@ -27,10 +65,10 @@ class CheckoutTest extends TestCase
 
     public function testMissingFieldException(): void
     {
-        $this->expectExceptionObject(new RequiredFieldMissingException("storeId", CheckoutClientRequest::class));
+        $this->expectExceptionObject(new RequiredFieldMissingException("transactionType", CheckoutClientRequest::class));
 
-        $missingFieldContent = Fixtures::paymentLinksRequestContent;
-        unset($missingFieldContent["storeId"]);
+        $missingFieldContent = self::paymentLinksRequestContent;
+        unset($missingFieldContent["transactionType"]);
 
         new CheckoutClientRequest($missingFieldContent);
     }
@@ -39,7 +77,7 @@ class CheckoutTest extends TestCase
     {
         $this->expectExceptionObject(new RequiredFieldMissingException("toBeUsedFor", CreateToken::class));
 
-        $missingFieldContent = Fixtures::paymentLinksRequestContent;
+        $missingFieldContent = self::paymentLinksRequestContent;
         unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
 
         new CheckoutClientRequest($missingFieldContent);
@@ -47,7 +85,7 @@ class CheckoutTest extends TestCase
 
     public function testPostCheckoutsSuccess(): void
     {
-        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
+        $req = new CheckoutClientRequest(self::paymentLinksRequestContent);
 
         $res = $this->client->createCheckout($req);
         $this->assertInstanceOf(CheckoutClientResponse::class, $res, "Response schema is malformed");
@@ -65,7 +103,7 @@ class CheckoutTest extends TestCase
     {
         $total = 130;
 
-        $req = new CheckoutClientRequest(Fixtures::paymentLinksRequestContent);
+        $req = new CheckoutClientRequest(self::paymentLinksRequestContent);
         $req->transactionAmount->total = $total;
         $req->transactionAmount->components->subtotal = $total - 0.99;
         $req->transactionAmount->components->vatAmount = 0;

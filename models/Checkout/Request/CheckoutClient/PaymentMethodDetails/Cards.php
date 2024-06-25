@@ -24,7 +24,7 @@ class Cards extends FisrvObject
     public function __construct(array | string | false $json = false, bool $isReponseContent = false)
     {
         $this->requiredFields = [
-            'createToken',
+            'createToken'
         ];
 
         FisrvObject::__construct($json, $isReponseContent);

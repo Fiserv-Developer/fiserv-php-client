@@ -14,7 +14,7 @@ class UtilTest extends TestCase
         $settings = new CheckoutSettings([
             'redirectBackUrls' => [
                 'successUrl' => 'https://www.successexample.com',
-                'failureUrl' => 'https://www.successexample.com',
+                'failureUrl' => 'https://www.successexample.com'
             ]
         ]);
 

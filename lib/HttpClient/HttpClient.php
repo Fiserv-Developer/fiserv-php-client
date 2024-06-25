@@ -19,15 +19,6 @@ abstract class HttpClient
 
     private const DOMAIN = 'https://prod.emea.api.fiservapps.com/';
 
-    protected string $endpointRoot;
-
-    /** @var array<string, string | bool> */
-    protected array $config;
-
-    private string $url;
-
-    private CurlHandle $session;
-
     private const DEFAULT_HEADERS = [
         'Content-Type' => 'application/json',
         'Accept ' => 'application/json',
@@ -50,6 +41,15 @@ abstract class HttpClient
         'user'
     ];
 
+    protected string $endpointRoot;
+
+    /** @var array<string, string | bool> */
+    protected array $config;
+
+    private string $url;
+
+    private CurlHandle $session;
+
     /**
      * HttpClient constructor
      *
@@ -60,7 +60,6 @@ abstract class HttpClient
         $this->endpointRoot = $endpointRoot;
 
         foreach ($config as $key => $value) {
-
             if (!in_array($key, self::VALID_CONFIG_KEYS)) {
                 throw new Exception('Key ' . $key . ' in config is not valid. Valid keys are: ' . implode(' | ', self::VALID_CONFIG_KEYS));
             }
@@ -80,7 +79,7 @@ abstract class HttpClient
 
     private function whichUserAgent(): string
     {
-        return 'fisrvPHPClient/' . self::VERSION . ' ' . ($this->config['user'] ?? '');
+        return 'FisrvPHPClient/' . self::VERSION . ' ' . ($this->config['user'] ?? '');
     }
 
     /**
@@ -151,7 +150,7 @@ abstract class HttpClient
      *
      * @return array<string, bool | string> Response object containing data and trace ID
      */
-    protected function curlRequest(RequestType $type, string $url, string $request = ''): array
+    private function curlRequest(RequestType $type, string $url, string $request = ''): array
     {
         $headers = [];
 
@@ -208,7 +207,7 @@ abstract class HttpClient
     /**
      * Check ApiConfig parameters and prevent requests on missing params.
      */
-    protected function validateApiConfigParams(): void
+    private function validateApiConfigParams(): void
     {
         if (!isset($this->config['api_key'])) {
             throw new Exception("No valid API key has been provided. Set it in ApiConfig class");

@@ -23,7 +23,6 @@ class CheckoutClientRequest extends RequestInterface
     public function __construct(array | string | false $json = false)
     {
         $this->requiredFields = [
-            'storeId',
             'transactionType',
             'transactionAmount',
             'paymentMethodDetails',

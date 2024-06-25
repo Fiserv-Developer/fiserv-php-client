@@ -36,7 +36,7 @@ abstract class FisrvObject
      */
     protected string | false $pattern = false;
 
-    private const NAMESPACE_PREFIX = 'Fisrv\\Models\\';
+    private const NAMESPACE_PREFIX = __NAMESPACE__ . '\\';
 
     /**
      * Constructor which calls setter.

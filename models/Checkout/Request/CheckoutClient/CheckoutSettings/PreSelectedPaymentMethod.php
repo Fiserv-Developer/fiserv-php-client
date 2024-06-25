@@ -6,6 +6,6 @@ enum PreSelectedPaymentMethod: string
 {
     case CARDS = 'Cards';
     case PAYPAL = 'PayPal';
-    case GPAY = 'Googlepay';
+    case GOOGLEPAY = 'Googlepay';
     case APPLE = 'Applepay';
 }
