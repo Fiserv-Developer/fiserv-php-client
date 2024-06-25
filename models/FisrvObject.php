@@ -16,9 +16,9 @@ use TypeError;
 abstract class FisrvObject
 {
     /**
-     * List containing references to required fields. 
+     * List containing references to required fields.
      * Has to be ignored if not request.
-     * 
+     *
      * @var array<string>
      */
     protected array $requiredFields = [];
@@ -41,7 +41,7 @@ abstract class FisrvObject
     /**
      * Constructor which calls setter.
      * If $isResponseContent flag ist true, the fields should not be validated.
-     * 
+     *
      * @param array<string, mixed> | string | false $json If not false, a JSON string to be serialized to DTO.
      * @param bool $isResponseContent True if object is a response
      */
@@ -77,11 +77,10 @@ abstract class FisrvObject
         }
     }
 
-
     /**
      * Dependency injection which is used to serialize JSON data from server to PHP
      * objects and vice versa. The setter is recursively for nested objects.
-     * 
+     *
      * @param array<string, string | mixed | array<string, mixed>> $data JSON data which has to parsed and inject into current object and children.
      */
     private function set(array $data): void
@@ -121,11 +120,11 @@ abstract class FisrvObject
     public function __toString(): string
     {
         $json = json_encode($this, JSON_PRETTY_PRINT);
-        
+
         if (!$json) {
             $json = 'Could not parse object';
         }
-        
+
         return $json;
     }
 }

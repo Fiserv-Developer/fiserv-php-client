@@ -2,7 +2,6 @@
 
 namespace Fisrv\Models;
 
-
 enum Currency: string
 {
     case EUR = 'EUR';

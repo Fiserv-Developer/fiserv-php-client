@@ -13,8 +13,8 @@ final class PaymentLinksClient extends HttpClient
 {
 
     /**
-     * Constructor 
-     * 
+     * Constructor
+     *
      * @param array<string, mixed> $apiConfig
      */
     public function __construct(array $apiConfig)
@@ -24,13 +24,13 @@ final class PaymentLinksClient extends HttpClient
 
     /**
      * Create payment link
-     * 
+     *
      * @param CheckoutClientRequest $request Request object
      */
     public function createPaymentLink(CheckoutClientRequest $request): PaymentsLinksCreatedResponse
     {
-        $repsonse = $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, PaymentsLinksCreatedResponse::class); 
-        
+        $repsonse = $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, PaymentsLinksCreatedResponse::class);
+
         if (!$repsonse instanceof PaymentsLinksCreatedResponse) {
             throw new ResponseMalformedException();
         }

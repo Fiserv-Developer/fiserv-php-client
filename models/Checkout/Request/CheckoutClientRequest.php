@@ -2,7 +2,6 @@
 
 namespace Fisrv\Models;
 
-
 class CheckoutClientRequest extends RequestInterface
 {
     public TransactionOrigin $transactionOrigin;

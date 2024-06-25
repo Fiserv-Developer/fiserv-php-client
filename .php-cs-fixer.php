@@ -30,6 +30,9 @@ $config
         // reduces multi blank lines b/w phpdoc description and @param to a single line
         // NOTE: Doesn't add a blank line if none exist
         'phpdoc_trim_consecutive_blank_line_separation' => true,
+        'array_syntax' => [
+            'syntax' => 'short',
+        ],
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()

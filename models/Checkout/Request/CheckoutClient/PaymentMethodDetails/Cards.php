@@ -12,8 +12,8 @@ class Cards extends FisrvObject
     public CreateToken $createToken;
 
     /**
-     * Constructor 
-     * 
+     * Constructor
+     *
      * @param array<string, mixed> | string | false $json
      */
     public function __construct(array | string | false $json = false, bool $isReponseContent = false)

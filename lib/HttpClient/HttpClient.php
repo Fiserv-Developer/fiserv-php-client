@@ -18,7 +18,7 @@ abstract class HttpClient
     private const VERSION = '0.1.4';
     private const DOMAIN = 'https://prod.emea.api.fiservapps.com/';
     protected string $endpointRoot;
-    
+
     /** @var array<string, string | bool> */
     protected array $config;
     private string $url;
@@ -40,7 +40,7 @@ abstract class HttpClient
 
     /**
      * HttpClient constructor
-     * 
+     *
      * @param array<string, string | bool> $config Config parameters
      */
     protected function __construct(string $endpointRoot, array $config)
@@ -50,10 +50,10 @@ abstract class HttpClient
         foreach ($config as $key => $value) {
             $valid_keys = [
                 'is_prod',
-                'api_key',
+                "api_key",
                 'api_secret',
                 'store_id',
-                'user',
+                'user'
             ];
 
             if (!in_array($key, $valid_keys)) {
@@ -62,6 +62,8 @@ abstract class HttpClient
 
             $this->config[$key] = $value;
         }
+
+        $hello = "test";
 
         $this->url = $config['is_prod'] ? self::DOMAIN : self::DOMAIN . '/sandbox';
         $this->session = curl_init();
@@ -79,9 +81,9 @@ abstract class HttpClient
     }
 
     /**
-     * Create an header object that conforms to API specs. 
+     * Create an header object that conforms to API specs.
      * A message signature is created by wrapping a hash (SHA256) calculation with the secret key.
-     * 
+     *
      * @param string $content Request body for POST/PUT requests. May be empty (but not null).
      * @return array<string> Array representing the header
      */
@@ -110,7 +112,7 @@ abstract class HttpClient
 
     /**
      * Generate UUIDv4 for message header authentication
-     * 
+     *
      * @return string UUIDv4 string
      */
     private static function generateUuid(): string
@@ -128,7 +130,7 @@ abstract class HttpClient
 
     /**
      * Generate timestamp for message header authentication
-     * 
+     *
      * @return int UNIX timestamp in seconds
      */
     private static function generateTimestamp(): int
@@ -138,12 +140,12 @@ abstract class HttpClient
 
     /**
      * Custom request service that uses cURL for API requests
-     * 
+     *
      * @param RequestType $type GET, POST or PATCH
      * @param string $url Full URI with root and service path
-     * @param string $request Request body for POST, PATCH requests as JSON string 
-     * 
-     * @return array<string, bool | string> Response object containing data and trace ID 
+     * @param string $request Request body for POST, PATCH requests as JSON string
+     *
+     * @return array<string, bool | string> Response object containing data and trace ID
      */
     protected function curlRequest(RequestType $type, string $url, string $request = ''): array
     {
@@ -194,7 +196,7 @@ abstract class HttpClient
             case 400:
                 throw new BadRequestException($httpCode, $response, $headers['trace-id'] ?? 'NO_TRACE_ID');
             default:
-                throw new ServerException($httpCode . ' : ' .  $response);
+                throw new ServerException($httpCode . ' : ' . $response);
         }
     }
 
@@ -218,12 +220,12 @@ abstract class HttpClient
 
     /**
      * Request builder that wraps curl requestor to validate and return DTO objects
-     * 
+     *
      * @param RequestType $type GET, POST or PATCH
      * @param string $endpoint Path of URL to call without root
      * @param FisrvObject $requestBody Optional request body which is null on GET requests
      * @param string $responseClass Response class type of ResponseInterface
-     * 
+     *
      * @return ResponseInterface Response object
      */
     protected function buildRequest(RequestType $type, string $endpoint, FisrvObject $requestBody = null, string $responseClass = null): ResponseInterface
@@ -250,7 +252,7 @@ abstract class HttpClient
         if (!$responseObject instanceof ResponseInterface) {
             throw new ResponseMalformedException();
         }
-        
+
         $responseObject->traceId = strval($response['trace-id']);
         return $responseObject;
     }
@@ -258,7 +260,7 @@ abstract class HttpClient
     /**
      * Run validation checks before request and
      * throw on failure.
-     * 
+     *
      * @param FisrvObject $requestBody Request to be validated
      */
     private function validateRequest(FisrvObject $requestBody): void

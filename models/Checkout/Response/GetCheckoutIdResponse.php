@@ -2,7 +2,6 @@
 
 namespace Fisrv\Models;
 
-
 class GetCheckoutIdResponse extends ResponseInterface
 {
     public string $storeId;

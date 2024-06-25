@@ -3,8 +3,6 @@
 use Fisrv\Models\CheckoutSettings;
 use PHPUnit\Framework\TestCase;
 
-use function PHPUnit\Framework\assertTrue;
-
 class UtilTest extends TestCase
 {
     public function testFieldStringValidationOnRequest(): void

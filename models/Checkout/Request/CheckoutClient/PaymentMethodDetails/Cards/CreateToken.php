@@ -2,7 +2,6 @@
 
 namespace Fisrv\Models;
 
-
 class CreateToken extends FisrvObject
 {
     public bool $declineDuplicateToken;
@@ -11,8 +10,8 @@ class CreateToken extends FisrvObject
     public bool $declineDuplicates;
 
     /**
-     * Constructor 
-     * 
+     * Constructor
+     *
      * @param array<string, mixed> | string | false $json
      */
     public function __construct(array | string | false $json = false)

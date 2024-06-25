@@ -14,7 +14,7 @@ final class CheckoutClient extends HttpClient
 {
     /**
      * Checkout client constructor
-     * 
+     *
      * @param array<string, string | bool> $config Config paramter as key value array
      */
     public function __construct(array $config)
@@ -25,7 +25,7 @@ final class CheckoutClient extends HttpClient
     /**
      * Create a checkout link to be used as checkout solution.
      * Pass an optional webhook to receive status events from fisrv server.
-     * 
+     *
      * @param CheckoutClientRequest $request - Request body containing checkout options
      */
     public function createCheckout(CheckoutClientRequest $request): CheckoutClientResponse
@@ -43,11 +43,11 @@ final class CheckoutClient extends HttpClient
 
     /**
      * Create a checkout link that uses default parameters for SEPA payment.
-     * 
+     *
      * @todo Currently, the request object is inaccessible in this kind of function call.
      * Possibly create a callback option or simply return an array containing the response (like now)
-     * and request data, both. 
-     * 
+     * and request data, both.
+     *
      * @see CheckoutClient::createCheckout
      * @param float $transactionTotal Total transaction amount (in EUR)
      * @param string $successUrl URL that directs to Thank You page from checkout
@@ -64,10 +64,10 @@ final class CheckoutClient extends HttpClient
     }
 
     /**
-     * Query an existing checkout link object by given ID. 
+     * Query an existing checkout link object by given ID.
      * Responds with verbose list about checkout configuration.
-     * 
-     * @param string $checkoutId - String checkout ID to be queried  
+     *
+     * @param string $checkoutId - String checkout ID to be queried
      */
     public function getCheckoutId(string $checkoutId): GetCheckoutIdResponse
     {

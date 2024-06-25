@@ -1,6 +1,7 @@
 <?php
 
 namespace Fisrv\Models;
+
 use Fisrv\Exception\ValidationException;
 
 class RedirectBackUrls extends FisrvObject implements ValidationInterface
@@ -9,8 +10,8 @@ class RedirectBackUrls extends FisrvObject implements ValidationInterface
     public string $failureUrl;
 
     /**
-     * Constructor 
-     * 
+     * Constructor
+     *
      * @param array<string, mixed> | string | false $json
      */
     public function __construct(array | string | false $json = false, bool $isReponseContent = false)
@@ -21,7 +22,7 @@ class RedirectBackUrls extends FisrvObject implements ValidationInterface
 
     /**
      * When implemented this should be used to check
-     * fields of current object for validity (e.g. string pattern check on 
+     * fields of current object for validity (e.g. string pattern check on
      * URLs) as per API specification.
      */
     public function validate(): void
@@ -29,7 +30,7 @@ class RedirectBackUrls extends FisrvObject implements ValidationInterface
         $this->checkPatternMatch('successUrl', $this->successUrl);
         $this->checkPatternMatch('failureUrl', $this->failureUrl);
     }
-    
+
     private function checkPatternMatch(string $field, string $value): void
     {
         if (!$this->pattern) {

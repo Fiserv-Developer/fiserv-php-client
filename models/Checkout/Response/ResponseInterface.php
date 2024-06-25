@@ -7,8 +7,8 @@ abstract class ResponseInterface extends FisrvObject
     public string $traceId;
 
     /**
-     * Constructor 
-     * 
+     * Constructor
+     *
      * @param array<string, mixed> | string | false $json
      */
     public function __construct(array | string | false $json = false)
