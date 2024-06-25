@@ -5,8 +5,11 @@ namespace Fisrv\Models;
 class CreateToken extends FisrvObject
 {
     public bool $declineDuplicateToken;
+
     public bool $reusable;
+
     public ToBeUsedFor $toBeUsedFor;
+
     public bool $declineDuplicates;
 
     /**

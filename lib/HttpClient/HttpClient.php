@@ -16,12 +16,16 @@ use Fisrv\Models\ValidationInterface;
 abstract class HttpClient
 {
     private const VERSION = '0.1.4';
+
     private const DOMAIN = 'https://prod.emea.api.fiservapps.com/';
+
     protected string $endpointRoot;
 
     /** @var array<string, string | bool> */
     protected array $config;
+
     private string $url;
+
     private CurlHandle $session;
 
     private const DEFAULT_HEADERS = [
@@ -38,6 +42,14 @@ abstract class HttpClient
         CURLOPT_SSL_VERIFYPEER => false,
     ];
 
+    private const VALID_CONFIG_KEYS = [
+        'is_prod',
+        'api_key',
+        'api_secret',
+        'store_id',
+        'user'
+    ];
+
     /**
      * HttpClient constructor
      *
@@ -48,22 +60,13 @@ abstract class HttpClient
         $this->endpointRoot = $endpointRoot;
 
         foreach ($config as $key => $value) {
-            $valid_keys = [
-                'is_prod',
-                "api_key",
-                'api_secret',
-                'store_id',
-                'user'
-            ];
 
-            if (!in_array($key, $valid_keys)) {
-                throw new Exception('Key ' . $key . ' in config is not valid. Valid keys are: ' . implode(' | ', $valid_keys));
+            if (!in_array($key, self::VALID_CONFIG_KEYS)) {
+                throw new Exception('Key ' . $key . ' in config is not valid. Valid keys are: ' . implode(' | ', self::VALID_CONFIG_KEYS));
             }
 
             $this->config[$key] = $value;
         }
-
-        $hello = "test";
 
         $this->url = $config['is_prod'] ? self::DOMAIN : self::DOMAIN . '/sandbox';
         $this->session = curl_init();
@@ -87,7 +90,7 @@ abstract class HttpClient
      * @param string $content Request body for POST/PUT requests. May be empty (but not null).
      * @return array<string> Array representing the header
      */
-    protected function authenticate(string $content): array
+    private function authenticate(string $content): array
     {
         $clientRequestId = self::generateUuid();
         $timestamp = self::generateTimestamp();
@@ -125,6 +128,7 @@ abstract class HttpClient
         $out[23] = "-";
         $out[14] = "4";
         $out[19] = ["8", "9", "a", "b"][random_int(0, 3)];
+
         return $out;
     }
 
@@ -162,6 +166,7 @@ abstract class HttpClient
                     list($key, $value) = explode(':', $header, 2);
                     $headers[$key] = trim($value);
                 }
+
                 return strlen($header);
             }
         ];
@@ -254,6 +259,7 @@ abstract class HttpClient
         }
 
         $responseObject->traceId = strval($response['trace-id']);
+
         return $responseObject;
     }
 

@@ -7,7 +7,9 @@ use Exception;
 class BadRequestException extends Exception
 {
     public string $title;
+
     public string $detail;
+
     public string $source;
 
     public function __construct(int $statusCode, string $message, string $traceId)
@@ -16,6 +18,7 @@ class BadRequestException extends Exception
 
         if (!is_array($decoded)) {
             $this->message = strval($statusCode) . ': ' . $message;
+
             return;
         }
 

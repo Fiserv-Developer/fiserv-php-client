@@ -7,7 +7,9 @@ use Fisrv\Exception\ValidationException;
 class TransactionAmount extends FisrvObject implements ValidationInterface
 {
     public float $total;
+
     public Currency $currency;
+
     public Components $components;
 
     public function validate(): void
@@ -19,6 +21,7 @@ class TransactionAmount extends FisrvObject implements ValidationInterface
         /** @todo This is weird (sanitization in validator) */
         if (!isset($this->components->subtotal)) {
             unset($this->components);
+
             return;
         }
 

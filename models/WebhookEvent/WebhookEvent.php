@@ -11,14 +11,23 @@ use Fisrv\Models\TransactionStatus;
 class WebhookEvent extends FisrvObject
 {
     public int $retryNumber;
+
     public string $storeId;
+
     public string $checkoutId;
+
     public string $orderId;
+
     public string $transactionType;
+
     public ApprovedAmount $approvedAmount;
+
     public TransactionStatus $transactionStatus;
+
     public PaymentMethodUsed $paymentMethodUsed;
+
     public IpgTransactionDetails $ipgTransactionDetails;
+
     public string $receivedAt;
 
     /**

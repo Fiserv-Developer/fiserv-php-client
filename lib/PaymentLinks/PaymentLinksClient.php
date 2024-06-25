@@ -11,7 +11,6 @@ use Fisrv\Models\PaymentsLinksCreatedResponse;
 
 final class PaymentLinksClient extends HttpClient
 {
-
     /**
      * Constructor
      *

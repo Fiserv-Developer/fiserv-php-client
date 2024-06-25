@@ -33,6 +33,18 @@ $config
         'array_syntax' => [
             'syntax' => 'short',
         ],
+        'blank_line_before_statement' => [
+            'statements' => [
+                'break',
+                'return',
+            ]
+        ],
+        'class_attributes_separation' => [
+            'elements' => ['const' => 'one', 'method' => 'one', 'property' => 'one', 'trait_import' => 'none', 'case' => 'none']
+        ],
+        // Local variables should not be assigned and return directly instead
+        'return_assignment' => true,
+        'protected_to_private' => true,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()

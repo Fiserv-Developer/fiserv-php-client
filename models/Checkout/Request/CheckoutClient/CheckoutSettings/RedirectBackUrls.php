@@ -7,6 +7,7 @@ use Fisrv\Exception\ValidationException;
 class RedirectBackUrls extends FisrvObject implements ValidationInterface
 {
     public string $successUrl;
+
     public string $failureUrl;
 
     /**
