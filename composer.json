@@ -9,9 +9,9 @@
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^11.1",
-    "friendsofphp/php-cs-fixer": "^3.52",
-    "phpstan/phpstan": "^1.10"
+    "phpunit/phpunit": "*",
+    "friendsofphp/php-cs-fixer": "*",
+    "phpstan/phpstan": "*"
   },
   "autoload": {
     "classmap": [
