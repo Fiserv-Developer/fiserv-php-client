@@ -15,7 +15,7 @@ use Fisrv\Models\ValidationInterface;
 
 abstract class HttpClient
 {
-    private const VERSION = '0.1.4';
+    private const VERSION = '0.0.1';
 
     private const DOMAIN = 'https://prod.emea.api.fiservapps.com/';
 

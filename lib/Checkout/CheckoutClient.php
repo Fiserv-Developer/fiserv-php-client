@@ -11,7 +11,7 @@ use Fisrv\Models\GetCheckoutIdResponse;
 
 final class CheckoutClient extends HttpClient
 {
-    public const minimalCheckoutRequestContent = [
+    private const CHECKOUT_REQUEST_TEMPLATE = [
         'transactionOrigin' => 'ECOM',
         'transactionType' => 'SALE',
         'transactionAmount' => [
@@ -87,7 +87,7 @@ final class CheckoutClient extends HttpClient
      */
     public static function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
     {
-        $request = new CheckoutClientRequest(self::minimalCheckoutRequestContent);
+        $request = new CheckoutClientRequest(self::CHECKOUT_REQUEST_TEMPLATE);
         $request->checkoutSettings->redirectBackUrls->successUrl = $successUrl;
         $request->checkoutSettings->redirectBackUrls->failureUrl = $failureUrl;
         $request->transactionAmount->total = $transactionTotal;
