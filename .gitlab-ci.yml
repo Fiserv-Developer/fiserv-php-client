@@ -15,3 +15,6 @@ build:
 
 deploy:
   extends: .base_deploy
+
+release:
+  extends: .base_release
