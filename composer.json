@@ -1,7 +1,7 @@
 {
   "name": "fisrv/php-client",
   "description": "PHP client for the fisrv API.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "library",
   "require": {
     "ext-curl": "*",
@@ -9,9 +9,9 @@
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "*",
-    "friendsofphp/php-cs-fixer": "*",
-    "phpstan/phpstan": "*"
+    "phpunit/phpunit": "@stable",
+    "friendsofphp/php-cs-fixer": "@stable",
+    "phpstan/phpstan": "@stable"
   },
   "autoload": {
     "classmap": [
@@ -22,7 +22,7 @@
   },
   "scripts": {
     "format": [
-        "vendor/bin/php-cs-fixer fix --dry-run --diff"
+      "vendor/bin/php-cs-fixer fix --dry-run --diff"
     ]
   }
 }
