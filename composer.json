@@ -10,14 +10,18 @@
   },
   "require-dev": {
     "phpunit/phpunit": "@stable",
-    "friendsofphp/php-cs-fixer": "@stable",
+    "friendsofphp/php-cs-fixer": "*",
     "phpstan/phpstan": "@stable"
   },
   "autoload": {
+    "psr-4": {
+      "Fisrv\\": [
+        "lib/",
+        "tests/"
+      ]
+    },
     "classmap": [
-      "lib/",
-      "models/",
-      "tests/"
+      "models/"
     ]
   },
   "scripts": {
