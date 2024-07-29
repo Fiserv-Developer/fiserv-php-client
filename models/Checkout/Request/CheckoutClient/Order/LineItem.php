@@ -18,5 +18,5 @@ class LineItem extends FisrvObject
 
     public int $miscellaneousFee = 0;
 
-    public float $total = $price;
+    public float $total = 0;
 }
