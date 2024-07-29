@@ -8,9 +8,15 @@ class LineItem extends FisrvObject
 
     public string $name;
 
-    public float $price;
+    public float $price = 0;
 
     public int $quantity;
 
-    public float $total;
+    public int $shippingCost = 0;
+
+    public int $valueAddedTax = 0;
+
+    public int $miscellaneousFee = 0;
+
+    public float $total = $price;
 }
