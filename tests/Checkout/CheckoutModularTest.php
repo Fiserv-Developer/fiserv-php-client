@@ -4,11 +4,15 @@ use Fisrv\Checkout\CheckoutClient;
 use Fisrv\Models\CheckoutClientRequest;
 use Fisrv\Models\CheckoutClientResponse;
 use Fisrv\Models\LineItem;
+use Fisrv\Models\PaymentsClientRequest;
+use Fisrv\Models\PaymentsClientResponse;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutModularTest extends TestCase
 {
     private CheckoutClient $client;
+
+    private static string $checkoutId;
 
     protected function setUp(): void
     {
@@ -60,6 +64,8 @@ class CheckoutModularTest extends TestCase
     {
         $request = new CheckoutClientRequest(self::requestBody);
         $response = $this->client->createCheckout($request);
+        self::$checkoutId = $response->checkout->checkoutId;
+
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
 
@@ -82,5 +88,17 @@ class CheckoutModularTest extends TestCase
         $response = $this->client->createCheckout($request);
 
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
+    }
+
+    public function testRefundCheckout(): void
+    {
+        $response = $this->client->refundCheckout(new PaymentsClientRequest([
+            'transactionAmount' => [
+                'total' => 1,
+                'currency' => 'EUR'
+            ],
+        ]), 'QA4t9p');
+
+        $this->assertInstanceOf(PaymentsClientResponse::class, $response);
     }
 }

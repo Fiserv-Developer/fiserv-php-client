@@ -49,8 +49,6 @@ class CheckoutTest extends TestCase
         'storeId' => '72305408',
     ];
 
-    private string $mockCheckoutId = 'IUBsFE';
-
     private CheckoutClient $client;
 
     protected function setUp(): void
@@ -92,12 +90,6 @@ class CheckoutTest extends TestCase
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
 
-    public function testGetCheckoutIdSuccess(): void
-    {
-        $res = $this->client->getCheckoutById($this->mockCheckoutId);
-        $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
-        $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
-    }
 
     public function testOrderWithSubcomponents(): void
     {
@@ -118,16 +110,10 @@ class CheckoutTest extends TestCase
         $this->assertEquals($total, $total_actual);
     }
 
-    public function testCreateBasicCheckout(): void
+    public function testGetCheckoutIdSuccess(): void
     {
-        $request = $this->client->createBasicCheckoutRequest(
-            14.99,
-            "https://success.com",
-            "https://noooo.com"
-        );
-
-        $response = $this->client->createCheckout($request);
-        // $this->assertInstanceOf(CheckoutClientResponse::class, $response);
-        $this->assertIsBool(true);
+        $res = $this->client->getCheckoutById('IUBsFE');
+        $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
+        $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
 }

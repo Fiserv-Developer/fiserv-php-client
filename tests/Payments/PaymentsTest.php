@@ -23,7 +23,7 @@ class PaymentsTest extends TestCase
 
     public function testCreatePaymentCardSaleTransaction(): void
     {
-        $req = new PaymentsClientRequest([
+        $request = new PaymentsClientRequest([
             'transactionAmount' => ['total' => '13', 'currency' => "GBP"],
             'paymentMethod' => [
                 'paymentCard' => [
@@ -34,22 +34,20 @@ class PaymentsTest extends TestCase
             ],
         ]);
 
-        $res = $this->client->createPaymentCardSaleTransaction($req);
-        self::$sharedTransactionId = $res->ipgTransactionId;
+        $response = $this->client->createPaymentCardSaleTransaction($request);
+        self::$sharedTransactionId = $response->ipgTransactionId;
 
-        $this->assertInstanceOf(PaymentsClientResponse::class, $res, "Response schema is malformed");
+        $this->assertInstanceOf(PaymentsClientResponse::class, $response, "Response schema is malformed");
     }
 
     public function testReturnTransaction(): void
     {
-        $req = new PaymentsClientRequest([
+        $response = $this->client->returnTransaction(new PaymentsClientRequest([
             'transactionAmount' => [
-                'total' => '3',
+                'total' => 3,
                 'currency' => "GBP"
             ],
-        ]);
-
-        $res = $this->client->returnTransaction($req, self::$sharedTransactionId);
-        $this->assertInstanceOf(PaymentsClientResponse::class, $res, "Response schema is malformed");
+        ]), self::$sharedTransactionId);
+        $this->assertInstanceOf(PaymentsClientResponse::class, $response, "Response schema is malformed");
     }
 }

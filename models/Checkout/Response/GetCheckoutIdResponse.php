@@ -21,4 +21,6 @@ class GetCheckoutIdResponse extends ResponseInterface
     public PaymentLink $paymentLink;
 
     public IpgTransactionDetails $ipgTransactionDetails;
+
+    public PaymentMethodUsed $paymentMethodUsed;
 }

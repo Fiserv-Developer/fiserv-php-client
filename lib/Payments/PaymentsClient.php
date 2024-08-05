@@ -59,21 +59,4 @@ final class PaymentsClient extends HttpClient
 
         return $response;
     }
-
-    /**
-     * Refund a transaction by given checkout ID. First fetch checkout details to retrieve transaction ID
-     * and finally return transaction
-     *
-     * @param \Fisrv\Models\PaymentsClientRequest $request
-     * @param string $checkoutId
-     * @return \Fisrv\Models\PaymentsClientResponse
-     */
-    public function refundByCheckoutId(PaymentsClientRequest $request, string $checkoutId): PaymentsClientResponse
-    {
-        $checkoutClient = new CheckoutClient(parent::$config);
-        $checkoutDetails = $checkoutClient->getCheckoutById($checkoutId);
-        $transactionId = $checkoutDetails->ipgTransactionDetails->ipgTransactionId;
-
-        return $this->returnTransaction($request, $transactionId);
-    }
 }

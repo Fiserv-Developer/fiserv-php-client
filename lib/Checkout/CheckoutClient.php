@@ -8,6 +8,10 @@ use Fisrv\HttpClient\RequestType;
 use Fisrv\Models\CheckoutClientRequest;
 use Fisrv\Models\CheckoutClientResponse;
 use Fisrv\Models\GetCheckoutIdResponse;
+use Fisrv\Models\PaymentsClientRequest;
+use Fisrv\Models\PaymentsClientResponse;
+use Fisrv\Models\TransactionStatus;
+use Fisrv\Payments\PaymentsClient;
 
 final class CheckoutClient extends HttpClient
 {
@@ -110,5 +114,26 @@ final class CheckoutClient extends HttpClient
         }
 
         return $response;
+    }
+
+    /**
+     * Refund a transaction by given checkout ID. First fetch checkout details to retrieve transaction ID
+     * and finally return transaction
+     *
+     * @param \Fisrv\Models\PaymentsClientRequest $request
+     * @param string $checkoutId
+     * @throws Exception Generic exception if transaction is non-refundable
+     * @return \Fisrv\Models\PaymentsClientResponse
+     */
+    public function refundCheckout(PaymentsClientRequest $request, string $checkoutId): PaymentsClientResponse
+    {
+        $paymentsClient = new PaymentsClient($this->config);
+        $checkoutDetails = $this->getCheckoutById($checkoutId);
+        if ($checkoutDetails->transactionStatus !== TransactionStatus::APPROVED) {
+            throw new Exception('Transaction is non-refundable because status is not APPROVED.');
+        }
+
+        $transactionId = $checkoutDetails->ipgTransactionDetails->ipgTransactionId;
+        return $paymentsClient->returnTransaction($request, $transactionId);
     }
 }
