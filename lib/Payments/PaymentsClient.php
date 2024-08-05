@@ -3,7 +3,6 @@
 namespace Fisrv\Payments;
 
 use Exception;
-use Fisrv\Checkout\CheckoutClient;
 use Fisrv\HttpClient\HttpClient;
 use Fisrv\HttpClient\RequestType;
 use Fisrv\Models\PaymentsClientRequest;

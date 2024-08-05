@@ -9,5 +9,6 @@ class IpgTransactionDetails extends FisrvObject
     public TransactionStatus $transactionStatus;
 
     public string $approvalCode;
+
     public string $transactionResult;
 }

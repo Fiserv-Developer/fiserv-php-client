@@ -90,7 +90,6 @@ class CheckoutTest extends TestCase
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
 
-
     public function testOrderWithSubcomponents(): void
     {
         $total = 130;

@@ -134,6 +134,7 @@ final class CheckoutClient extends HttpClient
         }
 
         $transactionId = $checkoutDetails->ipgTransactionDetails->ipgTransactionId;
+
         return $paymentsClient->returnTransaction($request, $transactionId);
     }
 }
