@@ -2,22 +2,22 @@
 
 namespace Fisrv\Models;
 
+use Fisrv\Models\Traits\Token;
+
 class CreateToken extends FisrvObject
 {
+    use Token;
+
     public bool $declineDuplicateToken;
 
-    public bool $reusable;
-
     public ToBeUsedFor $toBeUsedFor;
-
-    public bool $declineDuplicates;
 
     /**
      * Constructor
      *
      * @param array<string, mixed> | string | false $json
      */
-    public function __construct(array | string | false $json = false)
+    public function __construct(array|string|false $json = false)
     {
         $this->requiredFields = [
             'toBeUsedFor',

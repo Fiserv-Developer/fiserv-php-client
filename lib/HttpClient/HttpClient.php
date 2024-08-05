@@ -172,8 +172,9 @@ abstract class HttpClient
 
         switch ($type) {
             case RequestType::POST:
-            case RequestType::PATCH:
                 $options[CURLOPT_POST] = true;
+                // no break
+            case RequestType::PATCH:
                 $options[CURLOPT_POSTFIELDS] = $request;
         }
 
@@ -189,16 +190,17 @@ abstract class HttpClient
         }
 
         $httpCode = curl_getinfo($this->session, CURLINFO_RESPONSE_CODE);
+        $traceId = $headers['trace-id'] ?? 'NO_TRACE_ID';
 
         switch ($httpCode) {
             case 200:
             case 201:
                 return [
                     'data' => $response,
-                    'trace-id' => $headers['trace-id']
+                    'trace-id' => $traceId,
                 ];
             case 400:
-                throw new BadRequestException($httpCode, $response, $headers['trace-id'] ?? 'NO_TRACE_ID');
+                throw new BadRequestException($httpCode, $response, $traceId);
             default:
                 throw new ServerException($httpCode . ' : ' . $response);
         }
@@ -257,7 +259,9 @@ abstract class HttpClient
             throw new ResponseMalformedException();
         }
 
-        $responseObject->traceId = strval($response['trace-id']);
+        if (!isset($responseObject->traceId)) {
+            $responseObject->traceId = strval($response['trace-id']);
+        }
 
         return $responseObject;
     }

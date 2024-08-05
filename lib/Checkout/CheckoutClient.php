@@ -101,7 +101,7 @@ final class CheckoutClient extends HttpClient
      *
      * @param string $checkoutId - String checkout ID to be queried
      */
-    public function getCheckoutId(string $checkoutId): GetCheckoutIdResponse
+    public function getCheckoutById(string $checkoutId): GetCheckoutIdResponse
     {
         $response = $this->buildRequest(RequestType::GET, $this->endpointRoot . "/" . $checkoutId, null, GetCheckoutIdResponse::class);
 

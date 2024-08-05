@@ -19,4 +19,6 @@ class GetCheckoutIdResponse extends ResponseInterface
     public RequestSent $requestSent;
 
     public PaymentLink $paymentLink;
+
+    public IpgTransactionDetails $ipgTransactionDetails;
 }

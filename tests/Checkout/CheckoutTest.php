@@ -94,7 +94,7 @@ class CheckoutTest extends TestCase
 
     public function testGetCheckoutIdSuccess(): void
     {
-        $res = $this->client->getCheckoutId($this->mockCheckoutId);
+        $res = $this->client->getCheckoutById($this->mockCheckoutId);
         $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
@@ -112,7 +112,7 @@ class CheckoutTest extends TestCase
         $res = $this->client->createCheckout($req);
         $id = $res->checkout->checkoutId;
 
-        $details = $this->client->getCheckoutId($id);
+        $details = $this->client->getCheckoutById($id);
         $total_actual = $details->approvedAmount->total;
 
         $this->assertEquals($total, $total_actual);

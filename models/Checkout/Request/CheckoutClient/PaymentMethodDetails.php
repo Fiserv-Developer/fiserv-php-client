@@ -12,7 +12,13 @@ class PaymentMethodDetails extends FisrvObject
 
     public TokenBasedTransaction $tokenBasedTransaction;
 
-    public function __construct(array | string | false $json = false, bool $isReponseContent = false)
+    public string $paymentCard;
+
+    public string $paymentMethodType;
+
+    public string $paymentMethodBrand;
+
+    public function __construct(array|string|false $json = false, bool $isReponseContent = false)
     {
         $this->requiredFields = [
             'cards'

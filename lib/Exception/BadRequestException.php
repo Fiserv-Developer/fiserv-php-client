@@ -16,7 +16,9 @@ class BadRequestException extends Exception
     {
         $decoded = json_decode($message, true);
 
-        if (!is_array($decoded)) {
+        echo $message;
+
+        if (!is_array($decoded) || !isset($decoded['errors'])) {
             $this->message = strval($statusCode) . ': ' . $message;
 
             return;
