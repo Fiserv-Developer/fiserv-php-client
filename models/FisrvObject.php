@@ -88,11 +88,24 @@ abstract class FisrvObject
         foreach ($data as $key => $value) {
             /** Serialize nested properties */
             if (is_array($value)) {
+
                 try {
                     $className = self::NAMESPACE_PREFIX . ucfirst($key);
                     $nestedObj = new $className($value, $this->isResponseContent);
                 } catch (Error $th) {
-                    new InvalidFieldWarning($key, $this::class);
+
+                    /** Handle sequential lists */
+                    if (array_is_list($value)) {
+                        $className = rtrim(self::NAMESPACE_PREFIX . ucfirst($key), 's');
+
+                        foreach ($value as &$item) {
+                            $item = new $className($item, $this->isResponseContent);
+                        }
+
+                        continue;
+                    }
+
+                    new InvalidFieldWarning($key, $this::class, $th->getMessage());
                     continue;
                 }
 

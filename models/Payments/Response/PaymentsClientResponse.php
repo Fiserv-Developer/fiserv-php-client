@@ -41,4 +41,8 @@ class PaymentsClientResponse extends ResponseInterface
     public string $securityCodeResponse;
 
     public Processor $processor;
+
+    public AdditionalDetails $additionalDetails;
+
+    public RequestSent $requestSent;
 }

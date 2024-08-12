@@ -1,7 +1,7 @@
 {
   "name": "fisrv/php-client",
   "description": "PHP client for the fisrv API.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "library",
   "require": {
     "ext-curl": "*",

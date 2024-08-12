@@ -11,4 +11,8 @@ class OrderDetails extends FisrvObject
     public string $invoiceNumber;
 
     public string $purchaseOrderNumber;
+
+    public Basket $basket;
+
+    public Billing $billing;
 }

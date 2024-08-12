@@ -12,6 +12,8 @@ class CheckoutModularTest extends TestCase
 {
     private CheckoutClient $client;
 
+    private static string $checkoutId;
+
     protected function setUp(): void
     {
         $this->client = new CheckoutClient([
@@ -62,6 +64,7 @@ class CheckoutModularTest extends TestCase
     {
         $request = new CheckoutClientRequest(self::requestBody);
         $response = $this->client->createCheckout($request);
+        self::$checkoutId = $response->checkout->checkoutId;
 
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
@@ -92,9 +95,9 @@ class CheckoutModularTest extends TestCase
         $response = $this->client->refundCheckout(new PaymentsClientRequest([
             'transactionAmount' => [
                 'total' => 1,
-                'currency' => 'EUR'
+                'currency' => 'USD'
             ],
-        ]), 'QA4t9p');
+        ]), 'EDZjCI');
 
         $this->assertInstanceOf(PaymentsClientResponse::class, $response);
     }

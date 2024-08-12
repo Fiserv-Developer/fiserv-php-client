@@ -192,6 +192,8 @@ abstract class HttpClient
         $httpCode = curl_getinfo($this->session, CURLINFO_RESPONSE_CODE);
         $traceId = $headers['trace-id'] ?? 'NO_TRACE_ID';
 
+        // print_r(json_decode($response));
+
         switch ($httpCode) {
             case 200:
             case 201:
