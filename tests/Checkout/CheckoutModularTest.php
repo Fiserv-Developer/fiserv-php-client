@@ -12,8 +12,6 @@ class CheckoutModularTest extends TestCase
 {
     private CheckoutClient $client;
 
-    private static string $checkoutId;
-
     protected function setUp(): void
     {
         $this->client = new CheckoutClient([
@@ -64,7 +62,6 @@ class CheckoutModularTest extends TestCase
     {
         $request = new CheckoutClientRequest(self::requestBody);
         $response = $this->client->createCheckout($request);
-        self::$checkoutId = $response->checkout->checkoutId;
 
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
