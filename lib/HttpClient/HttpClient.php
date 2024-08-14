@@ -172,7 +172,7 @@ abstract class HttpClient
         switch ($type) {
             case RequestType::POST:
                 $options[CURLOPT_POST] = true;
-                // no break
+            // no break
             case RequestType::PATCH:
                 $options[CURLOPT_POSTFIELDS] = $request;
         }
@@ -180,8 +180,12 @@ abstract class HttpClient
         curl_setopt_array($this->session, $options + self::DEFAULT_CURL_OPTIONS);
         $response = curl_exec($this->session);
 
+        if (!$response) {
+            throw new Exception('CURL failed to fetch. ' . json_encode($this->session));
+        }
+
         if (is_bool($response)) {
-            throw new Exception('CURLOPT_RETURNTRANSFER is not set to true. Could not retrieve response data.' . $response);
+            throw new Exception('CURLOPT_RETURNTRANSFER is not set to true. Could not retrieve response data. ' . $response);
         }
 
         if (curl_errno($this->session)) {
