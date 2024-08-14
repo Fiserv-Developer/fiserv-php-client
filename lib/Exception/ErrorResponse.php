@@ -3,6 +3,8 @@
 namespace Fisrv\Exception;
 
 use Exception;
+use Fisrv\Models\CreateCheckoutResponse;
+use Fisrv\Models\GetCheckoutIdResponse;
 use Fisrv\Models\PaymentsClientResponse;
 use Fisrv\Models\ResponseInterface;
 
@@ -18,7 +20,14 @@ class ErrorResponse extends Exception
 
         if ($response instanceof PaymentsClientResponse) {
             $this->message = (string) $response->error;
+            return;
+        }
 
+        if (
+            $response instanceof GetCheckoutIdResponse ||
+            $response instanceof CreateCheckoutResponse
+        ) {
+            $this->message = (string) $response->errors[0]->detail;
             return;
         }
 

@@ -6,7 +6,7 @@ use Exception;
 use Fisrv\HttpClient\HttpClient;
 use Fisrv\HttpClient\RequestType;
 use Fisrv\Models\CheckoutClientRequest;
-use Fisrv\Models\CheckoutClientResponse;
+use Fisrv\Models\CreateCheckoutResponse;
 use Fisrv\Models\GetCheckoutIdResponse;
 use Fisrv\Models\PaymentsClientRequest;
 use Fisrv\Models\PaymentsClientResponse;
@@ -68,13 +68,13 @@ final class CheckoutClient extends HttpClient
      *
      * @param CheckoutClientRequest $request - Request body containing checkout options
      */
-    public function createCheckout(CheckoutClientRequest $request): CheckoutClientResponse
+    public function createCheckout(CheckoutClientRequest $request): CreateCheckoutResponse
     {
         /** Floor transaction amount in case it got deformed */
         $request->transactionAmount->total = floor($request->transactionAmount->total * 100) / 100;
-        $response = $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, CheckoutClientResponse::class);
+        $response = $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, CreateCheckoutResponse::class);
 
-        if (!$response instanceof CheckoutClientResponse) {
+        if (!$response instanceof CreateCheckoutResponse) {
             throw new Exception('Response is of malformed type');
         }
 
@@ -89,7 +89,7 @@ final class CheckoutClient extends HttpClient
      * @param string $successUrl URL that directs to Thank You page from checkout
      * @param string $failureUrl URL that directs to failure notifaction if checkout failed
      */
-    public static function createBasicCheckoutRequest(float $transactionTotal, string $successUrl, string $failureUrl): CheckoutClientRequest
+    public static function createBasicCheckoutRequest(float $transactionTotal = 0, string $successUrl = '', string $failureUrl = ''): CheckoutClientRequest
     {
         $request = new CheckoutClientRequest(self::CHECKOUT_REQUEST_TEMPLATE);
         $request->checkoutSettings->redirectBackUrls->successUrl = $successUrl;

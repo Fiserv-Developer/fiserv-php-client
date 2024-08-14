@@ -3,7 +3,7 @@
 use Fisrv\Checkout\CheckoutClient;
 use Fisrv\Exception\RequiredFieldMissingException;
 use Fisrv\Models\CheckoutClientRequest;
-use Fisrv\Models\CheckoutClientResponse;
+use Fisrv\Models\CreateCheckoutResponse;
 use Fisrv\Models\CreateToken;
 use Fisrv\Models\GetCheckoutIdResponse;
 use PHPUnit\Framework\TestCase;
@@ -78,7 +78,8 @@ class CheckoutTest extends TestCase
         $missingFieldContent = self::paymentLinksRequestContent;
         unset($missingFieldContent["paymentMethodDetails"]["cards"]["createToken"]["toBeUsedFor"]);
 
-        new CheckoutClientRequest($missingFieldContent);
+        $temp = new CheckoutClientRequest($missingFieldContent);
+        echo $temp;
     }
 
     public function testPostCheckoutsSuccess(): void
@@ -86,7 +87,7 @@ class CheckoutTest extends TestCase
         $req = new CheckoutClientRequest(self::paymentLinksRequestContent);
 
         $res = $this->client->createCheckout($req);
-        $this->assertInstanceOf(CheckoutClientResponse::class, $res, "Response schema is malformed");
+        $this->assertInstanceOf(CreateCheckoutResponse::class, $res, "Response schema is malformed");
         $this->assertObjectHasProperty("checkout", $res, "Response misses field (checkout)");
     }
 

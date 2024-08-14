@@ -23,4 +23,7 @@ class GetCheckoutIdResponse extends ResponseInterface
     public IpgTransactionDetails $ipgTransactionDetails;
 
     public PaymentMethodUsed $paymentMethodUsed;
+
+    /** @var array<Error> $errors */
+    public array $errors;
 }

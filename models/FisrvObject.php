@@ -7,6 +7,7 @@ use Exception;
 use Fisrv\Exception\InvalidFieldWarning;
 use Fisrv\Exception\RequiredFieldMissingException;
 use ReflectionProperty;
+use Throwable;
 use TypeError;
 
 /**
@@ -88,28 +89,24 @@ abstract class FisrvObject
         foreach ($data as $key => $value) {
             /** Serialize nested properties */
             if (is_array($value)) {
-
                 try {
                     $className = self::NAMESPACE_PREFIX . ucfirst($key);
                     $nestedObj = new $className($value, $this->isResponseContent);
+                    $value = $nestedObj;
                 } catch (Error $th) {
-
-                    /** Handle sequential lists */
-                    if (array_is_list($value)) {
-                        $className = rtrim(self::NAMESPACE_PREFIX . ucfirst($key), 's');
-
-                        foreach ($value as &$item) {
-                            $item = new $className($item, $this->isResponseContent);
-                        }
-
+                    /** Handle lists */
+                    if (!array_is_list($value)) {
+                        new InvalidFieldWarning($key, $this::class, $th->getMessage());
                         continue;
                     }
 
-                    new InvalidFieldWarning($key, $this::class, $th->getMessage());
-                    continue;
+                    $className = rtrim(self::NAMESPACE_PREFIX . ucfirst($key), 's');
+
+                    foreach ($value as &$item) {
+                        $item = new $className($item, $this->isResponseContent);
+                    }
                 }
 
-                $value = $nestedObj;
             }
 
             if (!property_exists($this, $key) && !$this->isResponseContent) {

@@ -2,7 +2,7 @@
 
 use Fisrv\Checkout\CheckoutClient;
 use Fisrv\Models\CheckoutClientRequest;
-use Fisrv\Models\CheckoutClientResponse;
+use Fisrv\Models\CreateCheckoutResponse;
 use Fisrv\Models\LineItem;
 use Fisrv\Models\PaymentsClientRequest;
 use Fisrv\Models\PaymentsClientResponse;
@@ -63,7 +63,7 @@ class CheckoutModularTest extends TestCase
         $request = new CheckoutClientRequest(self::requestBody);
         $response = $this->client->createCheckout($request);
 
-        $this->assertInstanceOf(CheckoutClientResponse::class, $response);
+        $this->assertInstanceOf(CreateCheckoutResponse::class, $response);
     }
 
     public function testCheckoutWithBasket(): void
@@ -84,7 +84,7 @@ class CheckoutModularTest extends TestCase
 
         $response = $this->client->createCheckout($request);
 
-        $this->assertInstanceOf(CheckoutClientResponse::class, $response);
+        $this->assertInstanceOf(CreateCheckoutResponse::class, $response);
     }
 
     // public function testRefundCheckout(): void
