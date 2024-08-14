@@ -34,7 +34,7 @@ abstract class FisrvObject
      * If pattern matching fails thow serialization/validation error to user.
      * No checking if false.
      */
-    protected string | false $pattern = false;
+    protected string|false $pattern = false;
 
     private const NAMESPACE_PREFIX = __NAMESPACE__ . '\\';
 
@@ -45,7 +45,7 @@ abstract class FisrvObject
      * @param array<string, mixed> | string | false $json If not false, a JSON string to be serialized to DTO.
      * @param bool $isResponseContent True if object is a response
      */
-    public function __construct(array | string | false $json = false, bool $isResponseContent = false)
+    public function __construct(array|string|false $json = false, bool $isResponseContent = false)
     {
         $this->isResponseContent = $isResponseContent;
 
@@ -127,6 +127,13 @@ abstract class FisrvObject
                     $this->{$key} = $className::from($value);
                 }
             }
+        }
+    }
+
+    protected function moveProperty(FisrvObject $instance, string $from, string $to): void
+    {
+        if (!isset($instance->{$to}) && isset($instance->{$from})) {
+            $instance->{$to} = $instance->{$from};
         }
     }
 

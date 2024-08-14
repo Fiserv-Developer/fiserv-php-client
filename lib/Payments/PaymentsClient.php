@@ -24,11 +24,16 @@ final class PaymentsClient extends HttpClient
      * Create a primary credit card transaction
      *
      * @param \Fisrv\Models\PaymentsClientRequest $request
+     * @param array<string, mixed> $request
      * @throws \Exception
      * @return \Fisrv\Models\PaymentsClientResponse
      */
-    public function createPaymentCardSaleTransaction(PaymentsClientRequest $request): PaymentsClientResponse
+    public function createPaymentCardSaleTransaction(PaymentsClientRequest|array $request): PaymentsClientResponse
     {
+        if (is_array($request)) {
+            $request = new PaymentsClientRequest($request);
+        }
+
         $request->requestType = 'PaymentCardSaleTransaction';
         $response = $this->buildRequest(RequestType::POST, $this->endpointRoot, $request, PaymentsClientResponse::class);
 

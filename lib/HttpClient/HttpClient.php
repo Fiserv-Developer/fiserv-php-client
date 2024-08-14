@@ -4,10 +4,9 @@ namespace Fisrv\HttpClient;
 
 use CurlHandle;
 use Exception;
-use Fisrv\Exception\BadRequestException;
-use Fisrv\Exception\CurlRequestException;
+use Fisrv\Exception\RequestException;
 use Fisrv\Exception\ResponseMalformedException;
-use Fisrv\Exception\ServerException;
+use Fisrv\Exception\ErrorResponse;
 use Fisrv\Models\FisrvObject;
 use Fisrv\Models\RequestInterface;
 use Fisrv\Models\ResponseInterface;
@@ -148,9 +147,9 @@ abstract class HttpClient
      * @param string $url Full URI with root and service path
      * @param string $request Request body for POST, PATCH requests as JSON string
      *
-     * @return array<string, bool | string> Response object containing data and trace ID
+     * @return string Response object containing data and trace ID
      */
-    private function curlRequest(RequestType $type, string $url, string $request = ''): array
+    private function curlRequest(RequestType $type, string $url, string $request = ''): string
     {
         $headers = [];
 
@@ -173,7 +172,7 @@ abstract class HttpClient
         switch ($type) {
             case RequestType::POST:
                 $options[CURLOPT_POST] = true;
-                // no break
+            // no break
             case RequestType::PATCH:
                 $options[CURLOPT_POSTFIELDS] = $request;
         }
@@ -186,26 +185,21 @@ abstract class HttpClient
         }
 
         if (curl_errno($this->session)) {
-            throw new CurlRequestException(curl_error(($this->session)));
+            throw new RequestException(curl_error(($this->session)));
         }
 
-        $httpCode = curl_getinfo($this->session, CURLINFO_RESPONSE_CODE);
-        $traceId = $headers['trace-id'] ?? 'NO_TRACE_ID';
+        $response = json_decode($response);
 
-        // print_r(json_decode($response));
+        $response->httpCode = (int) curl_getinfo($this->session, CURLINFO_RESPONSE_CODE);
+        $response->traceId = $headers['trace-id'] ?? null;
 
-        switch ($httpCode) {
-            case 200:
-            case 201:
-                return [
-                    'data' => $response,
-                    'trace-id' => $traceId,
-                ];
-            case 400:
-                throw new BadRequestException($httpCode, $response, $traceId);
-            default:
-                throw new ServerException($httpCode . ' : ' . $response);
+        $responseJson = json_encode($response);
+
+        if (!$responseJson) {
+            throw new Exception('CURL Request response could not be parsed: ' . (string) $response);
         }
+
+        return $responseJson;
     }
 
     /**
@@ -231,38 +225,37 @@ abstract class HttpClient
      *
      * @param RequestType $type GET, POST or PATCH
      * @param string $endpoint Path of URL to call without root
-     * @param FisrvObject $requestBody Optional request body which is null on GET requests
+     * @param RequestInterface $requestBody Optional request body which is null on GET requests
      * @param string $responseClass Response class type of ResponseInterface
      *
      * @return ResponseInterface Response object
      */
-    protected function buildRequest(RequestType $type, string $endpoint, FisrvObject $requestBody = null, string $responseClass = null): ResponseInterface
+    protected function buildRequest(RequestType $type, string $endpoint, ?RequestInterface $requestBody = null, ?string $responseClass = null): ResponseInterface
     {
+        if (is_null($requestBody)) {
+            $curlPayload = '';
+        }
+
         if ($requestBody instanceof RequestInterface) {
             $this->validateRequest($requestBody);
             $requestBody->storeId = strval($this->config['store_id']);
-        }
-
-        try {
             $curlPayload = json_encode($requestBody);
-
-            if (!is_string($curlPayload)) {
-                $curlPayload = '';
-            }
-
-            $response = $this->curlRequest($type, $this->url . $endpoint, $curlPayload);
-        } catch (CurlRequestException $e) {
-            throw $e;
         }
 
-        $responseObject = new $responseClass($response['data']);
+        if (!$curlPayload && !is_string($curlPayload)) {
+            print_r($requestBody);
+            throw new ResponseMalformedException();
+        }
+
+        $response = $this->curlRequest($type, $this->url . $endpoint, $curlPayload);
+        $responseObject = new $responseClass($response);
 
         if (!$responseObject instanceof ResponseInterface) {
             throw new ResponseMalformedException();
         }
 
-        if (!isset($responseObject->traceId)) {
-            $responseObject->traceId = strval($response['trace-id']);
+        if ($responseObject->httpCode !== 200 && $responseObject->httpCode !== 201) {
+            throw new ErrorResponse($responseObject);
         }
 
         return $responseObject;

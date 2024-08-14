@@ -4,7 +4,7 @@ namespace Fisrv\Exception;
 
 use Exception;
 
-class CurlRequestException extends Exception
+class RequestException extends Exception
 {
     public function __construct(string $message)
     {

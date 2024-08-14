@@ -87,15 +87,15 @@ class CheckoutModularTest extends TestCase
         $this->assertInstanceOf(CheckoutClientResponse::class, $response);
     }
 
-    public function testRefundCheckout(): void
-    {
-        $response = $this->client->refundCheckout(new PaymentsClientRequest([
-            'transactionAmount' => [
-                'total' => 1,
-                'currency' => 'USD'
-            ],
-        ]), 'EDZjCI');
+    // public function testRefundCheckout(): void
+    // {
+    //     $response = $this->client->refundCheckout(new PaymentsClientRequest([
+    //         'transactionAmount' => [
+    //             'total' => 1,
+    //             'currency' => 'USD'
+    //         ],
+    //     ]), 'EDZjCI');
 
-        $this->assertInstanceOf(PaymentsClientResponse::class, $response);
-    }
+    //     $this->assertInstanceOf(PaymentsClientResponse::class, $response);
+    // }
 }

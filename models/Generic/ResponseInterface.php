@@ -6,7 +6,7 @@ abstract class ResponseInterface extends FisrvObject
 {
     public string $traceId;
 
-    public string $apiTraceId;
+    public int $httpCode;
 
     /**
      * Constructor
@@ -17,8 +17,6 @@ abstract class ResponseInterface extends FisrvObject
     {
         FisrvObject::__construct($json, true);
 
-        if (!isset($this->traceId) && isset($this->apiTraceId)) {
-            $this->traceId = $this->apiTraceId;
-        }
+        $this->moveProperty($this, 'apiTraceId', 'traceId');
     }
 }

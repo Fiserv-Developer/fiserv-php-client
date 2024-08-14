@@ -12,7 +12,7 @@ class PaymentMethodDetails extends FisrvObject
 
     public TokenBasedTransaction $tokenBasedTransaction;
 
-    public string $paymentCard;
+    public PaymentCard $paymentCard;
 
     public string $paymentMethodType;
 
