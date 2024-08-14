@@ -27,6 +27,12 @@
   "scripts": {
     "format": [
       "vendor/bin/php-cs-fixer fix --dry-run --diff"
+    ],
+    "test": [
+      "vendor/bin/phpunit tests"
+    ],
+    "analyse": [
+      "vendor/bin/phpstan analyse ."
     ]
   }
 }

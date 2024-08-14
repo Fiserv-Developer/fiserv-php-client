@@ -1,7 +1,6 @@
 <?php
 
 use Fisrv\Checkout\CheckoutClient;
-use Fisrv\Exception\ErrorResponse;
 use Fisrv\Models\CheckoutSettings;
 use PHPUnit\Framework\TestCase;
 

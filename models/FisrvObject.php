@@ -7,7 +7,6 @@ use Exception;
 use Fisrv\Exception\InvalidFieldWarning;
 use Fisrv\Exception\RequiredFieldMissingException;
 use ReflectionProperty;
-use Throwable;
 use TypeError;
 
 /**

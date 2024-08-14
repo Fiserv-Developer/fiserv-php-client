@@ -6,6 +6,7 @@ use Fisrv\Models\CheckoutClientRequest;
 use Fisrv\Models\CreateCheckoutResponse;
 use Fisrv\Models\CreateToken;
 use Fisrv\Models\GetCheckoutIdResponse;
+use Fisrv\Models\LineItem;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase
@@ -116,4 +117,51 @@ class CheckoutTest extends TestCase
         $this->assertInstanceOf(GetCheckoutIdResponse::class, $res);
         $this->assertObjectHasProperty("storeId", $res, "Response misses field (storeId)");
     }
+
+    public function testCheckoutWithBasket(): void
+    {
+        $orderAddage = [
+            'order' => [
+                'orderDetails' => [
+                    'purchaseOrderNumber' => 0,
+                ],
+                'billing' => [
+                    'person' => [],
+                    'contact' => [],
+                    'address' => [],
+                ],
+                'basket' => []
+            ]
+        ];
+
+        $request = new CheckoutClientRequest(array_merge(self::paymentLinksRequestContent, $orderAddage));
+        $request->order->basket->lineItems[] = new LineItem([
+            'name' => 'Thing',
+            'quantity' => 3,
+            'price' => 24.99,
+        ]);
+
+        $request->order->basket->lineItems[] = new LineItem([
+            'name' => 'Another',
+            'quantity' => 1,
+            'price' => 8.99,
+            'total' => 8.99,
+        ]);
+
+        $response = $this->client->createCheckout($request);
+
+        $this->assertInstanceOf(CreateCheckoutResponse::class, $response);
+    }
+
+    // public function testRefundCheckout(): void
+    // {
+    //     $response = $this->client->refundCheckout(new PaymentsClientRequest([
+    //         'transactionAmount' => [
+    //             'total' => 1,
+    //             'currency' => 'USD'
+    //         ],
+    //     ]), 'EDZjCI');
+
+    //     $this->assertInstanceOf(PaymentsClientResponse::class, $response);
+    // }
 }

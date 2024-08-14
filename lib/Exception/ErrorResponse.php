@@ -20,6 +20,7 @@ class ErrorResponse extends Exception
 
         if ($response instanceof PaymentsClientResponse) {
             $this->message = (string) $response->error;
+
             return;
         }
 
@@ -28,6 +29,7 @@ class ErrorResponse extends Exception
             $response instanceof CreateCheckoutResponse
         ) {
             $this->message = (string) $response->errors[0]->detail;
+
             return;
         }
 
