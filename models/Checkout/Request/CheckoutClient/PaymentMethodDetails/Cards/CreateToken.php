@@ -12,6 +12,8 @@ class CreateToken extends FisrvObject
 
     public bool $reusable;
 
+    public CustomWalletRegistration $customWalletRegistration;
+
     public ToBeUsedFor $toBeUsedFor;
 
     /**

@@ -15,7 +15,7 @@ use stdClass;
 
 abstract class HttpClient
 {
-    private const VERSION = '1.0.0';
+    private const VERSION = '1.0.1';
 
     private const DOMAIN = 'https://prod.emea.api.fiservapps.com/';
 
@@ -171,7 +171,7 @@ abstract class HttpClient
         switch ($type) {
             case RequestType::POST:
                 $options[CURLOPT_POST] = true;
-                // no break
+            // no break
             case RequestType::PATCH:
                 $options[CURLOPT_POSTFIELDS] = $request;
         }

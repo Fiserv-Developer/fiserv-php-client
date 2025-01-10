@@ -5,10 +5,13 @@ namespace Fisrv\Checkout;
 use Fisrv\Environment;
 use Fisrv\Exception\RequiredFieldMissingException;
 use Fisrv\Models\CheckoutClientRequest;
+use Fisrv\Models\Components;
 use Fisrv\Models\CreateCheckoutResponse;
 use Fisrv\Models\CreateToken;
 use Fisrv\Models\GetCheckoutIdResponse;
 use Fisrv\Models\LineItem;
+use Fisrv\Models\PaymentsClientRequest;
+use Fisrv\Models\PaymentsClientResponse;
 use PHPUnit\Framework\TestCase;
 
 class CheckoutTest extends TestCase
@@ -92,6 +95,7 @@ class CheckoutTest extends TestCase
 
         $req = new CheckoutClientRequest(self::paymentLinksRequestContent);
         $req->transactionAmount->total = $total;
+        $req->transactionAmount->components = new Components();
         $req->transactionAmount->components->subtotal = $total - 0.99;
         $req->transactionAmount->components->vatAmount = 0;
         $req->transactionAmount->components->shipping = 0.99;
@@ -147,15 +151,15 @@ class CheckoutTest extends TestCase
         $this->assertInstanceOf(CreateCheckoutResponse::class, $response);
     }
 
-    // public function testRefundCheckout(): void
-    // {
-    //     $response = $this->client->refundCheckout(new PaymentsClientRequest([
-    //         'transactionAmount' => [
-    //             'total' => 1,
-    //             'currency' => 'USD'
-    //         ],
-    //     ]), 'EDZjCI');
+    public function testRefundCheckout(): void
+    {
+        $response = $this->client->refundCheckout(new PaymentsClientRequest([
+            'transactionAmount' => [
+                'total' => 1,
+                'currency' => 'USD'
+            ],
+        ]), 'EDZjCI');
 
-    //     $this->assertInstanceOf(PaymentsClientResponse::class, $response);
-    // }
+        $this->assertInstanceOf(PaymentsClientResponse::class, $response);
+    }
 }
