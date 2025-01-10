@@ -1,0 +1,45 @@
+{
+  "name": "fiserv-ipg/php-client",
+  "description": "PHP Client for the Fiserv API",
+  "version": "1.0.0",
+  "license": "GPL-3.0-or-later",
+  "type": "library",
+  "require": {
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "@stable",
+    "friendsofphp/php-cs-fixer": "*",
+    "phpstan/phpstan": "@stable"
+  },
+  "autoload": {
+    "psr-4": {
+      "Fisrv\\": [
+        "lib/",
+        "tests/"
+      ]
+    },
+    "classmap": [
+      "models/"
+    ]
+  },
+  "scripts": {
+    "analyse": [
+      "vendor/bin/phpstan analyse ."
+    ],
+    "fix-format": [
+      "vendor/bin/php-cs-fixer fix"
+    ],
+    "format": [
+      "vendor/bin/php-cs-fixer fix --dry-run --diff"
+    ],
+    "test": [
+      "vendor/bin/phpunit tests"
+    ],
+    "run-all": [
+      "composer analyse && composer fix-format && composer format && composer test"
+    ]
+  }
+}
