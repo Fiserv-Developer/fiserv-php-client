@@ -16,6 +16,6 @@ class InvalidFieldWarning
             $message .= ' JSON content: ' . $rawContent;
         }
 
-        trigger_error($message, E_USER_NOTICE);
+        print_r($message);
     }
 }
