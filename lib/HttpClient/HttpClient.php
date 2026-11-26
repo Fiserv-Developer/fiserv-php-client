@@ -29,8 +29,8 @@ abstract class HttpClient
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_AUTOREFERER => true,
         CURLOPT_TIMEOUT => 20,
-        CURLOPT_SSL_VERIFYHOST => false,
-        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_SSL_VERIFYPEER => true,
     ];
 
     private const VALID_CONFIG_KEYS = [
